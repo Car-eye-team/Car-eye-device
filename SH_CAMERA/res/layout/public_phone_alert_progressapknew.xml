@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="@null" >
+
+    
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:background="@null" >
+    
+    <FrameLayout
+                android:layout_width="534px"
+                android:layout_height="62px"
+                android:gravity="center"
+                android:background="@drawable/puclic_ddd01" >
+                <TextView
+                      android:id="@+id/tv_thisaler_ttitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="应用下载中..."
+                    android:gravity="center"
+                      android:layout_gravity="center|center"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+s<!--                 <ImageView -->
+<!--                   android:id="@+id/btn_cancel" -->
+<!--                     android:layout_width="60px" -->
+<!--                     android:layout_height="60px" -->
+<!--                     android:layout_gravity="center|right" -->
+<!--                     android:src="@drawable/puclic_xxxx" /> -->
+                
+                
+            </FrameLayout>
+    
+    <LinearLayout
+        android:layout_width="534px"
+        android:layout_height="148px"
+        android:layout_gravity="center"
+        android:background="@drawable/puclic_ddd02"
+        android:orientation="vertical" >
+        <LinearLayout
+            android:id="@+id/exitGameBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:orientation="vertical"
+            android:paddingLeft="6dp"
+            android:paddingRight="5dp"
+            android:paddingTop="60px" >
+
+            <ProgressBar
+                android:id="@+id/pb_progressbar"
+                style="@style/StyleProgressBarMini"
+                android:layout_width="fill_parent"
+                android:layout_height="8dp"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:progress="0" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" 
+               android:layout_marginTop="4dp"
+               android:layout_marginBottom="6dp"
+                >
+
+                <TextView
+                    android:id="@+id/tv_progressbar_l"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|left"
+                    android:layout_marginLeft="10dp"
+                    android:text="0%"
+                    android:textColor="#00abfe"
+                    android:textSize="18px" />
+
+                <TextView
+                    android:id="@+id/tv_progressbar_r"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="10dp"
+                    android:text="0/0"
+                    android:textColor="#00abfe"
+                    android:textSize="18px" />
+            </FrameLayout>
+        </LinearLayout>
+        
+<!--         <TextView -->
+<!--             android:id="@+id/tv_thisaler_ttitle" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_gravity="center" -->
+<!--             android:text="下载中..." -->
+<!--             android:textColor="@color/light_black" -->
+<!--             android:paddingTop="4dp" -->
+<!--             android:textSize="22sp" -->
+<!--             android:layout_marginBottom="12dp" -->
+<!--              /> -->
+        </LinearLayout>
+        
+    </LinearLayout>
+
+</LinearLayout>
