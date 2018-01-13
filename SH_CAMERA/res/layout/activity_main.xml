@@ -1,0 +1,184 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="6"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/ly_1_0"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:id="@+id/ly_1_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextureView
+                    android:id="@+id/textureview1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#338fcc" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ly_1_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextureView
+                    android:id="@+id/textureview2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#338fcc" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_2_0"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:id="@+id/ly_2_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextureView
+                    android:id="@+id/textureview3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#338fcc" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ly_2_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextureView
+                    android:id="@+id/textureview4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#338fcc" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_right_btly"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/bt_ly_1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bt_click"
+            android:gravity="center"
+            android:onClick="click" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a01" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bt_ly_2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bt_click"
+            android:gravity="center"
+            android:onClick="click" >
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a02" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bt_ly_3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bt_click"
+            android:gravity="center"
+            android:onClick="click" >
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a03" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bt_ly_4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bt_click"
+            android:gravity="center"
+            android:onClick="click" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a04" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bt_ly_5"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bt_click"
+            android:gravity="center"
+            android:onClick="click" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a05" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bt_ly_6"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bt_click"
+            android:gravity="center"
+            android:onClick="click" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a06" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
