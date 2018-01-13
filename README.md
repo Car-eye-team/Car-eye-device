@@ -1,2 +1,6 @@
-Car-eye-device
+﻿Car-eye-device
 车眼 设备子系统提供了一整套硬件设计，固件程序，系统软件，行车记录仪等功能模块得解决方案
+
+
+测试平台和免费车辆管理平台：www.car-eye.cn; 车眼开源平台网址：https://github.com/Car-eye-admin/ 
+有关车眼行车记录仪的相关技术支持，可以加群590411159。
