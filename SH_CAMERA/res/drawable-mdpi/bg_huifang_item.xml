@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:Android = "http://schemas.android.com/apk/res/android">  
-	<item Android:state_pressed="true" Android:drawable="@drawable/bg_lixian_city1"></item>
-	<item Android:state_pressed="false" Android:drawable="@drawable/bg_lixian_city2"></item>
-</selector> 
-
