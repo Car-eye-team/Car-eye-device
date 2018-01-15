@@ -134,8 +134,7 @@ public class MainService extends Service {
 	int framerate = Constants.FRAMERATE;
 	int bitrate;
 	public static DiskManager disk;	
-	public static Pusher mPusher;
-	
+	public static Pusher mPusher;	
 	//判断是退出还是打开其他界面
 	boolean isClose = true;	
 	//通知结束录像
@@ -275,10 +274,7 @@ public class MainService extends Service {
 					int type = intent.getIntExtra("EXTRA_TYPE", 0);  //类型  0 图片 1 录像
 					String stime = intent.getStringExtra("EXTRA_STIME");  //回放开始时间
 					String etime = intent.getStringExtra("EXTRA_ETIME");  //回放结束时间
-					//AppLog.d("DSLauncherReceiver", ACTION_VIDEO_PLAYBACK);*/
-					//CameraFileUtil.screenVideoFile(stime, etime, id);
-					
-					
+							
 				}else if(action.equals(Constants.ACTION_VIDEO_FILE_PLAYBACK))
 				{		 			
 					int cameraid = intent.getIntExtra("Channel", 1);  //通道ID
@@ -307,8 +303,7 @@ public class MainService extends Service {
 		localIntentFilter.addAction(Constants.ACTION_VIDEO_FILE_PLAYBACK);   
 		localIntentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
 		localIntentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS); 
-		localIntentFilter.addAction(Constants.ACTION_UPDATE_LOCATION); 
-		
+		localIntentFilter.addAction(Constants.ACTION_UPDATE_LOCATION); 		
 		registerReceiver(SYSBr, localIntentFilter);	        		
 	}
 	
@@ -364,8 +359,7 @@ public class MainService extends Service {
 				passwin = true;
 				restart();
 			}
-			if(type.equals(STARTRECORDER)){
-				
+			if(type.equals(STARTRECORDER)){				
 				int index = intent.getIntExtra("index", 0);
 				/*if(!isRecording){
 					click(R.id.bt_ly_2);
@@ -791,9 +785,7 @@ public class MainService extends Service {
 	/**
 	 * 初始化预览
 	 * @param i
-	 */
-		
-	
+	 */	
 
 	public void initPreview(int i){
 
@@ -886,13 +878,7 @@ public class MainService extends Service {
 			if(falg){
 				try {
 					AppLog.w(TAG, "摄像头数量:"+Camera.getNumberOfCameras());
-					//释放摄像头
-					//colseCamera(index);					
-					//测试用//
-					//camera[index] = Camera.open(mCameraId);
-					//Log.d(TAG, "mCameraId" + mCameraId);
 					camera[index] = Camera.open(cid[index]);
-
 				} catch (Exception e) {
 					e.printStackTrace();
 					camera[index] = null;
@@ -913,12 +899,7 @@ public class MainService extends Service {
 					
 					//时间		
 					//1 T3 2 一甲丙益后视镜  3 有方后视镜
-					if(Constants.PRODUCT_TYPE == 1){
-						//parameters.setPreviewSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);
-						//parameters.setPictureSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);
-						//parameters.setPreviewFpsRange(15,15);
-						//parameters.setGpsLatitude(21.223);
-						//parameters.setGpsLongitude(102.223);						
+					if(Constants.PRODUCT_TYPE == 1){									
 						camera[index].setErrorCallback(new CameraErrorCallback(index));
 					}else if(Constants.PRODUCT_TYPE == 2){						
 						parameters.setPreviewFrameRate(30);  
@@ -940,10 +921,7 @@ public class MainService extends Service {
 					}
 					camera[index].setParameters(parameters);					
 					camera[index].startPreview();
-					//checkCameraValid(index);					
-					//成功后开始录像
-					//
-					//处理没有数据出来的摄像头，对某些摄像头来说，能看到摄像头节点，但却没有摄像头数据造成录像和拍照失败。										
+													
 				}
 			}else{
 				//有方USB摄像头需要单独进行处理
@@ -1650,16 +1628,7 @@ public class MainService extends Service {
 	 */
 	void updateLocation()
 	{
-		String number="京55555";
-		String str = "0,0,DDDD,"+"0,40,"+number+",0,80,"+latitude+"!N  "+longitude +"!E";
-		Log.d("CMD", str);	
-		for (int i = 0; i < rules.length; i++) {
-			if(camera[rules[i]]!=null)
-			{
-				camera[rules[i]].setWaterMarkMultiple("0,0,DDDD,"+"0,40,"+number+",0,80,"+latitude+"!N  "+longitude +"!E,");
-				//camera[rules[i]].setWaterMarkMultiple("0,0,DDDD,"+"0,40,"+"DDDD"+",");
-			}
-		}		
+		
 	}	
 	private void updateView(Location location) {
 		if (location != null) {

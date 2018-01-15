@@ -5,10 +5,7 @@
     android:id="@+android:id/background"
     android:drawable="@drawable/seekbar_back" />
     <!--全部能量图  -->
-  <item
-    android:id="@+android:id/SecondaryProgress"
-    android:drawable="@drawable/seekbar_back" />
-    <!-- 进和能量图 -->
+  
   <item
     android:id="@+android:id/progress"
     android:drawable="@drawable/seekbar_progress" />

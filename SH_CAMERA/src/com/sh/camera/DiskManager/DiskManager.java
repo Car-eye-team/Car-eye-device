@@ -9,9 +9,9 @@ package com.sh.camera.DiskManager;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
-import android.os.storage.StorageVolume;
 import android.util.Log;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,8 +23,7 @@ import android.content.Intent;
 
 
 
-@SuppressLint("NewApi") public class DiskManager {
-	
+@SuppressLint("NewApi") public class DiskManager<StorageVolume> {
 	  private  static final String tag = "DiskManager";
 	  public String [] path = null;	  
 	  Context mContext;
@@ -89,32 +88,48 @@ import android.content.Intent;
 			  return null;
 		  return path[index];
 			  
-	  }	  
+	  }	
+	  
+	  
 	  public  String[] initDisk(Context context) {  
-	        String sd = null;  
-	        ArrayList<String> lineByteList = new ArrayList<String>();	      
+	        String sd = null; 
+	        Class<?> storageVolumeClazz = null;  
+	        ArrayList<String> lineByteList = new ArrayList<String>();	
+	        try { 
 	        StorageManager storageManager = (StorageManager) context  
 	                .getSystemService(Context.STORAGE_SERVICE);  
-	        StorageVolume[] volumes = storageManager.getVolumeList();
-	        
-	        Log.d(tag, "initDisk : " + volumes.length);
-	        for (int i = 0; i < volumes.length; i++) {  
-	            if (volumes[i].isRemovable()) { 	            	
-	                sd = volumes[i].getPath();  
-	                if(Environment.MEDIA_MOUNTED.equals(getStorageState(sd, context)))
-	                {
-	                	lineByteList.add(sd);
-	                	          	
-	                }
-	            }  
+	        storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");  
+	        Method getVolumeList = StorageManager.class.getDeclaredMethod("getVolumeList"); 	       	        
+	        Method isRemovable = storageVolumeClazz.getMethod("isRemovable");  
+	        Method getPath = storageVolumeClazz.getMethod("getPath");  
+	        Object  volumes = getVolumeList.invoke(storageManager);
+	        Method getVolumeState = StorageManager.class.getDeclaredMethod("getVolumeState", String.class); 
+	        final int length = Array.getLength(volumes);        
+	        for (int i = 0; i < length; i++) 
+	        {	        		           
+	        	Object storageVolumeElement  = Array.get(volumes, i);  	            
+	        	String path = (String) getPath.invoke(storageVolumeElement);  
+            	String state = (String) getVolumeState.invoke(storageManager, path); 
+            	boolean removable = (Boolean) isRemovable.invoke(storageVolumeElement);  
+                if(Environment.MEDIA_MOUNTED.equals(state) && removable)
+                {
+                	lineByteList.add(path);
+                	Log.d(tag, "Disk path  : " + path);
+                }              
+	           
+	          }  
+	        } catch (Exception e)
+	        {  
+	        	            Log.e(tag, e.getMessage());  
 	        }  
 	        path = new String [lineByteList.size()];
 	        for(int j = 0;j < lineByteList.size(); j++ ){
-	        	path[j] = lineByteList.get(j);
-	        
+	        	path[j] = lineByteList.get(j);	        
 	        }	        
 	        return path;  
 	    }  
+	  
+
 	  
 	   public  String getStorageState(String path,Context context) {
 	        try {
