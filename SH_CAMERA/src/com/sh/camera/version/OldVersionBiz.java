@@ -64,7 +64,7 @@ public class OldVersionBiz {
 		super();
 		this.context = context;
 	}
-
+	
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			int what = msg.what;
