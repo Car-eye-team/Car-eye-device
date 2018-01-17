@@ -117,7 +117,6 @@ public final class R {
         public static final int wheel_val=0x7f020051;
     }
     public static final class id {
-        public static final int SecondaryProgress=0x01010000;
         public static final int back=0x7f0a003c;
         public static final int bt_ly_1=0x7f0a0013;
         public static final int bt_ly_2=0x7f0a0014;
