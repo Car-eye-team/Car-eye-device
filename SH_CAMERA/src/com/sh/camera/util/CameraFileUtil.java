@@ -71,7 +71,6 @@ public class CameraFileUtil {
 		            image.compressToJpeg(
 		                    new Rect(0, 0, image.getWidth(), image.getHeight()),
 		                    90, filecon);   // 将NV21格式图片，以质量70压缩成Jpeg，并得到JPEG数据流
-		            
 		            filecon.close();  
 		        	Intent intent = new Intent(ACTION_TAKE_FINISH);
 					intent.putExtra("channel", index+1);
@@ -80,8 +79,7 @@ public class CameraFileUtil {
 		           		            
 		        }catch (IOException e)
 		        {
-		            e.printStackTrace();
-		            
+		            e.printStackTrace();		            
 		        }				
 			}
 		}).start();

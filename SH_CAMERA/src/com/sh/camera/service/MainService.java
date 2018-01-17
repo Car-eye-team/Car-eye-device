@@ -160,25 +160,7 @@ public class MainService extends Service {
 	{
 		return disk;
 	}
-	private static final int REQUEST_EXTERNAL_STORAGE = 1;
-	private static String[] PERMISSIONS_STORAGE = {
-	        Manifest.permission.READ_EXTERNAL_STORAGE,
-	Manifest.permission.WRITE_EXTERNAL_STORAGE };
-	//这个处理目前的V4库存在问题
-	public static void verifyStoragePermissions(Activity activity) {  
-		   
-	    int permission = ActivityCompat.checkSelfPermission(activity,  
-	            Manifest.permission.WRITE_EXTERNAL_STORAGE); 
-	    
-	    Log.d("CMD", "REQUEST_EXTERNAL_STORAGE1");
 
-	    if (permission != PackageManager.PERMISSION_GRANTED) { 
-	    	Log.d("CMD", "REQUEST_EXTERNAL_STORAGE");
-	    	
-	    	ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,  
-	                REQUEST_EXTERNAL_STORAGE);  
-	   }  
-	}  
 	
 	@Override
 	public void onCreate() {
@@ -202,6 +184,8 @@ public class MainService extends Service {
 		inflater = LayoutInflater.from(c);
 		registerReceiver(br, filter);
 		registerReceiver(br2, filter2);
+		
+				
 		disk.CreateDirctionaryOnDisk(Constants.CAMERA_FILE_DIR);
 		if(Constants.GPS_SUPPORT == true)			
 		{
@@ -977,7 +961,7 @@ public class MainService extends Service {
 	 {
 		 	
 		 final int pictype = type;
-		 Log.d("CMD", String.format(" TakePictureAll:\n%d", type));		 
+		 Log.d("CMD", String.format(" TakePictureAll:%d", type));		 
 		 try {		
 				if(type == 1){
 					//if(!SdCardUtil.checkSdCardUtil()){

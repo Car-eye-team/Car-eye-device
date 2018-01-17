@@ -189,7 +189,7 @@ public void onPreviewFrameUpload(byte[] data,int index,Camera camera){
 				if(handler != null){
 					handler.sendMessage(handler.obtainMessage(1001));
 				}	*/	
-	    	 Log.d("CMD", " saveJpeg_snap:"+index);
+	    	Log.d("CMD", " saveJpeg_snap:"+index);
 			CameraFileUtil.saveJpeg_snap(index, data, Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT,  MainService.disk.getDiskDirectory(MainService.disk.SelectDisk())+Constants.CAMERA_FILE_DIR+(index+1)+"-"+new Date().getTime()+".jpg");
 			
 	     }	     
