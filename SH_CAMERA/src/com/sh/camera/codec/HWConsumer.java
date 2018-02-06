@@ -10,19 +10,18 @@ package com.sh.camera.codec;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.ImageFormat;
 import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
 import org.push.hw.EncoderDebugger;
 import org.push.hw.NV21Convertor;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import org.push.push.Pusher;
-
 import com.sh.camera.service.MainService;
 import com.sh.camera.util.Constants;
 
@@ -72,28 +71,8 @@ public class HWConsumer extends Thread implements VideoConsumer {
     public int onVideo(byte[] data, int format) {
         if (!mVideoStarted)return 0;
 
-       /* if (lastPush == 0) {
-		    lastPush = System.currentTimeMillis();
-		}
-		long time = System.currentTimeMillis() - lastPush;
-          if (time >= 0) {
-		    time = millisPerframe - time;
-		    if (time > 0)
-				try {
-					Thread.sleep(time / 2);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}*/
-
-        /*  if (format == ImageFormat.YV12 ) {
-		    JNIUtil.yV12ToYUV420P(data, mWidth, mHeight);
-		}else{
-		    JNIUtil.nV21To420SP(data, mWidth, mHeight);
-		}*/
-		
-       
+        
+        data = mVideoConverter.convert(data);
 		inputBuffers = mMediaCodec.getInputBuffers();
 		outputBuffers = mMediaCodec.getOutputBuffers();
         int bufferIndex = mMediaCodec.dequeueInputBuffer(0);        
@@ -106,14 +85,7 @@ public class HWConsumer extends Thread implements VideoConsumer {
 		    buffer.clear();
 		    mMediaCodec.queueInputBuffer(bufferIndex, 0, data.length, System.nanoTime() / 1000, 0);
 		}
-         /*if (time > 0)
-			try {
-				Thread.sleep(time / 2);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		lastPush = System.currentTimeMillis();*/
+        
         return 0;
     }
     @Override
