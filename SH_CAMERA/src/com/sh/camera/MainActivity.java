@@ -68,9 +68,7 @@ public class MainActivity extends Activity {
 		}		
 		mainactivity = this;
 		//启动通讯service
-		startService(new Intent(MainActivity.this, ShCommService.class));	
-		
-		//startService(new Intent(MainActivity.this, CommandService.class));	
+		startService(new Intent(MainActivity.this, ShCommService.class));		
 		finish();
 	}
 }

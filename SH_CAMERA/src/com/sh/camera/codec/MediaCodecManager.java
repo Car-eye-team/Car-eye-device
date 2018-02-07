@@ -21,7 +21,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.sh.camera.audio.AudioStream;
-import com.sh.camera.service.CommandService;
 import com.sh.camera.service.MainService;
 import com.sh.camera.util.AppLog;
 import com.sh.camera.util.CameraFileUtil;
@@ -83,8 +82,7 @@ public class MediaCodecManager {
 
 	 debugger = EncoderDebugger.debug(MainService.getInstance(), Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 	 previewFormat = sw_codec ? ImageFormat.YV12 : debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;
-     		 
-	 if(sw_codec == true)
+     if(sw_codec == true)
 	 {
 		 mVC[index] = new SWConsumer(MainService.getInstance(), MainService.mPusher,index); 
 		 
@@ -124,9 +122,6 @@ public class MediaCodecManager {
      }
 	 
  }
- 
-
- 
  
 	public static boolean TakePicture(int cameraid,int type){
 		try {
@@ -172,29 +167,15 @@ public void onPreviewFrameUpload(byte[] data,int index,Camera camera){
      Camera.Size previewSize = camera.getParameters().getPreviewSize();
      if (data.length != Constants.UPLOAD_VIDEO_HEIGHT * Constants.UPLOAD_VIDEO_WIDTH * 3 / 2) {
     	 camera.addCallbackBuffer(data);
-    	 Log.d("CMD", " onPreviewFrameUpload return"+data.length);	
-         return;
+    	 return;
      }   
      MainService.getInstance().SetPreviewValid(index);
      if(TakePicture && MainService.picid == index )
      {    	
-    	 TakePicture = false;    	
-	     if(CAMERA_OPER_MODE == 0)	    
-	     {	    	
-	    	 CommandService.getInstance().snapshot(index, Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT, data);
-	     
-	     }else
-	     {
-	    	   	/*Handler handler = MainService.getInstance().handler; 
-				if(handler != null){
-					handler.sendMessage(handler.obtainMessage(1001));
-				}	*/	
-	    	Log.d("CMD", " saveJpeg_snap:"+index);
-			CameraFileUtil.saveJpeg_snap(index, data, Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT,  MainService.disk.getDiskDirectory(MainService.disk.SelectDisk())+Constants.CAMERA_FILE_DIR+(index+1)+"-"+new Date().getTime()+".jpg");
-			
-	     }	     
+    	TakePicture = false;    	
+	  	CameraFileUtil.saveJpeg_snap(index, data, Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT,  MainService.disk.getDiskDirectory(MainService.disk.SelectDisk())+Constants.CAMERA_FILE_DIR+(index+1)+"-"+new Date().getTime()+".jpg");
+    
      }  
-     Log.d("CMD", " onPreviewFrameUpload "+data.length);	
      if(mVC[index]!= null)
      {
     	 Log.d("CMD", " onPreviewFrameUpload1 "+data.length);	

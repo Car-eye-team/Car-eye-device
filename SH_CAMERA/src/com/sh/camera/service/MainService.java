@@ -80,8 +80,7 @@ public class MainService extends Service {
 	private static final String TAG = "CMD";
 	public static Context c;
 	private static MainService instance;
-	public static Context application;
-	
+	public static Context application;	
 	LayoutInflater inflater;
 	public static boolean isrun = false;
 	/**主界面是否在最前端显示状态*/
@@ -127,7 +126,6 @@ public class MainService extends Service {
 	private LinearLayout[] lys;
 	private int[] lyids = {R.id.ly_1_0, R.id.ly_1_1, R.id.ly_1_2, R.id.ly_2_0, R.id.ly_2_1, R.id.ly_2_2};
 	private boolean isTwoCamera = true;
-	//句柄
 	public static int[] StreamIndex;
 	public static boolean clickLock = false;
 	public static boolean[] sc_controls = {false, false, false, false};
@@ -183,9 +181,7 @@ public class MainService extends Service {
 		cid = Constants.CAMERA_ID;
 		inflater = LayoutInflater.from(c);
 		registerReceiver(br, filter);
-		registerReceiver(br2, filter2);
-		
-				
+		registerReceiver(br2, filter2);				
 		disk.CreateDirctionaryOnDisk(Constants.CAMERA_FILE_DIR);
 		if(Constants.GPS_SUPPORT == true)			
 		{
@@ -414,10 +410,8 @@ public class MainService extends Service {
 		wmParams.x = 0;
 		wmParams.y = 0;
 		wmParams.width =  WindowManager.LayoutParams.MATCH_PARENT;
-		wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-		
-		//最大化，不要设置LayoutParams.FLAG_NOT_FOCUSABLE，才能拦截返回键
-	
+		wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;		
+		//最大化，不要设置LayoutParams.FLAG_NOT_FOCUSABLE，才能拦截返回键	
 		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | 
 					WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
 		mWindowManager.updateViewLayout(view, wmParams);
@@ -437,7 +431,6 @@ public class MainService extends Service {
 				lys[i].setOnClickListener(click_ly);
 			}
 		}		
-		//一甲丙益USB摄像头需要单独进行处理，预览反向问题
 		if(Constants.PRODUCT_TYPE == 2){
 			int index = 1;
 			Matrix transform = new Matrix();
@@ -533,13 +526,7 @@ public class MainService extends Service {
 		wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 		wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 		addView();
-		/*ProviderBiz providerBiz = ProviderBiz.getInstance(c);
-		int mainStatus = providerBiz.getDeviceInfo().getMainStatus();
-		if(mainStatus == 1){
-			setWindowWin();
-		}*/				
-		
-		
+						
 	}
 	private void addView() {
 		if(inflater==null){

@@ -42,13 +42,10 @@ public class HWConsumer extends Thread implements VideoConsumer {
     private NV21Convertor mVideoConverter;
     private volatile boolean mVideoStarted;
     private int m_index;
-    private byte[] Scaler;
-
     public HWConsumer(Context context,Pusher pusher, int index){
         mContext = context;
         mPusher = pusher;
         m_index = index;
-        Scaler = new byte[(int) (Constants.UPLOAD_VIDEO_WIDTH* Constants.UPLOAD_VIDEO_HEIGHT * 1.5)];
        
     }
     @Override

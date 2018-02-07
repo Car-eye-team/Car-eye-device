@@ -28,8 +28,7 @@ import android.content.Intent;
 	  public String [] path = null;	  
 	  Context mContext;
 	  int m_DiskCnt;	
-	  public static  boolean isCleaning = false;
-	  
+	  public static  boolean isCleaning = false;	  
 	  public DiskManager(Context context)
 	  {
 		  mContext = context;

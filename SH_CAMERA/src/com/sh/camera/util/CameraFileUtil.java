@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.sh.camera.service.CommandService;
 import com.sh.camera.service.MainService;
 
 import android.annotation.SuppressLint;

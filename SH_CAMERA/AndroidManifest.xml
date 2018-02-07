@@ -9,7 +9,7 @@
         android:targetSdkVersion="21" />
 
     <uses-feature android:name="android.hardware.camera" />
-
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -28,8 +28,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 允许程序打开网络套接字 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- SD卡写入数据权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <!-- SD卡创建与删除文件权限 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
@@ -39,6 +38,7 @@
         android:icon="@drawable/icon_jly"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        
         <activity
             android:name="com.sh.camera.MainActivity"
             android:label="@string/app_name"
@@ -66,8 +66,7 @@
         <!-- 启动通讯Service -->
         <service
             android:name="com.sh.camera.service.ShCommService"
-            android:enabled="true" />
-        <service android:name="com.sh.camera.service.CommandService" />
+            android:enabled="true" />       
         <service android:name="com.sh.camera.service.MyIntentServiceSdCar" />
 
         <receiver android:name="com.sh.camera.receiver.StartReceiver" >

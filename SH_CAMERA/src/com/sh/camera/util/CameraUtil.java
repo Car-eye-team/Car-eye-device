@@ -27,10 +27,8 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
 import com.jsr.sdk.UsbCameraManager;
 import com.sh.camera.ServerManager.ServerManager;
-import com.sh.camera.service.CommandService;
 import com.sh.camera.service.MainService;
 import com.sh.camera.socket.CommCenterUsers;
 import com.sh.camera.socket.coder.CommEncoder;
@@ -380,30 +378,19 @@ public class CameraUtil {
 					fos.close();   
 				}
 
-				if(CAMERA_OPER_MODE == 1){
+				
 					if(handler != null){
 						handler.sendMessage(handler.obtainMessage(1001));
 					}
-				}else{
 				
-					Intent intent = new Intent("action-snapshot-gotten");
-					intent.putExtra("Channel", index);
-					LocalBroadcastManager.getInstance(CommandService.getInstance()).sendBroadcast(intent);
-
-				}
 
 
 			} catch (Exception e) {  
 				e.printStackTrace(); 
-				if(CAMERA_OPER_MODE == 1){
-					if(handler != null){
-						handler.sendMessage(handler.obtainMessage(1003));
-					}
-				}else{
-					Intent intent = new Intent("action-snapshot-gotten");
-					intent.putExtra("Channel", index);
-					LocalBroadcastManager.getInstance(CommandService.getInstance()).sendBroadcast(intent);					
+				if(handler != null){
+					handler.sendMessage(handler.obtainMessage(1003));
 				}
+				
 			}  
 			return null;  
 		}  
