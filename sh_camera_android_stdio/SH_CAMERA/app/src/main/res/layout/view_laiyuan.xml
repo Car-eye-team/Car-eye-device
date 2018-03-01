@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#262626"
+        android:gravity="center"
+        android:padding="10dp"
+         >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请选择文件类型"
+            android:textColor="#cccccc"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1a1a1a"
+        android:gravity="center"
+        android:padding="10dp"
+         >
+
+        <TextView
+            android:id="@+id/view_laiyuan_tv0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全部"
+            android:textColor="#338fcc"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1a1a1a"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+         >
+
+        <TextView
+            android:id="@+id/view_laiyuan_tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="摄像头一"
+            android:textColor="#cccccc"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1a1a1a"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+         >
+
+        <TextView
+            android:id="@+id/view_laiyuan_tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="摄像头二"
+            android:textColor="#cccccc"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1a1a1a"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+         >
+
+        <TextView
+            android:id="@+id/view_laiyuan_tv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="摄像头三"
+            android:textColor="#cccccc"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1a1a1a"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+         >
+
+        <TextView
+            android:id="@+id/view_laiyuan_tv4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="摄像头四"
+            android:textColor="#cccccc"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+
+</LinearLayout>
