@@ -8,8 +8,8 @@ car-eye 设备子系统提供了一整套硬件设计，固件程序，系统软
 多路行车记录仪：sh_camera
 
 sh_camera 是car-eye开源团队开发的基于android系统的一个应用程序。主要界面如下图：
-![](https://github.com/Car-eye-admin/doc/raw/master/车辆管理平台.jpg)
-![](https://github.com/Car-eye-team/doc/car-eye-device/raw/master/car-eye-camera主界面.jpg)
+
+![](https://github.com/Car-eye-team/doc/raw/master/car-eye-device/car-eye-camera主界面.jpg)
 
 
 
