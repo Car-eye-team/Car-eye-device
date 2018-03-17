@@ -83,6 +83,7 @@ end： 开始推送文件的相对偏移的结束时间
 
 public void  CarEyeCallBack(int channel, int Result)
 功能：推送文件的callback函数
+
 参数:
 
 channel：通道号
