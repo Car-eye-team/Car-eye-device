@@ -137,12 +137,12 @@ public class HWConsumer extends Thread implements VideoConsumer {
                 if (sync) {
                     System.arraycopy(mPpsSps, 0, h264, 0, mPpsSps.length);
                     outputBuffer.get(h264, mPpsSps.length, bufferInfo.size);
-                    mPusher.SendBuffer_org( h264,  mPpsSps.length + bufferInfo.size, (int)(bufferInfo.presentationTimeUs / 1000),1, m_index);
+                    mPusher.SendBuffer_org( h264,  mPpsSps.length + bufferInfo.size, (int)(bufferInfo.presentationTimeUs / 1000),0, m_index);
                     	 	
                 }else{
                 	
                     outputBuffer.get(h264, 0, bufferInfo.size);
-                    mPusher.SendBuffer_org( h264,  bufferInfo.size,  (int)(bufferInfo.presentationTimeUs / 1000), 1, m_index);
+                    mPusher.SendBuffer_org( h264,  bufferInfo.size,  (int)(bufferInfo.presentationTimeUs / 1000), 0, m_index);
                   
                 }
                 

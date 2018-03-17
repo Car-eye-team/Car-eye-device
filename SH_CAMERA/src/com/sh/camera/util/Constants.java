@@ -64,9 +64,14 @@ public class Constants {
 	public static String fps = "fps";
 	public static String rule = "rule";
 	public static String mode = "mode";
-	public static String addPort = "add_port";
+	public static String addPort = "add_port";	
+	public static int CAREYE_VCODE_H264 = 0x1C;
+	public static int CAREYE_VCODE_H265 = 0x48323635;
 
-
+	public static int CAREYE_ACODE_AAC = 0x15002;
+	public static int CAREYE_ACODE_G711U = 0x10006;
+	public static int CAREYE_ACODE_G711A = 0x10007;
+	public static int CAREYE_ACODE_G726 = 0x10007;
 	/**录像时长 分钟*/
 	public static final int VIDEO_TIME = 10;//10
 	/**SD卡路径*/
@@ -93,8 +98,6 @@ public class Constants {
 	public static boolean CAMERA_RECORD[] = {false,false,false,false};
 	
 	public static  boolean StartFlag  =false;
-	
-
 	/** 产品类型 1 T3 2 一甲丙益后视镜  3 有方后视镜*/
 	public static int  PRODUCT_TYPE = 1;	
 	//录像回放有关的定义	
@@ -104,11 +107,9 @@ public class Constants {
 	public static final String ACTION_VIDEO_STOP_PLAYBACK  = "ACTION_VIDEO_STOP_PLAYBACK";
 	public static final String ACTION_VIDEO_FILE_PLAYBACK  = "ACTION_VIDEO_FILE_PLAYBACK";
 	public static final String ACTION_VIDEO_PLAYBACK_LIST =  "ACTION_VIDEO_PLAYBACK_LIST";	
-	public static final String ACTION_UPDATE_LOCATION =  "UPDATE_LOCATION";	
-	
+	public static final String ACTION_UPDATE_LOCATION =  "UPDATE_LOCATION";		
 	/**
 	 * 设置参数	 */
-	
 	public static void setParam(Context context){
 		switch (PRODUCT_TYPE) {
 		//T3		
@@ -135,8 +136,7 @@ public class Constants {
 			CAMERA_ID[0] = 2;
 			CAMERA_ID[1] = 1;
 			CAMERA_ID[2] = 5;
-			CAMERA_ID[3] = 6;
-			
+			CAMERA_ID[3] = 6;			
 			break;
 			//有方后视镜
 			

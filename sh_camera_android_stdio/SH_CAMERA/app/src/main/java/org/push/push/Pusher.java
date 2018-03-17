@@ -32,17 +32,28 @@ public class Pusher {
 	 * @param format
 	 * @return
 	 */
-	 private ByteBuffer directbuffer;
-	    
-	    
-	public native int  InitNetWork(Context context,String serverIP, String serverPort, String streamName, int fps, int format);
-	public native int  StopNativeFileRTSP();
-	public native int  StartNativeFileRTSPEX(Context context, String serverIP, String serverPort, String streamName,  String fileName,int start, int end);
+	private ByteBuffer directbuffer;
 	
-	public native void   InitWatermark(int height);
-	public native byte[] addwatermarkScale(byte[] data,int length, int width, int height, int frameheight, int UploadWidth, int UploadHeight);
-	public native void  UnInitWatermark();
-	public native long  SendBuffer(int time, byte[] data, int lenth, int type, int index);
+	private Handler handle =null;	
+	public native int    CarEyeInitNetWork(Context context,String serverIP, String serverPort, String streamName, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
+	public native int 	 CarEyePusherIsReady(int channel);
+	public native long   CarEyeSendBuffer(int time, byte[] data, int lenth, int type, int channel);	
+	public native int    CarEyeStopNativeFileRTSP(int channel);	
+	public native int    CarEyeStartNativeFileRTSPEX(Context context, String serverIP, String serverPort, String streamName,  String fileName,int start, int end);
+
+	// result： 0 文件传输结束  , 传输出错
+	
+	public void  CarEyeCallBack(int channel, int Result){		
+		
+		Log.e("puser", "exit send file!");	
+		if(handle != null){
+			handle.sendMessage(handle.obtainMessage(1006));
+		}else{
+		}		
+		Intent intent = new Intent("com.dss.camera.ACTION_END_VIDEO_PLAYBACK");
+		intent.putExtra("EXTRA_ID", channel);
+		MainService.getInstance().sendBroadcast(intent);
+	}
 	
 	/**
 	 * 发送H264编码格式
@@ -59,41 +70,24 @@ public class Pusher {
 	 * 停止发送
 	 * @param index
 	 */
-	public native void stopPushNet(int index);   
+	public native void  CarEyeStopPushNet(int index);   
 	
-	public void  initDectBUffer(int size)
-	{
-		directbuffer = 	ByteBuffer.allocateDirect(size);
-	}
 	public  long SendBuffer_org(final byte[] data,final int length, final int timestamp, final int type, final int index)
 	{
 		long ret;
-		Log.e("SendBuffer_org", "SendBuffer_org"+timestamp);
-		ret = SendBuffer(timestamp, data,length,type,index);		
+		ret =  CarEyeSendBuffer(timestamp, data,length,type,index);		
 		return ret;
 		
-	}
-	public byte[] addwatermarkScale(byte[] data, byte[] dest, int size, int width, int height,int UploadWidth, int UploadHeight )
-	{
-		byte[] pdest;		
-		pdest = addwatermarkScale(data,size,width,height, height, UploadWidth,UploadHeight);		
-		System.arraycopy( pdest, 0, dest, 0,  UploadWidth*UploadHeight*3/2);
-		return data;
-	}
-
+	}	
 	public  void stopPush(final int  index)
 	{
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				stopPushNet(index);
-
+				 CarEyeStopPushNet(index);
 			}
 		}).start();
-
 	}
-
-
 	/**
 	 * 停止所有
 	 */
@@ -117,36 +111,22 @@ public class Pusher {
             }
         }).start();
     }*/
+	
 
-	public void startfilestream( final String serverIP, final String serverPort, final String streamName, final String fileName,final int splaysec,final int eplaysec,final Handler handler){
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					
-					//StartNativeFileRTSP(serverIP,serverPort,streamName, fileName);
-					StartNativeFileRTSPEX(MainService.application, serverIP,serverPort,streamName, fileName,splaysec,eplaysec);
-					Log.e("puser", "exit send file!");
-					if(handler != null){
-						handler.sendMessage(handler.obtainMessage(1006));
-					}else{
-					}
-					Intent intent = new Intent("com.dss.camera.ACTION_END_VIDEO_PLAYBACK");
-					intent.putExtra("EXTRA_ID", 0);
-					MainService.getInstance().sendBroadcast(intent);
-					CameraUtil.stopVideoFileStream();
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-			}
-		}).start();
+
+	public int  startfilestream( final String serverIP, final String serverPort, final String streamName, final String fileName,final int splaysec,final int eplaysec,final Handler handler){
+
+		//StartNativeFileRTSP(serverIP,serverPort,streamName, fileName);
+		handle = handler;
+		int channel =  CarEyeStartNativeFileRTSPEX(MainService.application, serverIP,serverPort,streamName, fileName,splaysec,eplaysec);
+		return channel;				
+				
 	}
 	public void startfilestream(final String serverIP, final String serverPort, final String streamName, final String filePath){
 
-		StartNativeFileRTSPEX(MainService.application,serverIP,serverPort,streamName, filePath,0,0);
+		CarEyeStartNativeFileRTSPEX(MainService.application,serverIP,serverPort,streamName, filePath,0,0);
 		Log.e("puser", "exit send file!");
-		CameraUtil.stopVideoFileStream();
+		//CameraUtil.stopVideoFileStream();
 	}
 	
 }

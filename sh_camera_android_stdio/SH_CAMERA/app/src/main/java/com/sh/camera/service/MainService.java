@@ -1,4 +1,4 @@
-/*  car eye 车辆管理平台 
+﻿/*  car eye 车辆管理平台 
  * car-eye管理平台   www.car-eye.cn
  * car-eye开源网址:  https://github.com/Car-eye-team
  * Copyright
@@ -8,6 +8,8 @@ package com.sh.camera.service;
 
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Date;
 
 import org.push.push.Pusher;
@@ -218,6 +220,7 @@ public class MainService extends Service {
 		}).start();
 		
 	}	
+	
 	@Override
 	public void onStart(Intent intent, int startId) {
 		// TODO Auto-generated method stub
@@ -229,7 +232,8 @@ public class MainService extends Service {
 			public void onReceive(Context context, Intent intent) { 
 
 				String action = intent.getAction();
-				UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);        		
+				UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE); 			
+				      		
 				if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action) && device.getDeviceProtocol() ==1) {          
 					Toast.makeText(context, "监听到usb摄像头变动1"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
 					usbcameraConnect = false;    
@@ -246,6 +250,8 @@ public class MainService extends Service {
 					openCamera(0, 2);      		
 
 				}  
+				
+				
 				else if(action.equals(Constants.ACTION_VIDEO_PLAYBACK))
 				{
 					int id = intent.getIntExtra("EXTRA_ID", 1);  //通道ID
@@ -685,6 +691,7 @@ public class MainService extends Service {
 				lys[i].setOnClickListener(click2start);
 			}
 		}		
+		
 		//确认四路、二路
 		if(ServerManager.getInstance().getMode() == SetActivity.rgids[0]){
 			lys[3].setVisibility(View.GONE);
@@ -1218,7 +1225,7 @@ public class MainService extends Service {
 			CameraUtil.VIDEO_UPLOAD[index] = true;
 			if(camera[rules[index]]!=null){
 				//初始化推流工具
-				StreamIndex[rules[index]]= mPusher.InitNetWork( getApplicationContext(),ipstr, portstr, String.format("%s?channel=%d.sdp", serialno,CameraId),framerate,0);
+				StreamIndex[rules[index]]= mPusher.CarEyeInitNetWork( getApplicationContext(),ipstr, portstr, String.format("%s?channel=%d.sdp", serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				//控制预览回调
 				sc_controls[rules[index]] = true;
 				camera[rules[index]].setPreviewCallback(preview[rules[index]]);	

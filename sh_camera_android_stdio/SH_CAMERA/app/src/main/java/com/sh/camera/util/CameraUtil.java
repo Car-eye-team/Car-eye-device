@@ -230,11 +230,11 @@ public class CameraUtil {
 			e.printStackTrace();
 		}
 	}
-
 	/**
 	 * 结束视频回放上传
 	 */
 	public static void stopVideoFileStream(){
+		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -243,14 +243,16 @@ public class CameraUtil {
 					if(MainService.mPusher == null){
 						MainService.mPusher = new Pusher();
 					}
-					MainService.mPusher.StopNativeFileRTSP();					
+					for(int i = 0; i <4; i++)
+					{
+						MainService.mPusher. CarEyeStopNativeFileRTSP(i);
+					}					
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
 			}
-		}).start();
-
+		}).start();		
 	}
 
 	/**
@@ -302,7 +304,6 @@ public class CameraUtil {
 
 		return false;
 	}
-
 	/**
 	 * 录像
 	 * @param cameraid 通道ID 1-4 
@@ -311,7 +312,6 @@ public class CameraUtil {
 	public static void videoRecord(int cameraid,long time){
 
 	}
-
 	/**
 	 * 摄像头检测
 	 */
@@ -376,13 +376,9 @@ public class CameraUtil {
 					fos.write(params[0]); 
 					fos.close();   
 				}
-
-				
-					if(handler != null){
-						handler.sendMessage(handler.obtainMessage(1001));
-					}
-				
-
+				if(handler != null){
+					handler.sendMessage(handler.obtainMessage(1001));
+				}
 
 			} catch (Exception e) {  
 				e.printStackTrace(); 

@@ -84,7 +84,7 @@ public class FileActivity extends Activity {
 				String abs_name = map.get("path");
 				Log.d("CMD", " filePath name"+filename);
 				int cameraid = Integer.parseInt(filename.split("-")[0]);
-				CameraUtil.startVideoFileStream(cameraid, 0, 600, abs_name,handler);
+				CameraUtil.startVideoFileStream(cameraid, 0, 0, abs_name,handler);
 				b = new Builder(FileActivity.this);
 				b.setView(inflater.inflate(R.layout.dialog_sc, null));
 				b.setPositiveButton("停止", new DialogInterface.OnClickListener() {
@@ -96,6 +96,7 @@ public class FileActivity extends Activity {
 				});
 				dialog = b.create();
 				dialog.show();
+				
 			}
 			if(msg.what==1006){
 				dialog.dismiss();
