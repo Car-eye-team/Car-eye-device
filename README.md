@@ -55,8 +55,8 @@ public native int 	 CarEyePusherIsReady(int channel);
 功能：判断通道是否准备好，用来开启推送1：已经准备好，0还没准备好。
 channel：通道号，初始化返回值
 
-public native long   CarEyeSendBuffer(int time, byte[] data, int lenth, int type, int channel);
-功能：填充流媒体数据到RTSP服务器
+public native long   CarEyeSendBuffer(int time, byte[] data, int lenth, int type, int channel);  
+功能：填充流媒体数据到RTSP服务器  
 参数
 time: 推送时间数，毫秒单位
 data:多媒体数据
