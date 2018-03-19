@@ -89,4 +89,4 @@ public void  CarEyeCallBack(int channel, int Result)
 channel：通道号  
 Result:返回码，一般为结束或者错误码  
 
-car-eye车辆管理平台：www.car-eye.cn; car-eye开源平台网址：https://github.com/Car-eye-team/Car-eye-device 有关car-eye 可以加QQ群590411159。
+car-eye车辆管理平台：www.car-eye.cn; car-eye开源平台网址：https://github.com/Car-eye-team/Car-eye-device 有关car-eye 咨询可以加QQ群590411159。
