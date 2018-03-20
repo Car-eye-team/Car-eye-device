@@ -37,7 +37,7 @@ public class Pusher {
 	private Handler handle =null;	
 	public native int    CarEyeInitNetWork(Context context,String serverIP, String serverPort, String streamName, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
 	public native int 	 CarEyePusherIsReady(int channel);
-	public native long   CarEyeSendBuffer(int time, byte[] data, int lenth, int type, int channel);	
+	public native long   CarEyeSendBuffer(long time, byte[] data, int lenth, int type, int channel);	
 	public native int    CarEyeStopNativeFileRTSP(int channel);	
 	public native int    CarEyeStartNativeFileRTSPEX(Context context, String serverIP, String serverPort, String streamName,  String fileName,int start, int end);
 
@@ -72,9 +72,10 @@ public class Pusher {
 	 */
 	public native void  CarEyeStopPushNet(int index);   
 	
-	public  long SendBuffer_org(final byte[] data,final int length, final int timestamp, final int type, final int index)
+	public  long SendBuffer_org(final byte[] data,final int length, final long timestamp, final int type, final int index)
 	{
 		long ret;
+		//Log.e("puser", "timestamp:"+timestamp+"length:"+length);	
 		ret =  CarEyeSendBuffer(timestamp, data,length,type,index);		
 		return ret;
 		
@@ -102,6 +103,7 @@ public class Pusher {
 			}
 		}).start();
 	}
+	
 
 	/* public void initPush(final String serverIP, final String serverPort, final String streamName, final int fps, final int format){
         new Thread(new Runnable() {
