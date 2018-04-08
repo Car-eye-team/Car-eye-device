@@ -38,5 +38,56 @@ rtsp://120.76.235.109:10554/13510671870-channel=1.sdp
 可以通过第三方播放器，如VLC等进行播放。在car-eye注册平台注册账号，并在客户端控制播放。
 注册网址为：http://39.108.246.45:800/
 
+# 库接口说明
 
+接口原型： public native int CarEyeInitNetWork(Context context,String serverIP, String serverPort, String streamName, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
+接口功能：初始化流媒体通道
+参数说明：   context：应用句柄   server IP:流媒体服务器的IP，可以是域名如www.car-eye.cn
+serverPort:RTSP流媒体的端口号
+streamName： 设备名：如手机号码13510671870 是设备的唯一标识
+videoformat： 视频格式，支持H264，265 MJPEG
+fps： 帧频率
+audioformat： 音频格式支持AAC,G711,G726等
+返回：通道号
+
+接口原型：public native int CarEyePusherIsReady(int channel);
+接口功能：判断通道是否准备好，用来开启推送1：已经准备好，0还没准备好。
+参数说明：
+channel：通道号 返回：1 通道已经准备好 0 通道还没准备好
+
+接口原型： public native long CarEyeSendBuffer(long time, byte[] data, int lenth, int type, int channel);
+接口功能：填充流媒体数据到RTSP服务器 参数说明：
+time: 推送时间数，毫秒单位 data: 多媒体数据
+lenth：数据长度
+type ：视频还是音频
+channel：推送的通道号
+返回：0 为发送数据成功  其他 为错误码
+
+接口原型 public native int CarEyeStopNativeFileRTSP(int channel);
+接口功能：结束文件的推送
+参数说明:
+channel:通道号
+
+接口原型： public native int CarEyeStartNativeFileRTSPEX(Context context, String serverIP, String serverPort, String streamName, String fileName,int start, int end);
+
+接口功能：启动文件的推送 参数说明:context：应用句柄
+serverIP:流媒体服务器的IP，可以是域名如www.car-eye.cn
+serverPort:RTSP流媒体的端口号
+streamName： 设备名：如手机号码13510671870 是设备的唯一标识
+fileName：文件的绝对路径
+start：推送的文件相对偏移的开始时间
+end： 推送文件的相对偏移的结束时间
+返回：通道号（1-8） 其他为错误
+
+接口原型   public void CarEyeCallBack(int channel, int Result)
+接口功能：推送文件的callback函数
+参数说明:
+channel：通道号
+Result:返回码，一般为结束或者错误码
+
+
+
+# 联系我们
+
+car-eye车辆管理平台：www.car-eye.cn; car-eye开源平台网址：https://github.com/Car-eye-team 有关car-eye 问题咨询可以加QQ群590411159。
 
