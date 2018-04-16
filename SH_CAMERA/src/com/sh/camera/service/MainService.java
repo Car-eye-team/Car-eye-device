@@ -11,9 +11,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Date;
-
 import org.push.push.Pusher;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
@@ -57,9 +56,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.dss.car.launcher.provider.biz.ProviderBiz;
-import com.jsr.sdk.UsbCameraManager;
 import com.sh.camera.FileActivity;
 import com.sh.camera.R;
 import com.sh.camera.SessionLinearLayout;
@@ -145,7 +142,6 @@ public class MainService extends Service {
 	private String longitude = ""; // 经度
 	private String latitude = ""; // 维度
 	private LocationManager lm;
-
 	// 获取本地application的对象
 	public static MainService getInstance() {
 		if (instance == null) {
@@ -153,16 +149,16 @@ public class MainService extends Service {
 		}
 		return instance;
 	}	
-
 	public static DiskManager getDiskManager()
 	{
 		return disk;
-	}
+	}	
+	private boolean isTabletDevice = true;
 
-	
-	@Override
 	public void onCreate() {
 		super.onCreate();
+		isTabletDevice = isTabletDevice(this);
+
 		instance = this;
 		c = MainService.this;
 		application = getApplicationContext();
@@ -181,12 +177,8 @@ public class MainService extends Service {
 		cid = Constants.CAMERA_ID;
 		inflater = LayoutInflater.from(c);
 		registerReceiver(br, filter);
-		registerReceiver(br2, filter2);				
+			
 		disk.CreateDirctionaryOnDisk(Constants.CAMERA_FILE_DIR);
-		if(Constants.GPS_SUPPORT == true)			
-		{
-			getLocation();
-		}
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -232,26 +224,20 @@ public class MainService extends Service {
 			public void onReceive(Context context, Intent intent) { 
 
 				String action = intent.getAction();
-				UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE); 			
-				      		
+				UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);			   		
 				if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action) && device.getDeviceProtocol() ==1) {          
 					Toast.makeText(context, "监听到usb摄像头变动1"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
 					usbcameraConnect = false;    
-					closeCamera(0);        		 
-
+					closeCamera(0);   		 
 				} else if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action) && device.getDeviceProtocol()==1) {
-
 					Toast.makeText(context, "监听到usb摄像头变动0"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
 					try {
 						Thread.sleep(500);
 					} catch (Exception e) {
 					}
 					usbcameraConnect = true;
-					openCamera(0, 2);      		
-
-				}  
-				
-				
+					openCamera(0, 2);   
+				}				
 				else if(action.equals(Constants.ACTION_VIDEO_PLAYBACK))
 				{
 					int id = intent.getIntExtra("EXTRA_ID", 1);  //通道ID
@@ -270,9 +256,6 @@ public class MainService extends Service {
 				else if(action.equals(Constants.ACTION_VIDEO_FILE_PLAYBACK))
 				{
 					CameraUtil.stopVideoFileStream();
-				}else if(action.equals(Constants.ACTION_UPDATE_LOCATION))
-				{
-					MainService.getInstance().updateLocation();
 				}
 				if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 				{
@@ -286,8 +269,7 @@ public class MainService extends Service {
 		localIntentFilter.addAction(Constants.ACTION_VIDEO_PLAYBACK);        
 		localIntentFilter.addAction(Constants.ACTION_VIDEO_FILE_PLAYBACK);   
 		localIntentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-		localIntentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS); 
-		localIntentFilter.addAction(Constants.ACTION_UPDATE_LOCATION); 		
+		localIntentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS); 		
 		registerReceiver(SYSBr, localIntentFilter);	        		
 	}
 	
@@ -296,19 +278,13 @@ public class MainService extends Service {
 		super.onDestroy();
 		isrun = false;
 		unregisterReceiver(br);
-		unregisterReceiver(br2);
+		
 		unregisterReceiver(SYSBr);
 		//取消监听
 		Log.d("main service", "onDestroy");
 	};
 
-	IntentFilter filter2 = new IntentFilter("android.intent.action.ACC_OVER");
-	BroadcastReceiver br2 = new BroadcastReceiver(){
-		@Override
-		public void onReceive(Context arg0, Intent arg1) {
-			restart();
-		}
-	};
+	
 	//pass一次window
 	boolean passwin = false;
 	IntentFilter filter = new IntentFilter(ACTION);
@@ -348,8 +324,7 @@ public class MainService extends Service {
 				/*if(!isRecording){
 					click(R.id.bt_ly_2);
 				}*/
-				prepareRecorder(index, 1);
-				
+				prepareRecorder(index, 1);				
 			}
 			if(type.equals(STOPRECORDER)){
 				if(isRecording){
@@ -381,13 +356,9 @@ public class MainService extends Service {
 	void setWindowMin(){
 		ismatch = true;
 		ly_bts.setVisibility(view.VISIBLE);
-		if(Constants.PRODUCT_TYPE == 3){
-			wmParams.x = 80;
-			wmParams.y = 132;
-		}else{
-			wmParams.x = 1;
-			wmParams.y = 1;
-		}
+		wmParams.x = 1;
+		wmParams.y = 1;
+		
 		wmParams.width = 1;
 		wmParams.height = 1;
 		//最小化到后台，需要设置LayoutParams.FLAG_NOT_FOCUSABLE，才能取消对返回键的拦截，并且移除layout
@@ -435,19 +406,6 @@ public class MainService extends Service {
 				lys[i].setOnClickListener(click_ly);
 			}
 		}		
-		if(Constants.PRODUCT_TYPE == 2){
-			int index = 1;
-			Matrix transform = new Matrix();
-			ttvs[index] = (TextureView) view.findViewById(ttvids[index]);
-			int width = ttvs[index].getWidth();
-			if(width>200){
-				width = 411;
-			}else {
-				width = 206;
-			}
-			transform.setScale(-1, 1,width, 0);
-			ttvs[index].setTransform(transform);
-		}
 		isWindowViewShow = true;
 		if(Constants.checkVersion){
 			Constants.checkVersion = false;
@@ -459,40 +417,16 @@ public class MainService extends Service {
 	void setWindowWin(){
 		ismatch = false;
 		ly_bts.setVisibility(view.GONE);
-		if(Constants.PRODUCT_TYPE == 3){
-			wmParams.x = 80;
-			wmParams.y = 132;
-			wmParams.width = 216;
-			wmParams.height = 155;
-		}else{
-			wmParams.x = 1;
-			wmParams.y = 1;
-			wmParams.width = 1;
-			wmParams.height = 1;
-		}
+		wmParams.x = 1;
+		wmParams.y = 1;
+		wmParams.width = 1;
+		wmParams.height = 1;
+		
 		mWindowManager.updateViewLayout(view, wmParams);
 		for (int i = 0; i < lys.length; i++) {
 			if(i!=0&&i!=3){
 				lys[i].setOnClickListener(click2start);
 			}
-		}
-
-		//一甲丙益USB摄像头需要单独进行处理，预览反向问题
-		if(Constants.PRODUCT_TYPE == 2){
-			int index = 1;
-			Matrix transform = new Matrix();
-			ttvs[index] = (TextureView) view.findViewById(ttvids[index]);
-			int width = 0;
-			if(ttvs[index].getWidth() > 500){
-				width = 216/2;
-				//处理摄像头窗口最大化后，进入另外一个应用在回到主界面串口显示一半的问题
-			}else if(ttvs[index].getWidth() == 2){
-				width = 216/2;
-			}else{
-				width = 216/4;
-			}
-			transform.setScale(-1, 1, width, 0);
-			ttvs[index].setTransform(transform);
 		}
 
 	}
@@ -627,17 +561,7 @@ public class MainService extends Service {
 			}
 			if(msg.what==1003){
 				boolean lock = false;
-				Toast.makeText(c, "执行拍照失败", 1000).show();
-				/*for (int i = 0; i < rules.length; i++) {
-					if(rules[i]==picid&&rules.length>i+1){
-						//boolean re = CameraUtil.cameraTakePicture(i+1, 1);
-						boolean re = MediaCodecManager.TakePicture(i+1, 1);
-						if(re){
-							lock = true;
-							break;
-						}
-					}
-				}*/
+				Toast.makeText(c, "执行拍照失败", 1000).show();				
 				if(!lock){
 					clickLock = false;
 				}
@@ -712,12 +636,22 @@ public class MainService extends Service {
 		stHolder = new SurfaceTexture[Constants.MAX_NUM_OF_CAMERAS];		
 		preview = new PreviewCallback[Constants.MAX_NUM_OF_CAMERAS];	
 		stListener = new SurfaceTextureListener[Constants.MAX_NUM_OF_CAMERAS];
-		ly_bts = (LinearLayout) view.findViewById(R.id.main_right_btly);
-		btiv1 = (ImageView) view.findViewById(R.id.imageView1);
-		btiv2 = (ImageView) view.findViewById(R.id.imageView2);
+		if(isTabletDevice){
+			ly_bts = (LinearLayout) view.findViewById(R.id.main_right_btly);
+		}else{
+			ly_bts = (LinearLayout) view.findViewById(R.id.main_bottom_btly);
+		}
+		ly_bts.setVisibility(View.VISIBLE);
+		if(isTabletDevice){
+			btiv1 = (ImageView) view.findViewById(R.id.imageView1);
+			btiv2 = (ImageView) view.findViewById(R.id.imageView2);
+		}else{
+			btiv1 = (ImageView) view.findViewById(R.id.imageView1_bottom);
+			btiv2 = (ImageView) view.findViewById(R.id.imageView2_bottom);
+		}
+
 		//预览回调
 		preview[0] = new PreviewCallback() {
-
 			@Override
 			public void onPreviewFrame(byte[] data, Camera camera1) {
 				// TODO Auto-generated method stub
@@ -793,23 +727,14 @@ public class MainService extends Service {
 	 * @param i
 	 */
 	public void colseCamera(int index){
-		try {
-			boolean falg = true;
-			if(Constants.PRODUCT_TYPE == 3){
-				if(index == 1){
-					falg = false;
-				}
+		try {		
+		
+			if(camera[index]!=null){
+				camera[index].stopPreview();
+				camera[index].release();
+				camera[index] = null;
 			}
-			if(falg){
-				if(camera[index]!=null){
-					camera[index].stopPreview();
-					camera[index].release();
-					camera[index] = null;
-				}
-			}else{
-				//有方USB摄像头需要单独进行处理
-				UsbCameraManager.getInstance().stopCamera();
-			}
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -867,41 +792,11 @@ public class MainService extends Service {
 						e.printStackTrace();
 					}
 					Camera.Parameters parameters = camera[index].getParameters();
-					/*List<Camera.Size> previewSIzes = parameters.getSupportedVideoSizes();
-					for (Camera.Size s : previewSIzes) {
-						System.out.println("CAMERA-"+cid[index]+"   "+s.width+"*"+s.height);
-					}	*/
-					parameters.setPreviewSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);
-					
-					//时间		
-					//1 T3 2 一甲丙益后视镜  3 有方后视镜
-					if(Constants.PRODUCT_TYPE == 1){									
-						camera[index].setErrorCallback(new CameraErrorCallback(index));
-					}else if(Constants.PRODUCT_TYPE == 2){						
-						parameters.setPreviewFrameRate(30);  
-						parameters.set("fps-percent",80);						
-						//一甲丙益USB摄像头传输反向的问题
-						if(index == 1){
-							parameters.set("mirror", "true");
-							parameters.set("timewater", "true");
-							Camera.Size previewSize = camera[index].getParameters().getPreviewSize();
-							Matrix transform = new Matrix();
-							transform.setScale(-1, 1, ttvs[index].getWidth()/2, 0); 
-							ttvs[index].setTransform(transform);
-						}
-						camera[index].setErrorCallback(new CameraErrorCallback(index));
-					}else{
-						parameters.setPreviewFrameRate(30);                       
-						parameters.set("fps-percent",80);
-						camera[index].setErrorCallback(new CameraErrorCallback(index));
-					}
+					parameters.setPreviewSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);							
+					camera[index].setErrorCallback(new CameraErrorCallback(index));					
 					camera[index].setParameters(parameters);					
-					camera[index].startPreview();
-													
+					camera[index].startPreview();													
 				}
-			}else{
-				//有方USB摄像头需要单独进行处理
-				UsbCameraManager.getInstance().startCamera(MainService.getInstance(),cid[index]);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -1053,24 +948,7 @@ public class MainService extends Service {
 					break;
 				}
 			}
-
-			if(Constants.PRODUCT_TYPE == 2){
-				int index = 1;
-				Matrix transform = new Matrix();
-				ttvs[index] = (TextureView) view.findViewById(ttvids[index]);
-				int width  = 0;
-				if(isgone){
-					width = ttvs[index].getWidth();
-				}else{
-					if(flag){
-						width = ttvs[index].getWidth()/2;
-					}else{
-						width = ttvs[index].getWidth()/4;
-					}
-				}
-				transform.setScale(-1, 1,width, 0);
-				ttvs[index].setTransform(transform);
-			}
+			
 		}
 	};
 	//控制某路缩放
@@ -1114,7 +992,9 @@ public class MainService extends Service {
 	public void click(int id){
 		if(clickLock) return;
 		switch (id) {
-		case R.id.bt_ly_1://拍照			
+		case R.id.bt_ly_1://拍照		
+		case R.id.bt_ly_1_bottom://鎷嶇収			
+	
 			//检查SD卡是否存在
 			//if(!SdCardUtil.checkSdCardUtil()){			
 			if(disk.getDiskCnt()<=0){
@@ -1126,6 +1006,8 @@ public class MainService extends Service {
 			}			
 			break;
 		case R.id.bt_ly_2://录像
+		case R.id.bt_ly_2_bottom://褰曞儚
+
 			//检查SD卡是否存在
 			//if(!SdCardUtil.checkSdCardUtil()){
 			
@@ -1160,6 +1042,8 @@ public class MainService extends Service {
 			}
 			break;
 		case R.id.bt_ly_3://上传
+		case R.id.bt_ly_3_bottom://涓婁紶
+
 			clickLock = true;
 			if(isSC){
 				stopSC();
@@ -1174,6 +1058,8 @@ public class MainService extends Service {
 			clickLock = false;
 			break;
 		case R.id.bt_ly_4://回放
+		case R.id.bt_ly_4_bottom://鍥炴斁
+
 			isClose = false;
 			setWindowMin();
 			Intent intent_file = new Intent(c, FileActivity.class);
@@ -1181,6 +1067,8 @@ public class MainService extends Service {
 			startActivity(intent_file);
 			break;
 		case R.id.bt_ly_5://设置
+		case R.id.bt_ly_5_bottom://璁剧疆
+
 			isClose = false;
 			setWindowMin();
 			Intent intent_set = new Intent(c, SetActivity.class);
@@ -1188,7 +1076,7 @@ public class MainService extends Service {
 			startActivity(intent_set);
 			break;
 		case R.id.bt_ly_6://退出
-			
+		case R.id.bt_ly_6_bottom://閫€鍑?	
 			setWindowMin();
 			break;
 		}
@@ -1322,9 +1210,6 @@ public class MainService extends Service {
 		
 	}
 	
-
-
-	
 	private void generateVideoFilename(int index,  int outputFileFormat) {  	 
         
         String title = String.format("%d-%d", index+1, new Date().getTime()) ;
@@ -1353,56 +1238,20 @@ public class MainService extends Service {
 			mrs[index].setAudioSource(MediaRecorder.AudioSource.MIC);
 			mrs[index].setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);*/
 			//1 T3 2 一甲丙益后视镜  3 有方后视镜
-			Log.d("CMD", " startRecorder "+index);
-			if(Constants.PRODUCT_TYPE ==1){
-				mrs[index].setOutputFormat(MediaRecorder.OutputFormat.MPEG_4); 
-				mrs[index].setVideoEncoder(MediaRecorder.VideoEncoder.H264); 
-				if(cid[index]>3){
-					mrs[index].setVideoSize(720, 576); 
-					mrs[index].setVideoEncodingBitRate(4*720*576);
-				}else if(cid[index]>-1&&cid[index]<4){
-					
-					mrs[index].setVideoSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT); 
-					mrs[index].setVideoEncodingBitRate(3*Constants.RECORD_VIDEO_WIDTH*Constants.RECORD_VIDEO_HEIGHT/2);
-				}
-				mrs[index].setVideoFrameRate(framerate); 
-				mrs[index].setOnErrorListener(new MediaRecorderErrorListener(index));
-				//camera[index].startWaterMark();		
-
-			}else if(Constants.PRODUCT_TYPE ==2){
-				mrs[index].setOutputFormat(10); 
-				mrs[index].setVideoEncoder(MediaRecorder.VideoEncoder.H264); 
-				mrs[index].setVideoEncodingBitRate(6*640*480);
-				if(cid[index]>3){
-					mrs[index].setVideoSize(720, 576); 
-				}else if(cid[index]>-1&&cid[index]<4){
-					mrs[index].setVideoSize(640, 480); 
-				}
-				if(index == 1){
-					mrs[index].setVideoFrameRate(20); 
-				}else{
-					mrs[index].setVideoFrameRate(30); 
-				}
-				mrs[index].setOnErrorListener(new MediaRecorderErrorListener(index));
-			}else if(Constants.PRODUCT_TYPE ==3){
-				mrs[index].setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);  
-				mrs[index].setVideoEncoder(MediaRecorder.VideoEncoder.H264); 
-				mrs[index].setVideoEncodingBitRate(6*640*480);
-				mrs[index].setVideoSize(640, 480); 
-				mrs[index].setVideoFrameRate(30); 
-				mrs[index].setOnErrorListener(new MediaRecorderErrorListener(index));
-			}else{
-				mrs[index].setOutputFormat(10); 
-				mrs[index].setVideoEncoder(MediaRecorder.VideoEncoder.H264); 
-				mrs[index].setVideoEncodingBitRate(6*640*480);
-				if(cid[index]>3){
-					mrs[index].setVideoSize(720, 576); 
-				}else if(cid[index]>-1&&cid[index]<4){
-					mrs[index].setVideoSize(640, 480); 
-				}
-				mrs[index].setVideoFrameRate(30); 
-				mrs[index].setOnErrorListener(new MediaRecorderErrorListener(index));
-			}					
+			Log.d("CMD", " startRecorder "+index);			
+			mrs[index].setOutputFormat(MediaRecorder.OutputFormat.MPEG_4); 
+			mrs[index].setVideoEncoder(MediaRecorder.VideoEncoder.H264); 
+			if(cid[index]>3){
+				mrs[index].setVideoSize(720, 576); 
+				mrs[index].setVideoEncodingBitRate(4*720*576);
+			}else if(cid[index]>-1&&cid[index]<4){
+				
+				mrs[index].setVideoSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT); 
+				mrs[index].setVideoEncodingBitRate(3*Constants.RECORD_VIDEO_WIDTH*Constants.RECORD_VIDEO_HEIGHT/2);
+			}
+			mrs[index].setVideoFrameRate(framerate); 
+			mrs[index].setOnErrorListener(new MediaRecorderErrorListener(index));
+			//camera[index].startWaterMark();					
 			generateVideoFilename(index, MediaRecorder.OutputFormat.MPEG_4 );
 			mrs[index].setOutputFile( MrTempName[index]);			
 			Log.d("CMD", "generate filename"+MrTempName[index]);	
@@ -1419,9 +1268,6 @@ public class MainService extends Service {
 		try {
 			if(camera[rules[i]]!=null){
 				recoTime = -1;
-				if(Constants.PRODUCT_TYPE ==1){
-					//camera[index].stopWaterMark();
-				}
 				if (mrs[index] != null) { 
 					try {
 						mrs[index].setOnErrorListener(null);  
@@ -1466,7 +1312,6 @@ public class MainService extends Service {
 				//如果是mipi挂掉了，usb断电，然后杀掉自己所在的进程，监听心跳广播启动自己
 				//usb camera挂掉了，先断电然后再上电
 				//Toast.makeText(c, "摄像头：error="+error+",mCameraId="+mCameraId, Toast.LENGTH_LONG).show();
-
 			}
 			Log.d("	error!!!", "code!!!!:"+error);	
 		}
@@ -1494,168 +1339,9 @@ public class MainService extends Service {
 		}
 	}
 	
-	private void getLocation() {
-		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		// 判断GPS是否正常启动
-		if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {			
-			return;
-		}
-		// 为获取地理位置信息时设置查询条件
-		String bestProvider = lm.getBestProvider(getCriteria(), true);
-		// 获取位置信息
-		// 如果不设置查询要求，getLastKnownLocation方法传人的参数为LocationManager.GPS_PROVIDER
-		Location location = lm.getLastKnownLocation(bestProvider);
-		updateView(location);
-		/**
-		 * 监听状态
-		 */
-		//lm.addGpsStatusListener(listener);
-		/**
-		 * 绑定监听，有4个参数 参数1，设备：有GPS_PROVIDER和NETWORK_PROVIDER两种 参数2，位置信息更新周期，单位毫秒
-		 * 参数3，位置变化最小距离：当位置距离变化超过此值时，将更新位置信息 参数4，监听
-		 * 备注：参数2和3，如果参数3不为0，则以参数3为准；参数3为0，则通过时间来定时更新；两者为0，则随时刷新。
-		 * 1秒更新一次，或最小位移变化超过1米更新一次；
-		 * 注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep
-		 * (10000);然后执行handler.sendMessage(),更新位置
-		 */
-		if (lm.getProvider(LocationManager.GPS_PROVIDER) != null) {			
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000,
-					0, locationListener);
-		} else if (lm.getProvider(LocationManager.NETWORK_PROVIDER) != null) {
-			
-			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-					5000, 0, locationListener);
-		}
-	}
-
-	// 位置监听
-	private LocationListener locationListener = new LocationListener() {
-		/**
-		 * 位置信息变化时触发
-		 */
-		public void onLocationChanged(Location location) {
-		
-			updateView(location);
-		}
-		/**
-		 * GPS状态变化时触发
-		 */
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			switch (status) {
-			// GPS状态为可见时
-			case LocationProvider.AVAILABLE:
-				Log.i(TAG, "AVAILABLE");				
-				break;
-			// GPS状态为服务区外时
-			case LocationProvider.OUT_OF_SERVICE:
-				Log.i(TAG, "OUT_OF_SERVICE");				
-				break;
-			// GPS状态为暂停服务时
-			case LocationProvider.TEMPORARILY_UNAVAILABLE:
-				Log.i(TAG, "UNAVAILABLE");				
-				break;
-			}
-		}
-		/**
-		 * GPS开启时触发
-		 */
-		public void onProviderEnabled(String provider) {
-			Location location = lm.getLastKnownLocation(provider);
-			updateView(location);
-		}
-
-		/**
-		 * GPS禁用时触发
-		 */
-		public void onProviderDisabled(String provider) {
-			updateView(null);
-		}
-
-	};
-
-	// 状态监听
-	GpsStatus.Listener listener = new GpsStatus.Listener() {
-		public void onGpsStatusChanged(int event) {
-			switch (event) {
-			// 第一次定位
-			case GpsStatus.GPS_EVENT_FIRST_FIX:
-				Log.i(TAG, "FRIST");				
-				break;
-			// 卫星状态改变
-			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-				break;
-			// 定位启动
-			case GpsStatus.GPS_EVENT_STARTED:
-				Log.i(TAG, "START");				
-				break;
-			// 定位结束
-			case GpsStatus.GPS_EVENT_STOPPED:
-				Log.i(TAG, "OVER");				
-				break;
-			}
-		}
-
-		
-	};
-	/**
-	 * 实时更新文本内容
-	 * 
-	 * @param location
-	 */
-	void updateLocation()
-	{
-		
+	private boolean isTabletDevice(Context context) {
+		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
+				Configuration.SCREENLAYOUT_SIZE_LARGE;
 	}	
-	private void updateView(Location location) {
-		if (location != null) {
-			
-			double log;
-			double lat;
-			long logint;
-			long latint;		
-			
-			log = location.getLongitude();
-			lat = location.getLatitude();
-			
-			logint = (int)(log*10000);
-			latint = (int)(lat*10000);
-						
-			longitude =  String.format("LOG:%d.%d", logint/10000,logint%10000);//String.valueOf(location.getLongitude());
-			latitude =  String.format("LAT:%d.%d", latint/10000,latint%10000);//String.valueOf(location.getLatitude());
-		
-			Log.i(TAG, longitude);
-			Log.i(TAG, latitude);		
-			Intent intent = new Intent(Constants.ACTION_UPDATE_LOCATION);
-			sendBroadcast(intent);		
-			
-		} else {
-			Log.i(TAG, "UNKNOWN");
-		}
-		
-	}
-
-	/**
-	 * 返回查询条件
-	 * 
-	 * @return
-	 */
-	private Criteria getCriteria() {
-		Criteria criteria = new Criteria();
-		// 设置定位精确度 Criteria.ACCURACY_COARSE比较粗略，Criteria.ACCURACY_FINE则比较精细
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		// 设置是否要求速度
-		criteria.setSpeedRequired(false);
-		// 设置是否允许运营商收费
-		criteria.setCostAllowed(false);
-		// 设置是否需要方位信息
-		criteria.setBearingRequired(false);
-		// 设置是否需要海拔信息
-		criteria.setAltitudeRequired(false);
-		// 设置对电源的需求
-		criteria.setPowerRequirement(Criteria.POWER_LOW);
-		return criteria;
-	}
-	
-	
 	
 }

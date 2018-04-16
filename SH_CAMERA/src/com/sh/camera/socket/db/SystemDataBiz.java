@@ -15,6 +15,7 @@ import com.sh.camera.util.ExceptionUtil;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 /**
  *     
@@ -44,14 +45,20 @@ public class SystemDataBiz {
 			commEditor.putInt("comm_gps_interval", CommConstants.COMM_GPS_INTERVAL);
 			
 			String terminal = ServerManager.getInstance().getStreamname();
+			
 			//终端设备号
 			commEditor.putString("comm_terminal", terminal);
+			String  IP = ServerManager.getInstance().getServiceIp(); ;
+			String  port = ServerManager.getInstance().getServicePort();;
 			
 			//主服务器参数
 			commEditor.putString("master_server_apn", CommConstants.MASTER_SERVER_APN);
-			commEditor.putString("master_server_ip", CommConstants.MASTER_SERVER_IP);
-			commEditor.putString("master_server_port", CommConstants.MASTER_SERVER_PORT);
-
+			commEditor.putString("master_server_ip", IP);
+			commEditor.putString("master_server_port", port);
+			
+			Log.d("COMM", "IP : " + IP+"port"+port);	
+			
+			
 			//备用服务器参数
 			commEditor.putString("backup_server_apn", CommConstants.BACKUP_SERVER_APN);
 			commEditor.putString("backup_server_ip", CommConstants.BACKUP_SERVER_IP);

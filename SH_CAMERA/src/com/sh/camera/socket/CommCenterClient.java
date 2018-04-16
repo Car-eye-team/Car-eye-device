@@ -50,7 +50,6 @@ public class CommCenterClient {
 
 					ip = SPutil.getComm().getString("master_server_ip", "");
 					port = SPutil.getComm().getString("master_server_port", "");
-
 					//判断IP为域名，还是IP
 					boolean isip = ParseUtil.isIp(ip);
 					if(!isip){

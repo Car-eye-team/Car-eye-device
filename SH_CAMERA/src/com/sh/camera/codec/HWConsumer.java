@@ -51,12 +51,9 @@ public class HWConsumer extends Thread implements VideoConsumer {
     public void onVideoStart(int width, int height) throws IOException {
         this.mWidth = width;
         this.mHeight = height;
-        startMediaCodec();
-       
+        startMediaCodec();       
         inputBuffers = mMediaCodec.getInputBuffers();
-        outputBuffers = mMediaCodec.getOutputBuffers();
-        
-
+        outputBuffers = mMediaCodec.getOutputBuffers();   
         start();
         mVideoStarted = true;
     }
@@ -70,8 +67,7 @@ public class HWConsumer extends Thread implements VideoConsumer {
         {
         	Log.d("CMD", " onVideo not ready ");	
         	return 0;
-        }
-              
+        }              
         data = mVideoConverter.convert(data);
 		inputBuffers = mMediaCodec.getInputBuffers();
 		outputBuffers = mMediaCodec.getOutputBuffers();
@@ -84,8 +80,7 @@ public class HWConsumer extends Thread implements VideoConsumer {
 		    buffer.put(data);
 		    buffer.clear();
 		    mMediaCodec.queueInputBuffer(bufferIndex, 0, data.length, System.nanoTime() / 1000, 0);
-		}
-        
+		}        
         return 0;
     }
     @Override

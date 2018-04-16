@@ -31,9 +31,13 @@ import com.sh.camera.version.VersionBiz;
 public class SetActivity extends Activity {
 
 	EditText et1,et2,et3,et4,et_editTextkzport;
+	/**平台 */
+	EditText et_ptserviceip ,et_ptserviceport;
 	Button bt1,bt2;
 	CheckBox[] cbs;
+	CheckBox[] cbsmodel;
 	int[] cbids = {R.id.checkBox1, R.id.checkBox2, R.id.checkBox3, R.id.checkBox4};
+	int[] cbidsmodel = {R.id.modelcheckBox1, R.id.modelcheckBox2};
 	RadioGroup rg;
 	public static int[] rgids = {R.id.radio0, R.id.radio1};
 
@@ -55,6 +59,9 @@ public class SetActivity extends Activity {
 		tv_version = (TextView) findViewById(R.id.tv_version);
 		et1 = (EditText) findViewById(R.id.set_editText1);
 		et2 = (EditText) findViewById(R.id.set_editText2);
+		///平台 EditText et_ptserviceip ,et_ptserviceport;
+		 et_ptserviceip = (EditText) findViewById(R.id.et_ptserviceip);
+		 et_ptserviceport = (EditText) findViewById(R.id.et_ptserviceport);
 		et_editTextkzport = (EditText) findViewById(R.id.et_editTextkzport);
 		et3 = (EditText) findViewById(R.id.set_editText3);
 		et4 = (EditText) findViewById(R.id.set_editText4);
@@ -68,6 +75,11 @@ public class SetActivity extends Activity {
 		for (int i = 0; i < cbs.length; i++) {
 			cbs[i] = (CheckBox) findViewById(cbids[i]);
 		}
+		//模式
+		cbsmodel = new CheckBox[2];
+		for (int i = 0; i < cbsmodel.length; i++) {
+			cbsmodel[i] = (CheckBox) findViewById(cbidsmodel[i]);
+		}
 
 		sp = getSharedPreferences("fcoltest", MODE_PRIVATE);
 		sped = sp.edit();
@@ -77,8 +89,11 @@ public class SetActivity extends Activity {
 		et2.setText(ServerManager.getInstance().getPort());
 		et3.setText(ServerManager.getInstance().getStreamname());
 		et_editTextkzport.setText(ServerManager.getInstance().getAddport());
+		
 		//et4.setText(ServerManager.getInstance().getFramerate());
 		et4.setText(sp.getString(Constants.fps, String.valueOf(Constants.FRAMERATE)));
+		et_ptserviceip.setText(ServerManager.getInstance().getServiceIp());
+		et_ptserviceport.setText(ServerManager.getInstance().getServicePort());
 
 
 
@@ -128,10 +143,17 @@ public class SetActivity extends Activity {
 				sped.putString(Constants.addPort, et_editTextkzport.getText().toString());
 				sped.putString(Constants.fps, et4.getText().toString());
 				sped.putInt(Constants.mode, rg.getCheckedRadioButtonId());
+				//服务端ip端口
+				sped.putString(Constants.PTSERVICE_IP, et_ptserviceip.getText().toString());
+				sped.putString(Constants.PTSERVICE_PORT, et_ptserviceport.getText().toString());
+				
 				sped.commit();
 				
 				Editor commEditor = SPutil.getCommEditor();
 				commEditor.putString("comm_terminal", et3.getText().toString());
+				commEditor.putString("master_server_ip", et_ptserviceip.getText().toString());
+				commEditor.putString("master_server_port", et_ptserviceport.getText().toString());
+				
 				commEditor.commit();
 				
 				//重启通讯

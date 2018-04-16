@@ -1,7 +1,7 @@
 /*  car eye 车辆管理平台 
  * car-eye管理平台   www.car-eye.cn
  * car-eye开源网址:  https://github.com/Car-eye-team
- * Copyright
+ * Copyright car-eye 开源团队 2018
  */
 
 /**
@@ -108,8 +108,12 @@ public class ShCommService extends Service {
 		}else{
 			SharedPreferences sp = ShCommService.getInstance().getSharedPreferences("fcoltest", ShCommService.getInstance().MODE_PRIVATE);
 			String terminal = sp.getString("name", Constants.STREAM_NAME);
+			String ip = sp.getString(Constants.PTSERVICE_IP, Constants.PT_SERVER_IP);
+			String port = sp.getString(Constants.PTSERVICE_PORT, Constants.PT_SERVER_PORT);			
 			Editor commEditor = SPutil.getCommEditor();
 			commEditor.putString("comm_terminal", terminal);
+			commEditor.putString("master_server_ip", ip);
+			commEditor.putString("master_server_port", port);			
 			commEditor.commit();
 		}
 		

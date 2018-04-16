@@ -6,6 +6,8 @@
 package com.sh.camera.ServerManager;
 
 import android.content.SharedPreferences;
+import android.widget.EditText;
+
 import com.sh.camera.util.Constants;
 
 import com.sh.camera.SetActivity;
@@ -36,9 +38,6 @@ public class ServerManager {
 	 * 获取实例
 	 * @return
 	 */
-
-
-
 	public static ServerManager getInstance() {
 		if (instance == null) {
 			sp = MainService.getInstance().getSharedPreferences("fcoltest", MainService.getInstance().MODE_PRIVATE);
@@ -62,6 +61,16 @@ public class ServerManager {
 		String port = sp.getString(Constants.port,Constants.SERVER_PORT);
 		return port;
 	}
+	//EditText et_ptserviceip ,et_ptserviceport;
+	public String getServiceIp() {
+		String port = sp.getString(Constants.PTSERVICE_IP,Constants.PT_SERVER_IP);
+		return port;
+	}
+	public String getServicePort() {
+		String port = sp.getString(Constants.PTSERVICE_PORT,Constants.PT_SERVER_PORT);
+		return port;
+	}
+	//EditText et_ptserviceip ,et_ptserviceport;
 
 	public String getStreamname() {
 		String streamname = sp.getString(Constants.name,Constants.STREAM_NAME);
@@ -83,22 +92,11 @@ public class ServerManager {
 		String rule = sp.getString(Constants.rule, "01");
 		return rule;
 	}
+	/**RTSP  RTMP*/
+	public String addModel() {
+		String rule = sp.getString(Constants.ADD_MODEL, "RTSP");
+		return rule;
+	}
 	
-	public String getDevicename() {
-		return Constants.devicename;
-	}
-
-	public String getAliveInterval() {
-		return Constants.AliveInterval;
-	}
-
-	public String getDeviceKey() {
-		return Constants.DeviceKey;
-	}
-
-	public String getDeviceTag() {
-		return Constants.DeviceTag;
-	}
-
-
+	
 }

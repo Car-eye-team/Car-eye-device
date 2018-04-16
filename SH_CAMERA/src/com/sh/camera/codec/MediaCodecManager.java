@@ -78,18 +78,9 @@ public class MediaCodecManager {
  
  public void StartUpload(int index, Camera camera)
  {   
-
 	 debugger = EncoderDebugger.debug(MainService.getInstance(), Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
-	 previewFormat = sw_codec ? ImageFormat.YV12 : debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;
-     if(sw_codec == true)
-	 {
-		 mVC[index] = new SWConsumer(MainService.getInstance(), MainService.mPusher,index); 
-		 
-	 }else
-	 {
-		 
-		 mVC[index] = new HWConsumer(MainService.getInstance(), MainService.mPusher,index);
-	 } 
+	 previewFormat = sw_codec ? ImageFormat.YV12 : debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;    	 
+	 mVC[index] = new HWConsumer(MainService.getInstance(), MainService.mPusher,index);
 	 try {
 		mVC[index].onVideoStart(Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 	} catch (IOException e) {
@@ -97,12 +88,10 @@ public class MediaCodecManager {
 		e.printStackTrace();
 	}
 	 if(Constants.AudioRecord)
-	 {
-		 
+	 {	
 		  audioStream = new AudioStream(MainService.mPusher, null, index);
           audioStream.startRecord();
-	 }	 
-	
+	 }	 	
  } 
  
  public void StopUpload(int index)
@@ -120,8 +109,7 @@ public class MediaCodecManager {
          
      }
 	 
- }
- 
+ } 
 	public static boolean TakePicture(int cameraid,int type){
 		try {
 			//检查SD卡是否存在			

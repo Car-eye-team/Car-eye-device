@@ -26,7 +26,6 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import com.jsr.sdk.UsbCameraManager;
 import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.service.MainService;
 import com.sh.camera.socket.CommCenterUsers;
@@ -287,15 +286,7 @@ public class CameraUtil {
 				MainService.picid = cameraid;
 				camera.takePicture(null, null, pictureCallback);
 				return true;
-			}
-			if(Constants.PRODUCT_TYPE == 3){
-				//有方USB摄像头需要单独处理
-				if (index == 1) {
-					MainService.picid = MainService.rules[index];
-					UsbCameraManager.getInstance().photoGraph(1,type);
-					return true;
-				}
-			}
+			}			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -351,26 +342,6 @@ public class CameraUtil {
 			try {
 				boolean flag = true;
 				//一甲丙益USB摄像头拍照反向问题
-				if(Constants.PRODUCT_TYPE == 2){
-					if(index == 1){
-						Bitmap bmp = BitmapFactory.decodeByteArray(params[0], 0, params[0].length);
-						Bitmap bitmap = ImageUtil.reverseBitmap(bmp, 0);
-						try {
-							FileOutputStream out = new FileOutputStream(picture);
-							bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-							out.flush();
-							out.close();
-						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						flag = false;
-					}
-				}
-
 				if(flag){
 					FileOutputStream fos = new FileOutputStream(picture.getPath());  
 					fos.write(params[0]); 

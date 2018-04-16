@@ -1,12 +1,10 @@
-/*  car eye 车辆管理平台
- * car-eye管理平台   www.car-eye.cn
- * car-eye开源网址:  https://github.com/Car-eye-team
- * Copyright
- */
-
 package com.sh.camera.codec;
-
-import android.annotation.SuppressLint;
+/*
+	Copyright (c) 2012-2017 EasyDarwin.ORG.  All rights reserved.
+	Github: https://github.com/EasyDarwin
+	WEChat: EasyDarwin
+	Website: http://www.easydarwin.org
+*/
 import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
@@ -20,10 +18,11 @@ import java.nio.ByteBuffer;
 /**
  * Created by John on 2017/1/10.
  */
-public class Muxer {
+
+public class EasyMuxer {
 
     private static final boolean VERBOSE = true;
-    private static final String TAG = Muxer.class.getSimpleName();
+    private static final String TAG = EasyMuxer.class.getSimpleName();
     private final String mFilePath;
     private MediaMuxer mMuxer;
     private final long durationMillis;
@@ -34,8 +33,7 @@ public class Muxer {
     private MediaFormat mVideoFormat;
     private MediaFormat mAudioFormat;
 
-    @SuppressLint("NewApi")
-	public Muxer(String path, long durationMillis) {
+    public EasyMuxer(String path, long durationMillis) {
         mFilePath = path;
         this.durationMillis = durationMillis;
         Object mux = null;
@@ -50,8 +48,7 @@ public class Muxer {
         }
     }
 
-    @SuppressLint("NewApi")
-	public synchronized void addTrack(MediaFormat format, boolean isVideo) {
+    public synchronized void addTrack(MediaFormat format, boolean isVideo) {
         // now that we have the Magic Goodies, start the muxer
         if (mAudioTrackIndex != -1 && mVideoTrackIndex != -1)
             throw new RuntimeException("already add all tracks");
@@ -80,8 +77,7 @@ public class Muxer {
         }
     }
 
-    @SuppressLint("NewApi")
-	public synchronized void pumpStream(ByteBuffer outputBuffer, MediaCodec.BufferInfo bufferInfo, boolean isVideo) {
+    public synchronized void pumpStream(ByteBuffer outputBuffer, MediaCodec.BufferInfo bufferInfo, boolean isVideo) {
         if (mAudioTrackIndex == -1 || mVideoTrackIndex == -1) {
             Log.i(TAG, String.format("pumpStream [%s] but muxer is not start.ignore..", isVideo ? "video" : "audio"));
             return;
@@ -128,8 +124,7 @@ public class Muxer {
             }
         }
     }
-    @SuppressLint("NewApi")
-	public synchronized void release() {
+    public synchronized void release() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             if (mMuxer != null) {
                 if (mAudioTrackIndex != -1 && mVideoTrackIndex != -1) {

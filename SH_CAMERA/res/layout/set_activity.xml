@@ -39,7 +39,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="服务器IP:"
+                        android:text="流媒体服务器IP:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <EditText
@@ -77,6 +77,7 @@
                         android:background="#1a1a1a"
                         android:textColor="#ffffff" />
                 </LinearLayout>
+                <!-- 平台 服务器 配置start -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -87,6 +88,66 @@
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
                     android:padding="5dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="平台服务器IP:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/et_ptserviceip"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="5"
+                        android:background="#1a1a1a"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="#1a1a1a"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:padding="5dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="端口号:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/et_ptserviceport"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="5"
+                        android:background="#1a1a1a"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <!-- 平台 服务器 配置end -->
+
+
+                <!-- 控制端口 暂时屏蔽start -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="#1a1a1a"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:visibility="gone" >
 
                     <TextView
                         android:layout_width="0dp"
@@ -104,6 +165,7 @@
                         android:background="#1a1a1a"
                         android:textColor="#ffffff" />
                 </LinearLayout>
+                <!-- 控制端口 end -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -202,6 +264,39 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="15dp" >
+
+                    <TextView
+                        android:id="@+id/modeltextView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="模式:"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <CheckBox
+                        android:id="@+id/modelcheckBox1"
+                        style="@style/CustomCheckboxTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="RTSP" />
+
+                    <CheckBox
+                        android:id="@+id/modelcheckBox2"
+                        style="@style/CustomCheckboxTheme"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="RTMP" />
+                </LinearLayout>
+
+                <!-- 受控摄像头 start -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="15dp"
+                    android:visibility="gone" >
 
                     <TextView
                         android:id="@+id/textView1"

@@ -51,12 +51,21 @@ public class Constants {
 	/**服务器端口*/
 	public static final String SERVER_PORT = "10554";
 	public static final String SERVER_ADDPORT = "10000";
+	
+	/**PT服务器端口*/
+	public static final String PT_SERVER_PORT = "9999";
+	public static final String PT_SERVER_IP = "39.108.246.45";
+	
 	/**设备号*/
 	public static final String STREAM_NAME = "18668171282";
-	public static String devicename = "NVR";
-	public static String AliveInterval = "30";
-	public static String DeviceKey  ="a939cd77c7cb4af6b2bd8f2090562b91";
-	public static String DeviceTag ="DEMO";
+
+	
+	/**PT服务端ip*/
+	public static final String PTSERVICE_IP = "ptservice_ip";
+	/**PT服务端port*/
+	public static final String PTSERVICE_PORT = "ptservice_port";
+	/**模式 model */
+	public static final String ADD_MODEL = "add_model";
 	
 	public static String ip = "ip";
 	public static String port = "port";
@@ -88,7 +97,6 @@ public class Constants {
 	public static  boolean isCleaning = false;
 	public static  boolean AudioRecord = false;
 	public static  final boolean ExtPlayer = false;
-	public static  boolean GPS_SUPPORT = false;
 	/**帧速率*/
 	public static int FRAMERATE = 20;
 	/**摄像头ID*/
@@ -99,7 +107,6 @@ public class Constants {
 	
 	public static  boolean StartFlag  =false;
 	/** 产品类型 1 T3 2 一甲丙益后视镜  3 有方后视镜*/
-	public static int  PRODUCT_TYPE = 1;	
 	//录像回放有关的定义	
 	public static final String ACTION_VIDEO_PREVIEW = "ACTION_VIDEO_PREVIEW";
 	public static final String ACTION_VIDEO_PLAYBACK = "ACTION_VIDEO_PLAYBACK";
@@ -111,9 +118,7 @@ public class Constants {
 	/**
 	 * 设置参数	 */
 	public static void setParam(Context context){
-		switch (PRODUCT_TYPE) {
-		//T3		
-		case 1:
+		
 			SD_CARD_PATH = "/mnt/extsd/";
 			INNER_CARD_PATH = "/mnt/sdcard/";
 			CAMERA_FILE_PATH = SD_CARD_PATH +"CarDVR/";
@@ -123,52 +128,7 @@ public class Constants {
 			CAMERA_ID[0] = 0;
 			CAMERA_ID[1] = 3;
 			CAMERA_ID[2] = 9;
-			CAMERA_ID[3] = 8;			
-			break;						
-			//一甲丙益后视镜			
-		case 2:
-			SD_CARD_PATH = "/mnt/external_sdio/";
-			INNER_CARD_PATH = "/mnt/sdcard/";			
-			CAMERA_FILE_PATH = SD_CARD_PATH +"CarDVR/";
-			SNAP_FILE_PATH = INNER_CARD_PATH+"CarDVR/";
-			CAMERA_FILE_DIR = "/CarDVR/";
-			FRAMERATE = 20;
-			CAMERA_ID[0] = 2;
-			CAMERA_ID[1] = 1;
-			CAMERA_ID[2] = 5;
-			CAMERA_ID[3] = 6;			
-			break;
-			//有方后视镜
-			
-		case 3:
-			SD_CARD_PATH = "/mnt/sdcard/";
-			INNER_CARD_PATH = "/mnt/sdcard/";
-			CAMERA_FILE_PATH = SD_CARD_PATH +"CarDVR/";
-			SNAP_FILE_PATH = INNER_CARD_PATH+"CarDVR/";
-			CAMERA_FILE_DIR = "/CarDVR/";
-			FRAMERATE = 20;
-			CAMERA_ID[0] = 0;
-			CAMERA_ID[1] = 2;
-			CAMERA_ID[2] = 5;
-			CAMERA_ID[3] = 6;
-			break;
-		default:
-			break;
-		}
-		
-		CAMERA_RECORD[0] = false;
-		CAMERA_RECORD[1] = false;
-		CAMERA_RECORD[2] = false;
-		CAMERA_RECORD[3] = false;		
-		try {
-			//发送广播给设置的应用，传递视频路径
-			Intent intent = new Intent("com.dss.camera.ACTION_VIDEO_PATH");
-			intent.putExtra("EXTRA_VIDEO_PATH",CAMERA_FILE_PATH);
-			context.sendBroadcast(intent);
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+			CAMERA_ID[3] = 8;		
 	}
 
 	/**应用启动自动检测一次版本信息*/

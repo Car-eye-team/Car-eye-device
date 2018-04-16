@@ -35,7 +35,7 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/icon_jly"
+        android:icon="@drawable/icon_logo"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         
@@ -45,7 +45,6 @@
             android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -73,42 +72,14 @@
             <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
-        <receiver android:name="com.sh.camera.receiver.SystemReceiver" >
-            <intent-filter android:priority="1000" >
-                <action android:name="com.dss.launcher.ACTION_ACC_ON" />
-                <action android:name="auto.intent.action.HEARTBEAT" />
-                <action android:name="com.dss.launcher.ACTION_ACC_OFF" />
-                <action android:name="com.dss.app.carcall.ACTION_HOME" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.sh.camera.receiver.DSLauncherReceiver"
-            android:exported="true" >
-            <intent-filter android:priority="1000" >
-                <action android:name="com.dss.launcher.ACTION_VIDEO_PREVIEW" />
-                <action android:name="com.dss.launcher.ACTION_VIDEO_PLAYBACK" />
-                <action android:name="com.dss.launcher.ACTION_VIDEO_STOP_PLAYBACK" />
-                <action android:name="com.dss.launcher.ACTION_REGIST_SUCCESS" />
-                <action android:name="com.dss.launcher.ACTION_VIDEO_FILE_PLAYBACK" />
-                <action android:name="com.dss.launcher.ACTION_TAKE_PICTURE" />
-            </intent-filter>
-        </receiver>
+        </receiver>   
         <receiver android:name="com.sh.camera.receiver.SdCardBroadCastReceiver" >
             <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />
                 <action android:name="android.intent.action.MEDIA_EJECT" />
-
                 <data android:scheme="file" />
             </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.sh.camera.receiver.UsbCameraReceiver"
-            android:exported="true" >
-            <intent-filter android:priority="1000" >
-                <action android:name="android.intent.action.USB_CAMERA" />
-            </intent-filter>
-        </receiver>
+        </receiver>     
     </application>
 
 </manifest>
