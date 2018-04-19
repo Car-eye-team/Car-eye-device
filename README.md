@@ -15,7 +15,7 @@ sh_camera 是car-eye开源团队开发的基于android系统的一个应用程�
 
 设置界面的图大致如下：
 
-![](https://github.com/Car-eye-team/doc/raw/master/car-eye-device/car-eye-camera设置界面.jpg)
+![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/car-eye-camera%E8%AE%BE%E7%BD%AE%E7%95%8C%E9%9D%A2.jpg)
 
 其中服务器IP是流媒体服务的IP地址
 端口是服务器的端口
