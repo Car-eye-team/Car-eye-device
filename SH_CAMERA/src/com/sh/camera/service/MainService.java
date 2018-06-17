@@ -1,6 +1,6 @@
-ï»¿/*  car eye è½¦è¾†ç®¡ç†å¹³å° 
- * car-eyeç®¡ç†å¹³å°   www.car-eye.cn
- * car-eyeå¼€æºç½‘å€:  https://github.com/Car-eye-team
+/*  car eye ³µÁ¾¹ÜÀíÆ½Ì¨ 
+ * car-eye¹ÜÀíÆ½Ì¨   www.car-eye.cn
+ * car-eye¿ªÔ´ÍøÖ·:  https://github.com/Car-eye-team
  * Copyright
  */
 
@@ -80,30 +80,30 @@ public class MainService extends Service {
 	public static Context application;	
 	LayoutInflater inflater;
 	public static boolean isrun = false;
-	/**ä¸»ç•Œé¢æ˜¯å¦åœ¨æœ€å‰ç«¯æ˜¾ç¤ºçŠ¶æ€*/
+	/**Ö÷½çÃæÊÇ·ñÔÚ×îÇ°¶ËÏÔÊ¾×´Ì¬*/
 	public static boolean isWindowViewShow = true;
 	public static String ACTION = "com.dss.car.dvr";
-	//æ§åˆ¶æ‚¬æµ®çª—å…¨å±
+	//¿ØÖÆĞü¸¡´°È«ÆÁ
 	public static String FULLSCREEN = "fullscreen";
-	//æ§åˆ¶æ‚¬æµ®çª—å…¨å±ä¸”è·³è¿‡ä¸€æ¬¡çª—å£åŒ–æŒ‡ä»¤
+	//¿ØÖÆĞü¸¡´°È«ÆÁÇÒÌø¹ıÒ»´Î´°¿Ú»¯Ö¸Áî
 	public static String PASSWINFULL = "passwinfullscreen";
-	//æ§åˆ¶æ‚¬æµ®çª—çª—å£åŒ–
+	//¿ØÖÆĞü¸¡´°´°¿Ú»¯
 	public static String WINDOW = "window";
-	//æ§åˆ¶æ‚¬æµ®çª—æœ€å°åŒ–
+	//¿ØÖÆĞü¸¡´°×îĞ¡»¯
 	public static String MINIMIZE = "minimize";
-	//æ§åˆ¶é¢„è§ˆç•Œé¢é‡å¯
+	//¿ØÖÆÔ¤ÀÀ½çÃæÖØÆô
 	public static String RESTART = "restart";
-	//é€šçŸ¥å¼€å§‹å½•åƒ
+	//Í¨Öª¿ªÊ¼Â¼Ïñ
 	public static String STARTRECORDER = "startrecorder";
-	//é€šçŸ¥å¼€å§‹ä¸Šä¼ 
+	//Í¨Öª¿ªÊ¼ÉÏ´«
 	public static String STARTPUSH = "startpush";
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~åˆå§‹åŒ–ä¸»è¦åŠŸèƒ½æ§ä»¶~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//ä¸»è¦æ˜¾ç¤ºæ§ä»¶
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~³õÊ¼»¯Ö÷Òª¹¦ÄÜ¿Ø¼ş~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//Ö÷ÒªÏÔÊ¾¿Ø¼ş
 	public TextureView[] ttvs;
 	private SurfaceTexture[] stHolder;
-	//æŒ‰é’®å®¹å™¨
+	//°´Å¥ÈİÆ÷
 	private LinearLayout ly_bts;
-	//æ‘„åƒå¤´æ•°ç»„
+	//ÉãÏñÍ·Êı×é
 	public static Camera[] camera;
 	private static boolean avaliable[]= {false, false, false, false};
 	static PreviewCallback[] preview;
@@ -111,13 +111,13 @@ public class MainService extends Service {
 	private String[] MrTempName;
 	private ContentValues[] mCurrentVideoValues;
 	public static SurfaceTextureListener[] stListener;
-	//æ‘„åƒå¤´id
+	//ÉãÏñÍ·id
 	public static int[] cid = null;
-	//å—æ§æ‘„åƒå¤´
+	//ÊÜ¿ØÉãÏñÍ·
 	public static int[] rules;
-	//è®°å½•å½“å‰å½•åˆ¶è§†å±çš„èµ·ç‚¹ï¼Œæœªå½•åˆ¶æ—¶-1ï¼›
+	//¼ÇÂ¼µ±Ç°Â¼ÖÆÊÓÆÁµÄÆğµã£¬Î´Â¼ÖÆÊ±-1£»
 	long recoTime = -1;
-	//æ§ä»¶idæ•°ç»„
+	//¿Ø¼şidÊı×é
 	private int[] ttvids = {R.id.textureview1, R.id.textureview2, R.id.textureview3, R.id.textureview4};
 	private ImageView btiv1,btiv2;
 	private LinearLayout[] lys;
@@ -130,19 +130,19 @@ public class MainService extends Service {
 	int bitrate;
 	public static DiskManager disk;	
 	public static Pusher mPusher;	
-	//åˆ¤æ–­æ˜¯é€€å‡ºè¿˜æ˜¯æ‰“å¼€å…¶ä»–ç•Œé¢
+	//ÅĞ¶ÏÊÇÍË³ö»¹ÊÇ´ò¿ªÆäËû½çÃæ
 	boolean isClose = true;	
-	//é€šçŸ¥ç»“æŸå½•åƒ
+	//Í¨Öª½áÊøÂ¼Ïñ
 	public static String STOPRECORDER = "stoprecorder";
-	//é€šçŸ¥ç»“æŸä¸Šä¼ 
+	//Í¨Öª½áÊøÉÏ´«
 	public static String STOPPUSH = "stoppush";
 	BroadcastReceiver 	SYSBr;	
 	boolean usbcameraConnect = true;
 	boolean sd_inject = false;	
-	private String longitude = ""; // ç»åº¦
-	private String latitude = ""; // ç»´åº¦
+	private String longitude = ""; // ¾­¶È
+	private String latitude = ""; // Î¬¶È
 	private LocationManager lm;
-	// è·å–æœ¬åœ°applicationçš„å¯¹è±¡
+	// »ñÈ¡±¾µØapplicationµÄ¶ÔÏó
 	public static MainService getInstance() {
 		if (instance == null) {
 			instance = new MainService();
@@ -171,7 +171,7 @@ public class MainService extends Service {
 		mCurrentVideoValues = new ContentValues[Constants.MAX_NUM_OF_CAMERAS];
 		framerate = ServerManager.getInstance().getFramerate();
 		CreateView();		
-		//ä¸€å¼€å§‹å°±åˆå§‹åŒ–ç¼–ç å™¨ï¼Œå¤ªå ç”¨èµ„æº		
+		//Ò»¿ªÊ¼¾Í³õÊ¼»¯±àÂëÆ÷£¬Ì«Õ¼ÓÃ×ÊÔ´		
 		isrun = true;			
 		Constants.setParam(c);
 		cid = Constants.CAMERA_ID;
@@ -226,11 +226,11 @@ public class MainService extends Service {
 				String action = intent.getAction();
 				UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);			   		
 				if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action) && device.getDeviceProtocol() ==1) {          
-					Toast.makeText(context, "ç›‘å¬åˆ°usbæ‘„åƒå¤´å˜åŠ¨1"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
+					Toast.makeText(context, "¼àÌıµ½usbÉãÏñÍ·±ä¶¯1"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
 					usbcameraConnect = false;    
 					closeCamera(0);   		 
 				} else if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action) && device.getDeviceProtocol()==1) {
-					Toast.makeText(context, "ç›‘å¬åˆ°usbæ‘„åƒå¤´å˜åŠ¨0"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
+					Toast.makeText(context, "¼àÌıµ½usbÉãÏñÍ·±ä¶¯0"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
 					try {
 						Thread.sleep(500);
 					} catch (Exception e) {
@@ -240,14 +240,14 @@ public class MainService extends Service {
 				}				
 				else if(action.equals(Constants.ACTION_VIDEO_PLAYBACK))
 				{
-					int id = intent.getIntExtra("EXTRA_ID", 1);  //é€šé“ID
-					int type = intent.getIntExtra("EXTRA_TYPE", 0);  //ç±»å‹  0 å›¾ç‰‡ 1 å½•åƒ
-					String stime = intent.getStringExtra("EXTRA_STIME");  //å›æ”¾å¼€å§‹æ—¶é—´
-					String etime = intent.getStringExtra("EXTRA_ETIME");  //å›æ”¾ç»“æŸæ—¶é—´
+					int id = intent.getIntExtra("EXTRA_ID", 1);  //Í¨µÀID
+					int type = intent.getIntExtra("EXTRA_TYPE", 0);  //ÀàĞÍ  0 Í¼Æ¬ 1 Â¼Ïñ
+					String stime = intent.getStringExtra("EXTRA_STIME");  //»Ø·Å¿ªÊ¼Ê±¼ä
+					String etime = intent.getStringExtra("EXTRA_ETIME");  //»Ø·Å½áÊøÊ±¼ä
 							
 				}else if(action.equals(Constants.ACTION_VIDEO_FILE_PLAYBACK))
 				{		 			
-					int cameraid = intent.getIntExtra("Channel", 1);  //é€šé“ID
+					int cameraid = intent.getIntExtra("Channel", 1);  //Í¨µÀID
 					String filename = intent.getStringExtra("Name");
 					int splaysec = intent.getIntExtra("Start", 0); 
 					int eplaysec = intent.getIntExtra("End", 0);
@@ -259,7 +259,7 @@ public class MainService extends Service {
 				}
 				if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS))
 				{
-					//Toast.makeText(context, "ç›‘å¬åˆ°home key", Toast.LENGTH_LONG).show();
+					//Toast.makeText(context, "¼àÌıµ½home key", Toast.LENGTH_LONG).show();
 					MainService.getInstance().setWindowMin();
 				}
 			}
@@ -280,12 +280,12 @@ public class MainService extends Service {
 		unregisterReceiver(br);
 		
 		unregisterReceiver(SYSBr);
-		//å–æ¶ˆç›‘å¬
+		//È¡Ïû¼àÌı
 		Log.d("main service", "onDestroy");
 	};
 
 	
-	//passä¸€æ¬¡window
+	//passÒ»´Îwindow
 	boolean passwin = false;
 	IntentFilter filter = new IntentFilter(ACTION);
 	BroadcastReceiver br = new BroadcastReceiver(){
@@ -352,7 +352,7 @@ public class MainService extends Service {
 		removeView();
 		addView();
 	}
-	//æœ€å°åŒ–
+	//×îĞ¡»¯
 	void setWindowMin(){
 		ismatch = true;
 		ly_bts.setVisibility(view.VISIBLE);
@@ -361,7 +361,7 @@ public class MainService extends Service {
 		
 		wmParams.width = 1;
 		wmParams.height = 1;
-		//æœ€å°åŒ–åˆ°åå°ï¼Œéœ€è¦è®¾ç½®LayoutParams.FLAG_NOT_FOCUSABLEï¼Œæ‰èƒ½å–æ¶ˆå¯¹è¿”å›é”®çš„æ‹¦æˆªï¼Œå¹¶ä¸”ç§»é™¤layout
+		//×îĞ¡»¯µ½ºóÌ¨£¬ĞèÒªÉèÖÃLayoutParams.FLAG_NOT_FOCUSABLE£¬²ÅÄÜÈ¡Ïû¶Ô·µ»Ø¼üµÄÀ¹½Ø£¬²¢ÇÒÒÆ³ılayout
 		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | 
 				LayoutParams.FLAG_NOT_FOCUSABLE | 
 				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
@@ -378,7 +378,7 @@ public class MainService extends Service {
 		isWindowViewShow = false;
 	}	
 	
-	//æœ€å¤§åŒ–
+	//×î´ó»¯
 	void setWindowFull(){
 		ismatch = true;
 		ly_bts.setVisibility(view.VISIBLE);
@@ -386,12 +386,12 @@ public class MainService extends Service {
 		wmParams.y = 0;
 		wmParams.width =  WindowManager.LayoutParams.MATCH_PARENT;
 		wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;		
-		//æœ€å¤§åŒ–ï¼Œä¸è¦è®¾ç½®LayoutParams.FLAG_NOT_FOCUSABLEï¼Œæ‰èƒ½æ‹¦æˆªè¿”å›é”®	
+		//×î´ó»¯£¬²»ÒªÉèÖÃLayoutParams.FLAG_NOT_FOCUSABLE£¬²ÅÄÜÀ¹½Ø·µ»Ø¼ü	
 		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | 
 					WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
 		mWindowManager.updateViewLayout(view, wmParams);
 		
-		//æœ€å¤§åŒ–ï¼Œæ·»åŠ layoutï¼Œæ‰èƒ½æ‹¦æˆªè¿”å›é”®ï¼Œé•¿å®½ä¸º1ï¼Œæ‰ä¸ä¼šæŒ¡ä½ç•Œé¢
+		//×î´ó»¯£¬Ìí¼Ólayout£¬²ÅÄÜÀ¹½Ø·µ»Ø¼ü£¬³¤¿íÎª1£¬²Å²»»áµ²×¡½çÃæ
 		wmParams.width = 1;
 		wmParams.height = 1;
 
@@ -413,7 +413,7 @@ public class MainService extends Service {
 		}
 	}
 
-	//çª—å£åŒ–
+	//´°¿Ú»¯
 	void setWindowWin(){
 		ismatch = false;
 		ly_bts.setVisibility(view.GONE);
@@ -447,9 +447,9 @@ public class MainService extends Service {
 	LayoutParams wmParams;
 	WindowManager mWindowManager;
 	View view;
-	// ä¸€ä¸ªç‚¹ï¼Œå åŠ åœ¨Windowä¸­ï¼Œç”¨æ¥ç›‘å¬è¿”å›é”®ï¼Œæœ€å°åŒ–åç§»é™¤ï¼Œæœ€å¤§åŒ–æ—¶å åŠ åˆ°windowä¸­ã€‚
+	// Ò»¸öµã£¬µş¼ÓÔÚWindowÖĞ£¬ÓÃÀ´¼àÌı·µ»Ø¼ü£¬×îĞ¡»¯ºóÒÆ³ı£¬×î´ó»¯Ê±µş¼Óµ½windowÖĞ¡£
 	SessionLinearLayout layoutPoint;
-	// è§¦å±ç›‘å¬  
+	// ´¥ÆÁ¼àÌı  
 	float lastX, lastY;  
 	int oldOffsetX, oldOffsetY;  
 	private void CreateView() {
@@ -526,7 +526,7 @@ public class MainService extends Service {
 	}
 
 	/**
-	 * è¿”å›éµç›‘å¬
+	 * ·µ»ØæI¼àÌı
 	 */
 	private SessionLinearLayout.DispatchKeyEventListener mDispatchKeyEventListener = new SessionLinearLayout.DispatchKeyEventListener() {
 
@@ -544,7 +544,7 @@ public class MainService extends Service {
 		public void handleMessage(android.os.Message msg) {
 			if(msg.what==1001){
 				boolean lock = false;
-				Toast.makeText(c, "æ‰§è¡Œæ‹ç…§æˆåŠŸ", 1000).show();
+				Toast.makeText(c, "Ö´ĞĞÅÄÕÕ³É¹¦", 1000).show();
 				/*for (int i = 0; i < rules.length; i++) {
 					if(rules[i]==picid&&rules.length>i+1){
 						//boolean re = CameraUtil.cameraTakePicture(i+1, 1);
@@ -561,19 +561,19 @@ public class MainService extends Service {
 			}
 			if(msg.what==1003){
 				boolean lock = false;
-				Toast.makeText(c, "æ‰§è¡Œæ‹ç…§å¤±è´¥", 1000).show();				
+				Toast.makeText(c, "Ö´ĞĞÅÄÕÕÊ§°Ü", 1000).show();				
 				if(!lock){
 					clickLock = false;
 				}
 			}
-			//å½•åˆ¶è¾¾åˆ°è§„å®šæ—¶é•¿ï¼Œé‡å½•
+			//Â¼ÖÆ´ïµ½¹æ¶¨Ê±³¤£¬ÖØÂ¼
 			if(msg.what==1002){
 				clickLock = true;
 				try {
 					for (int i = 0; i < rules.length; i++) {
 						stoprecorder(rules[i],i);
 					}
-					//åŠ å…¥SDå¡ç©ºé—´å¤„ç†é€»è¾‘
+					//¼ÓÈëSD¿¨¿Õ¼ä´¦ÀíÂß¼­
 					//				SdCardBiz.getInstance().getDetection(Constants.isCleaning);
 					//SdCardBiz.getInstance().getDetectionServiceSdCar(Constants.isCleaning,instance);
 					for (int i = 0; i < rules.length; i++) {
@@ -616,7 +616,7 @@ public class MainService extends Service {
 			}
 		}		
 		
-		//ç¡®è®¤å››è·¯ã€äºŒè·¯
+		//È·ÈÏËÄÂ·¡¢¶şÂ·
 		if(ServerManager.getInstance().getMode() == SetActivity.rgids[0]){
 			lys[3].setVisibility(View.GONE);
 			isTwoCamera = true;
@@ -650,7 +650,7 @@ public class MainService extends Service {
 			btiv2 = (ImageView) view.findViewById(R.id.imageView2_bottom);
 		}
 
-		//é¢„è§ˆå›è°ƒ
+		//Ô¤ÀÀ»Øµ÷
 		preview[0] = new PreviewCallback() {
 			@Override
 			public void onPreviewFrame(byte[] data, Camera camera1) {
@@ -681,7 +681,7 @@ public class MainService extends Service {
 				MediaCodecManager.getInstance().onPreviewFrameUpload(data,3,camera[3]);
 			}
 		};
-		//åˆå§‹åŒ–æ‘„åƒå¤´ã€å¼€å§‹é¢„è§ˆ
+		//³õÊ¼»¯ÉãÏñÍ·¡¢¿ªÊ¼Ô¤ÀÀ
 		for (int i = 0; i < Constants.MAX_NUM_OF_CAMERAS; i++) {
 			if(isTwoCamera&&i>1) break;
 			initPreview(i);
@@ -693,7 +693,7 @@ public class MainService extends Service {
 		avaliable[index]  = true;		
 	}
 	/**
-	 * åˆå§‹åŒ–é¢„è§ˆ
+	 * ³õÊ¼»¯Ô¤ÀÀ
 	 * @param i
 	 */	
 
@@ -723,7 +723,7 @@ public class MainService extends Service {
 		ttvs[i].setSurfaceTextureListener(stListener[i]);	
 	}
 	/**
-	 * å…³é—­é‡Šæ”¾æ‘„åƒå¤´
+	 * ¹Ø±ÕÊÍ·ÅÉãÏñÍ·
 	 * @param i
 	 */
 	public void colseCamera(int index){
@@ -767,9 +767,9 @@ public class MainService extends Service {
 	}	
 
 	/**
-	 * æ‰“å¼€æ‘„åƒå¤´å¹¶é¢„è§ˆ
+	 * ´ò¿ªÉãÏñÍ·²¢Ô¤ÀÀ
 	 * @param i
-	 * @param type 1 æ­£å¸¸å¯åŠ¨  2 é‡å¯
+	 * @param type 1 Õı³£Æô¶¯  2 ÖØÆô
 	 */
 	//int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 		
@@ -778,7 +778,7 @@ public class MainService extends Service {
 			boolean falg = true;			
 			if(falg){
 				try {
-					AppLog.w(TAG, "æ‘„åƒå¤´æ•°é‡:"+Camera.getNumberOfCameras());
+					AppLog.w(TAG, "ÉãÏñÍ·ÊıÁ¿:"+Camera.getNumberOfCameras());
 					camera[index] = Camera.open(cid[index]);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -804,7 +804,7 @@ public class MainService extends Service {
 			AppLog.d(TAG, ExceptionUtil.getInfo(e));
 		}
 	}
-	//é˜²æ­¢å‡ºç°ä¸€ä¸ªæ‘„åƒå¤´åçš„æƒ…å†µä¸‹å½±å“åˆ«çš„æ‘„åƒå¤´ä¸èƒ½æ­£å¸¸å·¥ä½œ
+	//·ÀÖ¹³öÏÖÒ»¸öÉãÏñÍ·»µµÄÇé¿öÏÂÓ°Ïì±ğµÄÉãÏñÍ·²»ÄÜÕı³£¹¤×÷
 	//2017-06-29
 	public boolean  checkCameraValid(final int index)
 	{
@@ -853,7 +853,7 @@ public class MainService extends Service {
 				if(type == 1){
 					//if(!SdCardUtil.checkSdCardUtil()){
 					if(MainService.getDiskManager().getDiskCnt()<=0){
-						AppLog.d("CMD", "SDå¡ä¸å­˜åœ¨");
+						AppLog.d("CMD", "SD¿¨²»´æÔÚ");
 						return ;
 					}
 				}else
@@ -886,7 +886,7 @@ public class MainService extends Service {
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							} //ç­‰å¾…å¤„ç†å®Œæˆ//						
+							} //µÈ´ı´¦ÀíÍê³É//						
 						}
 			
 					}					
@@ -911,7 +911,7 @@ public class MainService extends Service {
 		 
 	 }
 	
-	//æ§åˆ¶æŸè·¯ç¼©æ”¾
+	//¿ØÖÆÄ³Â·Ëõ·Å
 	boolean isgone = false;
 	OnClickListener click_ly = new OnClickListener() {
 		@Override
@@ -951,7 +951,7 @@ public class MainService extends Service {
 			
 		}
 	};
-	//æ§åˆ¶æŸè·¯ç¼©æ”¾
+	//¿ØÖÆÄ³Â·Ëõ·Å
 	void setAllView(){
 		if(isTwoCamera){
 			lys[1].setVisibility(View.VISIBLE);
@@ -962,7 +962,7 @@ public class MainService extends Service {
 			}
 		}
 	}
-	//é‡Šæ”¾æ‘„åƒå¤´èµ„æº
+	//ÊÍ·ÅÉãÏñÍ·×ÊÔ´
 	public void closeCamera(int index){
 		if(camera[index]!=null){
 			camera[index].setPreviewCallback(null);
@@ -971,7 +971,7 @@ public class MainService extends Service {
 			camera[index] = null;
 		}
 	}
-	//é‡Šæ”¾å½•åƒèµ„æº
+	//ÊÍ·ÅÂ¼Ïñ×ÊÔ´
 	public void stopMrs(int index){
 		if (mrs[index]!=null) { 
 			mrs[index].stop(); 
@@ -980,7 +980,7 @@ public class MainService extends Service {
 		}
 	}
 
-	//å³è¾¹å…­ä¸ªæŒ‰é”®çš„ç‚¹å‡»äº‹ä»¶
+	//ÓÒ±ßÁù¸ö°´¼üµÄµã»÷ÊÂ¼ş
 	public static int picid = -1;
 	boolean isRecording = false;
 	boolean isSC = false;
@@ -992,46 +992,46 @@ public class MainService extends Service {
 	public void click(int id){
 		if(clickLock) return;
 		switch (id) {
-		case R.id.bt_ly_1://æ‹ç…§		
-		case R.id.bt_ly_1_bottom://é·å¶‡å			
+		case R.id.bt_ly_1://ÅÄÕÕ		
+		case R.id.bt_ly_1_bottom://æ‹ç…§			
 	
-			//æ£€æŸ¥SDå¡æ˜¯å¦å­˜åœ¨
+			//¼ì²éSD¿¨ÊÇ·ñ´æÔÚ
 			//if(!SdCardUtil.checkSdCardUtil()){			
 			if(disk.getDiskCnt()<=0){
-				Toast.makeText(c, "æœªæ£€æµ‹åˆ°SDå¡,å°†æ— æ³•æ‰§è¡Œæ“ä½œ", 1000).show();
+				Toast.makeText(c, "Î´¼ì²âµ½SD¿¨,½«ÎŞ·¨Ö´ĞĞ²Ù×÷", 1000).show();
 			}else{
 				clickLock = true;
 				//CameraUtil.cameraTakePicture(0, 1);
 				TakePictureAll(1);				
 			}			
 			break;
-		case R.id.bt_ly_2://å½•åƒ
-		case R.id.bt_ly_2_bottom://è¤°æ›å„š
+		case R.id.bt_ly_2://Â¼Ïñ
+		case R.id.bt_ly_2_bottom://å½•åƒ
 
-			//æ£€æŸ¥SDå¡æ˜¯å¦å­˜åœ¨
+			//¼ì²éSD¿¨ÊÇ·ñ´æÔÚ
 			//if(!SdCardUtil.checkSdCardUtil()){
 			
 			if(disk.getDiskCnt()<=0){
-				Toast.makeText(c, "æœªæ£€æµ‹åˆ°SDå¡,å°†æ— æ³•æ‰§è¡Œæ“ä½œ", 1000).show();
+				Toast.makeText(c, "Î´¼ì²âµ½SD¿¨,½«ÎŞ·¨Ö´ĞĞ²Ù×÷", 1000).show();
 			}else{
 				clickLock = true;
-				//å…ˆåˆ¤æ–­æ˜¯å¦å½•åˆ¶ä¸­
+				//ÏÈÅĞ¶ÏÊÇ·ñÂ¼ÖÆÖĞ
 				if(isRecording){
 					btiv1.setImageResource(R.drawable.a02);
-					//éå†å—æ§æ•°ç»„,åœæ­¢å½•åƒ
+					//±éÀúÊÜ¿ØÊı×é,Í£Ö¹Â¼Ïñ
 					for (int i = 0; i < rules.length; i++) {
 						stoprecorder(rules[i],i);
 					}
 					isRecording = false;
 				}else{
-					//åˆ¤æ–­æ˜¯å¦æ­£åœ¨ä¸Šä¼ 
+					//ÅĞ¶ÏÊÇ·ñÕıÔÚÉÏ´«
 					/*if(isSC){
-						//åœæ­¢ä¸Šä¼ 
+						//Í£Ö¹ÉÏ´«
 						stopSC();
 					}*/
 					btiv1.setImageResource(R.drawable.b02);
 					disk.getDetectionServiceSdCar(instance);	
-					//éå†å—æ§æ•°ç»„,å¼€å§‹å½•åƒ
+					//±éÀúÊÜ¿ØÊı×é,¿ªÊ¼Â¼Ïñ
 					for (int i = 0; i < rules.length; i++) {
 						if(camera[rules[i]]!=null  ) startRecorder(rules[i]);
 					}
@@ -1041,14 +1041,14 @@ public class MainService extends Service {
 				clickLock = false;
 			}
 			break;
-		case R.id.bt_ly_3://ä¸Šä¼ 
-		case R.id.bt_ly_3_bottom://æ¶“å©ç´¶
+		case R.id.bt_ly_3://ÉÏ´«
+		case R.id.bt_ly_3_bottom://ä¸Šä¼ 
 
 			clickLock = true;
 			if(isSC){
 				stopSC();
 			}else{				
-				//å¤„ç†ä¸Šä¼ 
+				//´¦ÀíÉÏ´«
 				btiv2.setImageResource(R.drawable.b03);
 				for (int i = 0; i < rules.length; i++) {
 					startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i);
@@ -1057,8 +1057,8 @@ public class MainService extends Service {
 			}
 			clickLock = false;
 			break;
-		case R.id.bt_ly_4://å›æ”¾
-		case R.id.bt_ly_4_bottom://é¥ç‚´æ–
+		case R.id.bt_ly_4://»Ø·Å
+		case R.id.bt_ly_4_bottom://å›æ”¾
 
 			isClose = false;
 			setWindowMin();
@@ -1066,8 +1066,8 @@ public class MainService extends Service {
 			intent_file.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent_file);
 			break;
-		case R.id.bt_ly_5://è®¾ç½®
-		case R.id.bt_ly_5_bottom://ç’å‰§ç–†
+		case R.id.bt_ly_5://ÉèÖÃ
+		case R.id.bt_ly_5_bottom://è®¾ç½®
 
 			isClose = false;
 			setWindowMin();
@@ -1075,14 +1075,14 @@ public class MainService extends Service {
 			intent_set.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent_set);
 			break;
-		case R.id.bt_ly_6://é€€å‡º
-		case R.id.bt_ly_6_bottom://é–«â‚¬é‘?	
+		case R.id.bt_ly_6://ÍË³ö
+		case R.id.bt_ly_6_bottom://é€€å‡?	
 			setWindowMin();
 			break;
 		}
 	}
 
-	//ç»“æŸä¸Šä¼ 
+	//½áÊøÉÏ´«
 	private void stopSC() {
 		btiv2.setImageResource(R.drawable.a03);
 		for (int i = 0; i < rules.length; i++) {
@@ -1112,9 +1112,9 @@ public class MainService extends Service {
 		try {
 			CameraUtil.VIDEO_UPLOAD[index] = true;
 			if(camera[rules[index]]!=null){
-				//åˆå§‹åŒ–æ¨æµå·¥å…·
+				//³õÊ¼»¯ÍÆÁ÷¹¤¾ß
 				StreamIndex[rules[index]]= mPusher.CarEyeInitNetWork( getApplicationContext(),ipstr, portstr, String.format("%s?channel=%d.sdp", serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
-				//æ§åˆ¶é¢„è§ˆå›è°ƒ
+				//¿ØÖÆÔ¤ÀÀ»Øµ÷
 				sc_controls[rules[index]] = true;
 				camera[rules[index]].setPreviewCallback(preview[rules[index]]);	
 				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]]);									
@@ -1127,7 +1127,7 @@ public class MainService extends Service {
 	}
 
 	/**
-	 * ç»“æŸè§†é¢‘ä¸Šä¼ 
+	 * ½áÊøÊÓÆµÉÏ´«
 	 * @param i
 	 */
 	public void stopVideoUpload(int i){
@@ -1148,7 +1148,7 @@ public class MainService extends Service {
 	}
 
 	/**
-	 * å‡†å¤‡å½•åƒ
+	 * ×¼±¸Â¼Ïñ
 	 * @param index
 	 */
 	public void prepareRecorder(int index,int type){
@@ -1170,7 +1170,7 @@ public class MainService extends Service {
 		}
 	}
 	/**
-	 * å¼€å§‹å½•åƒ
+	 * ¿ªÊ¼Â¼Ïñ
 	 * @param index
 	 */
 	private  String convertOutputFormatToFileExt(int outputFileFormat) {
@@ -1234,10 +1234,10 @@ public class MainService extends Service {
 			mrs[index].setVideoSource(MediaRecorder.VideoSource.CAMERA);
 			String starttime;
 			String endtime;				
-			/*//è®¾ç½®audioçš„ç¼–ç æ ¼å¼
+			/*//ÉèÖÃaudioµÄ±àÂë¸ñÊ½
 			mrs[index].setAudioSource(MediaRecorder.AudioSource.MIC);
 			mrs[index].setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);*/
-			//1 T3 2 ä¸€ç”²ä¸™ç›Šåè§†é•œ  3 æœ‰æ–¹åè§†é•œ
+			//1 T3 2 Ò»¼×±ûÒæºóÊÓ¾µ  3 ÓĞ·½ºóÊÓ¾µ
 			Log.d("CMD", " startRecorder "+index);			
 			mrs[index].setOutputFormat(MediaRecorder.OutputFormat.MPEG_4); 
 			mrs[index].setVideoEncoder(MediaRecorder.VideoEncoder.H264); 
@@ -1263,7 +1263,7 @@ public class MainService extends Service {
 		}
 
 	}
-	//æ ¹æ®æ‘„åƒå¤´idåœæ­¢å½•åƒ
+	//¸ù¾İÉãÏñÍ·idÍ£Ö¹Â¼Ïñ
 	void stoprecorder(int index,int i){
 		try {
 			if(camera[rules[i]]!=null){
@@ -1307,28 +1307,28 @@ public class MainService extends Service {
 		}
 		@Override
 		public void onError(int error, android.hardware.Camera camera) {
-			if (error == android.hardware.Camera.CAMERA_ERROR_SERVER_DIED) {        //åº•å±‚cameraå®ä¾‹æŒ‚æ‰äº†
+			if (error == android.hardware.Camera.CAMERA_ERROR_SERVER_DIED) {        //µ×²ãcameraÊµÀı¹ÒµôÁË
 				// We are not sure about the current state of the app (in preview or snapshot or recording). Closing the app is better than creating a new Camera object.                                 
-				//å¦‚æœæ˜¯mipiæŒ‚æ‰äº†ï¼Œusbæ–­ç”µï¼Œç„¶åæ€æ‰è‡ªå·±æ‰€åœ¨çš„è¿›ç¨‹ï¼Œç›‘å¬å¿ƒè·³å¹¿æ’­å¯åŠ¨è‡ªå·±
-				//usb cameraæŒ‚æ‰äº†ï¼Œå…ˆæ–­ç”µç„¶åå†ä¸Šç”µ
-				//Toast.makeText(c, "æ‘„åƒå¤´ï¼šerror="+error+",mCameraId="+mCameraId, Toast.LENGTH_LONG).show();
+				//Èç¹ûÊÇmipi¹ÒµôÁË£¬usb¶Ïµç£¬È»ºóÉ±µô×Ô¼ºËùÔÚµÄ½ø³Ì£¬¼àÌıĞÄÌø¹ã²¥Æô¶¯×Ô¼º
+				//usb camera¹ÒµôÁË£¬ÏÈ¶ÏµçÈ»ºóÔÙÉÏµç
+				//Toast.makeText(c, "ÉãÏñÍ·£ºerror="+error+",mCameraId="+mCameraId, Toast.LENGTH_LONG).show();
 			}
 			Log.d("	error!!!", "code!!!!:"+error);	
 		}
 	}
 
-	private class MediaRecorderErrorListener implements MediaRecorder.OnErrorListener {                 //åº•å±‚mediaRecorderä¸ŠæŠ¥é”™è¯¯ä¿¡æ¯
+	private class MediaRecorderErrorListener implements MediaRecorder.OnErrorListener {                 //µ×²ãmediaRecorderÉÏ±¨´íÎóĞÅÏ¢
 		private int mCameraId = -1;
 		public MediaRecorderErrorListener(int cameraId) {
 			mCameraId = cameraId;
 		}    
 		@Override
 		public void onError(MediaRecorder mr, int what, int extra) {                              
-			//å…ˆåœæ­¢æ‰å½•åˆ¶
-			if(what == MediaRecorder.MEDIA_ERROR_SERVER_DIED){      //MediaRecorder.MEDIA_ERROR_SERVER_DIED--100ï¼Œè¯´æ˜mediaServiceæ­»äº†ï¼Œéœ€è¦é‡Šæ”¾MediaRecorder
+			//ÏÈÍ£Ö¹µôÂ¼ÖÆ
+			if(what == MediaRecorder.MEDIA_ERROR_SERVER_DIED){      //MediaRecorder.MEDIA_ERROR_SERVER_DIED--100£¬ËµÃ÷mediaServiceËÀÁË£¬ĞèÒªÊÍ·ÅMediaRecorder
 
 				btiv1.setImageResource(R.drawable.a02);
-				//éå†å—æ§æ•°ç»„ï¼Œåœæ­¢å½•åƒ
+				//±éÀúÊÜ¿ØÊı×é£¬Í£Ö¹Â¼Ïñ
 				for (int i = 0; i < rules.length; i++) {
 					stoprecorder(rules[i],i);
 					openCamera(i,1);
