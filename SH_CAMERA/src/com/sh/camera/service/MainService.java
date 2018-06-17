@@ -455,7 +455,7 @@ public class MainService extends Service {
 	private void CreateView() {
 		mWindowManager = (WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
 		wmParams = new WindowManager.LayoutParams();
-		wmParams.type = LayoutParams.TYPE_PHONE;
+		wmParams.type = LayoutParams.TYPE_TOAST;
 		wmParams.format = PixelFormat.RGBA_8888;
 		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
 		wmParams.gravity = Gravity.LEFT | Gravity.TOP;
