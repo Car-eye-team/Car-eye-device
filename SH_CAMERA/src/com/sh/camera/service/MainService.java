@@ -1,41 +1,27 @@
 
 package com.sh.camera.service;
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Date;
 import org.push.push.Pusher;
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import android.location.Criteria;
-import android.location.GpsStatus;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore.Video;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -46,8 +32,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.dss.car.launcher.provider.biz.ProviderBiz;
 import com.sh.camera.FileActivity;
@@ -134,6 +123,11 @@ public class MainService extends Service {
 	private String latitude = ""; // 维度
 	private LocationManager lm;
 	// 获取本地application的对象
+	private Button btn_app_minimize,btn_app_exit;
+	private FrameLayout inc_alertaui;
+	private FrameLayout   inc_url;
+	private TextView text_url;
+
 	public static MainService getInstance() {
 		if (instance == null) {
 			instance = new MainService();
@@ -268,9 +262,7 @@ public class MainService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		isrun = false;
-		unregisterReceiver(br);
-		
-		unregisterReceiver(SYSBr);
+		System.exit(0);
 		//取消监听
 		Log.d("main service", "onDestroy");
 	};
@@ -332,8 +324,13 @@ public class MainService extends Service {
 					click(R.id.bt_ly_3);
 				}
 			}
+			if(type.equals("EXIT"))
+			{
+				StopCameraprocess();
+				removeView();
+				stopSelf();
+			}
 		}
-
 	};
 
 	private void restart() {
@@ -524,7 +521,7 @@ public class MainService extends Service {
 		@Override
 		public boolean dispatchKeyEvent(KeyEvent event) {
 			if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && isWindowViewShow) {
-				setWindowMin();
+				inc_alertaui.setVisibility(View.VISIBLE);
 				return true;
 			}
 			return false;
@@ -640,6 +637,9 @@ public class MainService extends Service {
 			btiv1 = (ImageView) view.findViewById(R.id.imageView1_bottom);
 			btiv2 = (ImageView) view.findViewById(R.id.imageView2_bottom);
 		}
+		btn_app_minimize = (Button) view.findViewById(R.id.btn_app_minimize);
+		btn_app_exit = (Button) view.findViewById(R.id.btn_app_exit);
+		inc_alertaui = (FrameLayout) view.findViewById(R.id.inc_alertaui);
 
 		//预览回调
 		preview[0] = new PreviewCallback() {
@@ -1067,9 +1067,32 @@ public class MainService extends Service {
 			startActivity(intent_set);
 			break;
 		case R.id.bt_ly_6://退出
-		case R.id.bt_ly_6_bottom://閫€鍑?	
-			setWindowMin();
+		case R.id.bt_ly_6_bottom://退出
+			inc_alertaui.setVisibility(View.VISIBLE);
 			break;
+		case R.id.btn_app_minimize://閫€鍑?
+			//娣诲姞涓€夋嫨绐?
+			try {
+				inc_alertaui.setVisibility(View.GONE);
+				setWindowMin();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case R.id.btn_app_exit://閫€鍑?
+			try {
+				inc_alertaui.setVisibility(View.GONE);
+				Intent intent = new Intent(ACTION);
+				intent.putExtra("type", "EXIT");
+				sendBroadcast(intent);
+			}
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+
 		}
 	}
 

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:id="@+id/inc_alertaui"
+    android:orientation="vertical"
+    android:visibility="gone"
+    android:padding="20.0dip" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip"
+            android:gravity="center"
+            android:text="@string/app_title"
+            android:textColor="#000000"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|center"
+                android:lineSpacingMultiplier="1.5"
+                android:minHeight="120.0dip"
+                android:paddingBottom="15.0dip"
+                android:text="@string/app_alert_message" 
+                android:paddingLeft="20.0dip"
+                android:textColor="#000000"
+                android:paddingRight="20.0dip"
+                android:paddingTop="15.0dip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1.0px"
+            android:background="#ffd0d0d0" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="60.0dip"
+            android:layout_gravity="bottom"
+            android:background="@null"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_app_exit"
+                android:textColor="#ffffff"
+                android:layout_width="114.0dip"
+                android:layout_height="40.0dip"
+                android:background="@drawable/btn_public_selector"
+                android:gravity="center"
+                android:onClick="click"
+                android:text="@string/app_exit" />
+
+            <Button
+                android:id="@+id/btn_app_minimize"
+                 android:textColor="#ffffff"
+                android:layout_width="114.0dip"
+                android:layout_height="40.0dip"
+                android:layout_marginLeft="20.0dip"
+                android:background="@drawable/btn_public_selector"
+                android:gravity="center"
+                android:onClick="click"
+                android:text="@string/app_minimize" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
