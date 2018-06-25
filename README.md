@@ -15,7 +15,7 @@ car-eye-device 是车辆管理系统的设备端程序，负责视频采集，gp
 
 sh_camera 是car-eye开源团队开发的基于android系统的一个应用程序。主要界面如下图：
 
-![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/car-eye-camera%E4%B8%BB%E7%95%8C%E9%9D%A2.png)
+![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/pusher.jpg)
 
 其中面板的中按钮依次为拍照，录像，实时上传，打开回放，内部可以远程和本地回放文件，设置按钮
 
