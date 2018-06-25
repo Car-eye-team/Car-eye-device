@@ -1,8 +1,12 @@
 ﻿# Car-eye-device
  
-car-eye 设备子系统提供了一整套硬件设计，固件程序，系统软件，行车记录仪等功能模块得解决方案
+car-eye-device 是车辆管理系统的设备端程序，负责视频采集，gps采集等，实现了传统的DVR功能。还支持远程控制，支持远程观看实时视频和检索录像。
 
-其中SH-CAMERA 是设备端行车记录仪模块，该功能模块实现了传统的DVR功能。还支持远程控制，支持远程观看实时视频和检索录像。
+## Car-eye-device 工作原理
+设备端通过808协议跟Car-eye-server或者Car-eye-CMS进行通信，上传位置信息和视频控制信息，整个框架如下图    
+
+
+![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/car-eye-camera%E4%B8%BB%E7%95%8C%E9%9D%A2.png)
 
 
 ## 多路行车记录仪功能介绍
