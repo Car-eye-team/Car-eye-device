@@ -9,6 +9,8 @@ car-eye-device 是车辆管理系统的设备端程序，负责视频采集，gp
 ![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/car-eye-device-machine.png)
 
 
+
+
 ## 多路行车记录仪功能介绍
 
 sh_camera 是car-eye开源团队开发的基于android系统的一个应用程序。主要界面如下图：
