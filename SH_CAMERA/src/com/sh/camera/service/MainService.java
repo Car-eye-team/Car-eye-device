@@ -833,8 +833,6 @@ public class MainService extends Service {
 		}).start();
 		return true;		
 	}
-	
-	
 	 public static void TakePictureAll(int type)
 	 {
 		 	
@@ -993,7 +991,8 @@ public class MainService extends Service {
 			}else{
 				clickLock = true;
 				//CameraUtil.cameraTakePicture(0, 1);
-				TakePictureAll(1);				
+				TakePictureAll(1);
+				clickLock = false;
 			}			
 			break;
 		case R.id.bt_ly_2://录像
@@ -1001,7 +1000,6 @@ public class MainService extends Service {
 
 			//检查SD卡是否存在
 			//if(!SdCardUtil.checkSdCardUtil()){
-			
 			if(disk.getDiskCnt()<=0){
 				Toast.makeText(c, "未检测到SD卡,将无法执行操作", 1000).show();
 			}else{
@@ -1034,7 +1032,6 @@ public class MainService extends Service {
 			break;
 		case R.id.bt_ly_3://上传
 		case R.id.bt_ly_3_bottom://涓婁紶
-
 			clickLock = true;
 			if(isSC){
 				stopSC();
@@ -1127,7 +1124,7 @@ public class MainService extends Service {
 			CameraUtil.VIDEO_UPLOAD[index] = true;
 			if(camera[rules[index]]!=null){
 				//初始化推流工具
-				StreamIndex[rules[index]]= mPusher.CarEyeInitNetWork( getApplicationContext(),ipstr, portstr, String.format("%s?channel=%d.sdp", serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
+				StreamIndex[rules[index]]= mPusher.CarEyeInitNetWorkRTSP( getApplicationContext(),ipstr, portstr, String.format("%s?channel=%d.sdp", serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				//控制预览回调
 				sc_controls[rules[index]] = true;
 				camera[rules[index]].setPreviewCallback(preview[rules[index]]);	
@@ -1152,8 +1149,7 @@ public class MainService extends Service {
 				sc_controls[rules[i]] = false;				
 				MediaCodecManager.getInstance().StopUpload(rules[i]);
 				camera[rules[i]].setPreviewCallback(null);
-				mPusher.stopPush(StreamIndex[rules[i]]);	
-
+				mPusher.stopPush(StreamIndex[rules[i]],Constants.CAREYE_RTSP_PROTOCOL);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

@@ -95,8 +95,6 @@ public class SetActivity extends Activity {
 		et_ptserviceip.setText(ServerManager.getInstance().getServiceIp());
 		et_ptserviceport.setText(ServerManager.getInstance().getServicePort());
 
-
-
 		String rulestr = ServerManager.getInstance().getRule();
 		for (int i = 0; i < rulestr.length(); i++) {
 			int id = Integer.parseInt(rulestr.substring(i, i+1));
@@ -146,7 +144,6 @@ public class SetActivity extends Activity {
 				//服务端ip端口
 				sped.putString(Constants.PTSERVICE_IP, et_ptserviceip.getText().toString());
 				sped.putString(Constants.PTSERVICE_PORT, et_ptserviceport.getText().toString());
-				
 				sped.commit();
 				
 				Editor commEditor = SPutil.getCommEditor();

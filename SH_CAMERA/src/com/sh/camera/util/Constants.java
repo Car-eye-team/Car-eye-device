@@ -81,6 +81,11 @@ public class Constants {
 	public static int CAREYE_ACODE_G711U = 0x10006;
 	public static int CAREYE_ACODE_G711A = 0x10007;
 	public static int CAREYE_ACODE_G726 = 0x10007;
+
+	/* rtsp/rtmp   */
+	public static int CAREYE_RTSP_PROTOCOL = 1;
+	public static int CAREYE_RTMP_PROTOCOL = 2;
+
 	/**录像时长 分钟*/
 	public static final int VIDEO_TIME = 10;//10
 	/**SD卡路径*/
@@ -118,7 +123,6 @@ public class Constants {
 	/**
 	 * 设置参数	 */
 	public static void setParam(Context context){
-		
 			SD_CARD_PATH = "/mnt/extsd/";
 			INNER_CARD_PATH = "/mnt/sdcard/";
 			CAMERA_FILE_PATH = SD_CARD_PATH +"CarDVR/";

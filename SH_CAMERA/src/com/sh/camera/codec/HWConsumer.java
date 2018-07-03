@@ -63,7 +63,7 @@ public class HWConsumer extends Thread implements VideoConsumer {
     @Override
     public int onVideo(byte[] data, int format) {
         if (!mVideoStarted)return 0;
-        if(mPusher.CarEyePusherIsReady(m_index)==0)
+        if(mPusher.CarEyePusherIsReadyRTSP(m_index)==0)
         {
         	Log.d("CMD", " onVideo not ready ");	
         	return 0;
@@ -136,15 +136,14 @@ public class HWConsumer extends Thread implements VideoConsumer {
                 if (sync) {
                     System.arraycopy(mPpsSps, 0, h264, 0, mPpsSps.length);
                     outputBuffer.get(h264, mPpsSps.length, bufferInfo.size);
-                    mPusher.SendBuffer_org( h264,  mPpsSps.length + bufferInfo.size, (bufferInfo.presentationTimeUs / 1000),0, m_index);
+                    mPusher.SendBuffer_org( h264,  mPpsSps.length + bufferInfo.size, (bufferInfo.presentationTimeUs / 1000),0, m_index,Constants.CAREYE_RTSP_PROTOCOL);
                     	 	
                 }else{
                 	
                     outputBuffer.get(h264, 0, bufferInfo.size);
-                    mPusher.SendBuffer_org( h264,  bufferInfo.size,  (bufferInfo.presentationTimeUs / 1000), 0, m_index);
+                    mPusher.SendBuffer_org( h264,  bufferInfo.size,  (bufferInfo.presentationTimeUs / 1000), 0, m_index,Constants.CAREYE_RTSP_PROTOCOL);
                   
                 }
-                
                 mMediaCodec.releaseOutputBuffer(outputBufferIndex, false);
             }
         }

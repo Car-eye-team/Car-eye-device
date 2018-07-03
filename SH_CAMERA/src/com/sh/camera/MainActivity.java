@@ -14,6 +14,7 @@ import android.util.Log;
 
 
 import com.sh.camera.service.MainService;
+import com.sh.camera.service.ShCommService;
 import com.sh.camera.util.Constants;
 
 
@@ -55,6 +56,7 @@ public class MainActivity extends Activity {
 		//启动通讯service\
 		//FloatWindowManager.getInstance().applyOrShowFloatWindow(MainActivity.this);
 
+
 	}
 
 	private void getPermission() {
@@ -66,6 +68,7 @@ public class MainActivity extends Activity {
 			intent.putExtra("type", MainService.FULLSCREEN);
 			sendBroadcast(intent);
 		}
+		startService(new Intent(MainActivity.this, ShCommService.class));
 		finish();
 	}
 

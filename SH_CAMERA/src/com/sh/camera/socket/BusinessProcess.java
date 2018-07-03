@@ -20,6 +20,7 @@ import com.sh.camera.util.CameraUtil;
 import com.sh.camera.util.CommCameraFileUtil;
 import com.sh.camera.util.Constants;
 import com.sh.camera.util.ExceptionUtil;
+import com.sh.camera.util.Tools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -155,7 +156,6 @@ public class BusinessProcess {
 		case 0x8103:	// 设置参数
 			try {
 
-
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
@@ -172,10 +172,20 @@ public class BusinessProcess {
 				//操作类型 0 实时预览 1 停止预览
 				int type = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
 				num += 1;
-				/*Intent intent = new Intent("com.dss.launcher.ACTION_VIDEO_PREVIEW");
-				intent.putExtra("EXTRA_ID", id);
-				intent.putExtra("EXTRA_TYPE", type);*/
+				int protocolType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				// 鏈嶅姟鍣↖P鍦板潃闀垮害	BYTE	闀垮害n
+				int ipLen = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				// 鏈嶅姟鍣↖P鍦板潃	STRING	瀹炴椂闊宠棰戞湇鍔″櫒IP鍦板潃
+				String ip = Tools.byteToString(data, num, ipLen);
+				num += ipLen;
+				// 绔彛鍙凤紙TCP锛?WORD	瀹炴椂闊宠棰戞湇鍔″櫒TCP绔彛鍙?
+				int port = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+
 				
+
 				if(type == 0){
 					CameraUtil.startVideoUpload((id-1));
 				}else{
@@ -204,7 +214,17 @@ public class BusinessProcess {
 				//结束时间
 				String etime = ParseUtil.bcd2Str(ParseUtil.byteTobyte(data, num, 6)); 		
 				num += 6;
-
+				int protocolType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				// 鏈嶅姟鍣↖P鍦板潃闀垮害	BYTE	闀垮害n
+				int ipLen = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				// 鏈嶅姟鍣↖P鍦板潃	STRING	瀹炴椂闊宠棰戞湇鍔″櫒IP鍦板潃
+				String ip = Tools.byteToString(data, num, ipLen);
+				num += ipLen;
+				// 绔彛鍙凤紙TCP锛?WORD	瀹炴椂闊宠棰戞湇鍔″櫒TCP绔彛鍙?
+				int port = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
 				/*Intent intent = new Intent("com.dss.launcher.ACTION_VIDEO_PLAYBACK");
 				intent.putExtra("EXTRA_ID", id);
 				intent.putExtra("EXTRA_TYPE", type);

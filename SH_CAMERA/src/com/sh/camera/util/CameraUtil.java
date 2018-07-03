@@ -113,7 +113,6 @@ public class CameraUtil {
 		if(VIDEO_UPLOAD[i]){
 			stopVideoUpload(i);
 		}
-
 		//初始化推流工具
 		VIDEO_UPLOAD[i] = true;
 		MainService.getInstance().startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i);
@@ -152,7 +151,7 @@ public class CameraUtil {
 					if(MainService.mPusher == null){
 						MainService.mPusher = new Pusher();
 					}
-					MainService.mPusher.startfilestream(ip, port,streamName, map.get("path"));
+					MainService.mPusher.startfilestream(ip, port,streamName, map.get("path"),Constants.CAREYE_RTMP_PROTOCOL);
 					if(i == data.size()){
 						/*Intent intent = new Intent("com.dss.camera.ACTION_END_VIDEO_PLAYBACK");
 						intent.putExtra("EXTRA_ID", map.get("cameraid"));
@@ -218,7 +217,7 @@ public class CameraUtil {
 
 					CameraUtil.VIDEO_FILE_UPLOAD = true;
 					Log.d("CMD", " restart"+filename);
-					MainService.mPusher.startfilestream( ip, port, streamName, filename,splaysec,eplaysec,handler);
+					MainService.mPusher.startfilestream( ip, port, streamName, filename,splaysec,eplaysec,handler,Constants.CAREYE_RTSP_PROTOCOL);
 				}
 			});
 
@@ -356,7 +355,6 @@ public class CameraUtil {
 				if(handler != null){
 					handler.sendMessage(handler.obtainMessage(1003));
 				}
-				
 			}  
 			return null;  
 		}  
