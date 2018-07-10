@@ -97,7 +97,13 @@ end：  推送文件的相对偏移的结束时间
 接口功能：推送文件的callback函数      
 参数说明:    
 channel：通道号     
-Result:返回码，为结束或者错误码      
+Result:返回码，为结束或者错误码     
+
+# 注意事项
+
+Car-eye-server 目前支持RTSP通信方式的设备管理
+
+Car-eye CMS 目前支持RTSP/RTMP 两种设备的管理
 
 # 商业合作
 
