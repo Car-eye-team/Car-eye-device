@@ -32,7 +32,7 @@ public class ServerManager {
 	private static final String tag = "ServerManger.";
 	private static ServerManager instance;
 	private static SharedPreferences sp;
-	SharedPreferences.Editor sped;
+	private static SharedPreferences.Editor sped;
 
 	/**
 	 * 获取实例
@@ -41,17 +41,27 @@ public class ServerManager {
 	public static ServerManager getInstance() {
 		if (instance == null) {
 			sp = MainService.getInstance().getSharedPreferences("fcoltest", MainService.getInstance().MODE_PRIVATE);
+
 			instance = new ServerManager();
 		}
 		return instance;
 	}
-
-
 	public String getIp() {
 		String ip = sp.getString(Constants.ip,Constants.SERVER_IP);
 		return ip;
 	}
-
+	public void SetIP(String ip)
+	{
+		sped = sp.edit();
+		sped.putString(Constants.ip, ip);
+		sped.commit();
+	}
+	public void SetPort(String port)
+	{
+		sped = sp.edit();
+		sped.putString(Constants.port, port);
+		sped.commit();
+	}
 	public String getAddport() {
 		String addport = sp.getString(Constants.addPort,Constants.SERVER_ADDPORT);
 		return addport;
@@ -87,16 +97,20 @@ public class ServerManager {
 		return mode;
 	}
 
-	
 	public String getRule() {
 		String rule = sp.getString(Constants.rule, "01");
 		return rule;
 	}
 	/**RTSP  RTMP*/
-	public String addModel() {
-		String rule = sp.getString(Constants.ADD_MODEL, "RTSP");
+	public int getprotocol() {
+		int rule = sp.getInt(Constants.protocol_type, Constants.protocol);
 		return rule;
 	}
-	
-	
+
+	public void setprotocol(int protocol) {
+		sped = sp.edit();
+		sped.putInt(Constants.protocol_type, protocol);
+		sped.commit();
+	}
+
 }

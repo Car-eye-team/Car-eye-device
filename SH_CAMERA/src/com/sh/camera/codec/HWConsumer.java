@@ -21,6 +21,8 @@ import org.push.hw.NV21Convertor;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import org.push.push.Pusher;
+
+import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.service.MainService;
 import com.sh.camera.util.Constants;
 
@@ -63,11 +65,22 @@ public class HWConsumer extends Thread implements VideoConsumer {
     @Override
     public int onVideo(byte[] data, int format) {
         if (!mVideoStarted)return 0;
-        if(mPusher.CarEyePusherIsReadyRTSP(m_index)==0)
+
+        if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTSP_PROTOCOL) {
+            if(mPusher.CarEyePusherIsReadyRTSP(m_index)==0)
+            {
+                Log.d("CMD", " onVideo not ready ");
+                return 0;
+            }
+        }else
         {
-        	Log.d("CMD", " onVideo not ready ");	
-        	return 0;
-        }              
+            if(mPusher.CarEyePusherIsReadyRTMP(m_index)==0)
+            {
+                Log.d("CMD", " onVideo not ready ");
+                return 0;
+            }
+        }
+
         data = mVideoConverter.convert(data);
 		inputBuffers = mMediaCodec.getInputBuffers();
 		outputBuffers = mMediaCodec.getOutputBuffers();
@@ -136,12 +149,12 @@ public class HWConsumer extends Thread implements VideoConsumer {
                 if (sync) {
                     System.arraycopy(mPpsSps, 0, h264, 0, mPpsSps.length);
                     outputBuffer.get(h264, mPpsSps.length, bufferInfo.size);
-                    mPusher.SendBuffer_org( h264,  mPpsSps.length + bufferInfo.size, (bufferInfo.presentationTimeUs / 1000),0, m_index,Constants.CAREYE_RTSP_PROTOCOL);
+                    mPusher.SendBuffer_org( h264,  mPpsSps.length + bufferInfo.size, (bufferInfo.presentationTimeUs / 1000),0, m_index,ServerManager.getInstance().getprotocol());
                     	 	
                 }else{
                 	
                     outputBuffer.get(h264, 0, bufferInfo.size);
-                    mPusher.SendBuffer_org( h264,  bufferInfo.size,  (bufferInfo.presentationTimeUs / 1000), 0, m_index,Constants.CAREYE_RTSP_PROTOCOL);
+                    mPusher.SendBuffer_org( h264,  bufferInfo.size,  (bufferInfo.presentationTimeUs / 1000), 0, m_index,ServerManager.getInstance().getprotocol());
                   
                 }
                 mMediaCodec.releaseOutputBuffer(outputBufferIndex, false);

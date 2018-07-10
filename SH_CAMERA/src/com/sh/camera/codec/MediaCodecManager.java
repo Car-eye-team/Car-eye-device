@@ -62,8 +62,6 @@ public class MediaCodecManager {
 		}
 		return instance;
 	}
-
-	
 	/**
 	 * 释放解码器资源
 	 * @param index
@@ -92,11 +90,9 @@ public class MediaCodecManager {
 		  audioStream = new AudioStream(MainService.mPusher, null, index);
           audioStream.startRecord();
 	 }	 	
- } 
- 
+ }
  public void StopUpload(int index)
  {
-	
 	 if(mVC[index]!= null)
 	 {
 		 mVC[index].onVideoStop();
@@ -161,13 +157,11 @@ public void onPreviewFrameUpload(byte[] data,int index,Camera camera){
      {    	
     	TakePicture = false;    	
 	  	CameraFileUtil.saveJpeg_snap(index, data, Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT,  MainService.disk.getDiskDirectory(MainService.disk.SelectDisk())+Constants.CAMERA_FILE_DIR+(index+1)+"-"+new Date().getTime()+".jpg");
-    
-     }  
+     }
      if(mVC[index]!= null)
      {
     	 Log.d("CMD", " onPreviewFrameUpload1 "+data.length);	
     	 mVC[index].onVideo(data, previewFormat);
-    	
      }else
      {   	
     	 camera.setPreviewCallback(null);    

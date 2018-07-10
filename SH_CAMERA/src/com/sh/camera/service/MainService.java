@@ -119,9 +119,7 @@ public class MainService extends Service {
 	BroadcastReceiver 	SYSBr;	
 	boolean usbcameraConnect = true;
 	boolean sd_inject = false;	
-	private String longitude = ""; // 经度
-	private String latitude = ""; // 维度
-	private LocationManager lm;
+
 	// 获取本地application的对象
 	private Button btn_app_minimize,btn_app_exit;
 	private FrameLayout inc_alertaui;
@@ -743,7 +741,6 @@ public class MainService extends Service {
 			sd_inject = true;
 		}	
 	}
-	
 
 	public void startRecoders_SD_ERR()
 	{
@@ -818,8 +815,7 @@ public class MainService extends Service {
 				Log.d("CMD", " checkCameraValid "+avaliable[index]);	
 				if(avaliable[index] == false)				
 				{
-					//closeCamera(index);	
-					
+					//closeCamera(index);
 				}else
 				{
 					camera[index].setPreviewCallback(null);
@@ -827,7 +823,6 @@ public class MainService extends Service {
 					intent.putExtra("type", MainService.STARTRECORDER);
 					intent.putExtra("index", index);
 					sendBroadcast(intent);
-					
 				}				
 			}
 		}).start();
@@ -835,7 +830,6 @@ public class MainService extends Service {
 	}
 	 public static void TakePictureAll(int type)
 	 {
-		 	
 		 final int pictype = type;
 		 Log.d("CMD", String.format(" TakePictureAll:%d", type));		 
 		 try {		
@@ -1116,6 +1110,7 @@ public class MainService extends Service {
 	public void startVideoUpload2(String ipstr, String portstr, String serialno,  int index){
 
 		int CameraId;
+		int  m_index_channel;
 		CameraId = index+1;		
 		if(camera[rules[index]]!=null && sc_controls[rules[index]]!=false){
 			return;			
@@ -1124,11 +1119,23 @@ public class MainService extends Service {
 			CameraUtil.VIDEO_UPLOAD[index] = true;
 			if(camera[rules[index]]!=null){
 				//初始化推流工具
-				StreamIndex[rules[index]]= mPusher.CarEyeInitNetWorkRTSP( getApplicationContext(),ipstr, portstr, String.format("%s?channel=%d.sdp", serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
+
+				if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTSP_PROTOCOL) {
+					StreamIndex[rules[index]] = mPusher.CarEyeInitNetWorkRTSP(getApplicationContext(), ipstr, portstr, String.format("%s?channel=%d.sdp", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
+				}else
+				{
+					StreamIndex[rules[index]]  = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(),ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
+				}
+				if(StreamIndex[rules[index]]  < 0)
+				{
+					Log.d("CMD", " init error, error number"+StreamIndex[rules[index]] );
+					//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
+					return;
+				}
 				//控制预览回调
 				sc_controls[rules[index]] = true;
-				camera[rules[index]].setPreviewCallback(preview[rules[index]]);	
-				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]]);									
+				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]]);
+				camera[rules[index]].setPreviewCallback(preview[rules[index]]);
 			}
 
 		} catch (Exception e) {
@@ -1149,7 +1156,7 @@ public class MainService extends Service {
 				sc_controls[rules[i]] = false;				
 				MediaCodecManager.getInstance().StopUpload(rules[i]);
 				camera[rules[i]].setPreviewCallback(null);
-				mPusher.stopPush(StreamIndex[rules[i]],Constants.CAREYE_RTSP_PROTOCOL);
+				mPusher.stopPush(StreamIndex[rules[i]],ServerManager.getInstance().getprotocol());
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

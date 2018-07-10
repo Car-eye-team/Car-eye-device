@@ -37,10 +37,10 @@ public class SetActivity extends Activity {
 	CheckBox[] cbs;
 	CheckBox[] cbsmodel;
 	int[] cbids = {R.id.checkBox1, R.id.checkBox2, R.id.checkBox3, R.id.checkBox4};
-	int[] cbidsmodel = {R.id.modelcheckBox1, R.id.modelcheckBox2};
-	RadioGroup rg;
+	//int[] cbidsmodel = {R.id.radio2, R.id.radio3};
+	RadioGroup rg, rg1;
 	public static int[] rgids = {R.id.radio0, R.id.radio1};
-
+	public static int[] rgids1 = {R.id.radio2, R.id.radio3};
 	SharedPreferences sp;
 	SharedPreferences.Editor sped;
 	private TextView tv_version;
@@ -68,23 +68,28 @@ public class SetActivity extends Activity {
 		bt1 = (Button) findViewById(R.id.set_button1);
 		bt2 = (Button) findViewById(R.id.set_button2);
 		rg = (RadioGroup) findViewById(R.id.radioGroup1);
-
-
+		rg1 = (RadioGroup) findViewById(R.id.radioGroup2);
 
 		cbs = new CheckBox[4];
 		for (int i = 0; i < cbs.length; i++) {
 			cbs[i] = (CheckBox) findViewById(cbids[i]);
 		}
 		//模式
-		cbsmodel = new CheckBox[2];
-		for (int i = 0; i < cbsmodel.length; i++) {
-			cbsmodel[i] = (CheckBox) findViewById(cbidsmodel[i]);
-		}
+		//cbsmodel = new CheckBox[2];
+		//for (int i = 0; i < cbsmodel.length; i++) {
+		//	cbsmodel[i] = (CheckBox) findViewById(cbidsmodel[i]);
+		//}
 
 		sp = getSharedPreferences("fcoltest", MODE_PRIVATE);
 		sped = sp.edit();
 
 		rg.check(ServerManager.getInstance().getMode());
+		if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTSP_PROTOCOL) {
+			rg1.check(rgids1[0]);
+		}else
+		{
+			rg1.check(rgids1[1]);
+		}
 		et1.setText(ServerManager.getInstance().getIp());
 		et2.setText(ServerManager.getInstance().getPort());
 		et3.setText(ServerManager.getInstance().getStreamname());
@@ -141,21 +146,23 @@ public class SetActivity extends Activity {
 				sped.putString(Constants.addPort, et_editTextkzport.getText().toString());
 				sped.putString(Constants.fps, et4.getText().toString());
 				sped.putInt(Constants.mode, rg.getCheckedRadioButtonId());
+				if(rg1.getCheckedRadioButtonId() == rgids1[1]) {
+					sped.putInt(Constants.protocol_type, Constants.CAREYE_RTMP_PROTOCOL);
+				}else
+				{
+					sped.putInt(Constants.protocol_type, Constants.CAREYE_RTSP_PROTOCOL);
+				}
 				//服务端ip端口
 				sped.putString(Constants.PTSERVICE_IP, et_ptserviceip.getText().toString());
 				sped.putString(Constants.PTSERVICE_PORT, et_ptserviceport.getText().toString());
 				sped.commit();
-				
 				Editor commEditor = SPutil.getCommEditor();
 				commEditor.putString("comm_terminal", et3.getText().toString());
 				commEditor.putString("master_server_ip", et_ptserviceip.getText().toString());
 				commEditor.putString("master_server_port", et_ptserviceport.getText().toString());
-				
 				commEditor.commit();
-				
 				//重启通讯
 				CommCenterUsers.restartTimerConnectSvr();
-				
 				Intent intent = new Intent(MainService.ACTION);
 				intent.putExtra("type", MainService.RESTART);
 				sendBroadcast(intent);

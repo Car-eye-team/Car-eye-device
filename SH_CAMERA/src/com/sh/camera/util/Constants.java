@@ -65,15 +65,15 @@ public class Constants {
 	/**PT服务端port*/
 	public static final String PTSERVICE_PORT = "ptservice_port";
 	/**模式 model */
-	public static final String ADD_MODEL = "add_model";
-	
+
 	public static String ip = "ip";
 	public static String port = "port";
 	public static String name = "name";
 	public static String fps = "fps";
 	public static String rule = "rule";
 	public static String mode = "mode";
-	public static String addPort = "add_port";	
+	public static String addPort = "add_port";
+	public static String  protocol_type = "protocol_type";
 	public static int CAREYE_VCODE_H264 = 0x1C;
 	public static int CAREYE_VCODE_H265 = 0x48323635;
 
@@ -83,8 +83,9 @@ public class Constants {
 	public static int CAREYE_ACODE_G726 = 0x10007;
 
 	/* rtsp/rtmp   */
-	public static int CAREYE_RTSP_PROTOCOL = 1;
-	public static int CAREYE_RTMP_PROTOCOL = 2;
+	public static int CAREYE_RTSP_PROTOCOL = 0;
+	public static int CAREYE_RTMP_PROTOCOL = 1;
+	public static final int protocol = CAREYE_RTSP_PROTOCOL;
 
 	/**录像时长 分钟*/
 	public static final int VIDEO_TIME = 10;//10

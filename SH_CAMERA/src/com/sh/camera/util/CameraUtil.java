@@ -151,7 +151,7 @@ public class CameraUtil {
 					if(MainService.mPusher == null){
 						MainService.mPusher = new Pusher();
 					}
-					MainService.mPusher.startfilestream(ip, port,streamName, map.get("path"),Constants.CAREYE_RTMP_PROTOCOL);
+					MainService.mPusher.startfilestream(ip, port,streamName, map.get("path"),ServerManager.getInstance().getprotocol());
 					if(i == data.size()){
 						/*Intent intent = new Intent("com.dss.camera.ACTION_END_VIDEO_PLAYBACK");
 						intent.putExtra("EXTRA_ID", map.get("cameraid"));
@@ -217,7 +217,7 @@ public class CameraUtil {
 
 					CameraUtil.VIDEO_FILE_UPLOAD = true;
 					Log.d("CMD", " restart"+filename);
-					MainService.mPusher.startfilestream( ip, port, streamName, filename,splaysec,eplaysec,handler,Constants.CAREYE_RTSP_PROTOCOL);
+					MainService.mPusher.startfilestream( ip, port, streamName, filename,splaysec,eplaysec,handler,ServerManager.getInstance().getprotocol());
 				}
 			});
 
@@ -243,7 +243,12 @@ public class CameraUtil {
 					}
 					for(int i = 0; i <4; i++)
 					{
-						MainService.mPusher. CarEyeStopNativeFileRTSP(i);
+						if(ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTSP_PROTOCOL) {
+							MainService.mPusher.CarEyeStopNativeFileRTSP(i);
+						}else
+						{
+							MainService.mPusher.CarEyeStopPushNetRTMP(i);
+						}
 					}					
 				} catch (Exception e) {
 					// TODO: handle exception
