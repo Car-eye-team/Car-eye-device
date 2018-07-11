@@ -111,7 +111,7 @@ Car-eye-device 商业用户需要鉴权，具体请联系团队管理人员
 
 
 # 二维码下载       
-https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/android%20DVR%20%E4%BA%8C%E7%BB%B4%E7%A0%81.png
+![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/android%20DVR%20%E4%BA%8C%E7%BB%B4%E7%A0%81.png)
 
 
 
