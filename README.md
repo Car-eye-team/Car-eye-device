@@ -110,6 +110,12 @@ Car-eye CMS 目前支持RTSP/RTMP 两种设备的管理
 Car-eye-device 商业用户需要鉴权，具体请联系团队管理人员
 
 
+# 二维码下载       
+https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/android%20DVR%20%E4%BA%8C%E7%BB%B4%E7%A0%81.png
+
+
+
+
 # 联系我们   
 
 car-eye 开源官方网址：www.car-eye.cn     
