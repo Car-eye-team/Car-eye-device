@@ -60,6 +60,7 @@ public class CameraUtil {
 	 * 开始视频上传
 	 * @param i 通道
 	 */
+	private static boolean Lock = false;
 
 
 	public static void startVideoUpload2(final String ipstr, final String portstr, final String serialno,  int CameraId){
@@ -67,31 +68,33 @@ public class CameraUtil {
 		final int i = CameraId -1;
 		AsyncTask.execute(new Runnable() {
 			@Override
-			public void run() {	                                     
-				//预览之前判断是否回放，如果回放先结束回放
-				if(CameraUtil.VIDEO_FILE_UPLOAD){
-					stopVideoFileStream();
-					try
-					{
-						Thread.sleep(100);				        
-					}catch (Exception localException)
-					{				          
-					}       
-				}
+			public void run() {
+				if(!Lock) {
+					Lock = true;
 
-				//预览之前先停止上传
-				if(VIDEO_UPLOAD[i]){
-					stopVideoUpload(i);
-					try
-					{
-						Thread.sleep(100);				        
-					}catch (Exception localException)
-					{				          
-					}        			
+					//预览之前判断是否回放，如果回放先结束回放
+					if (CameraUtil.VIDEO_FILE_UPLOAD) {
+						stopVideoFileStream();
+						try {
+							Thread.sleep(100);
+						} catch (Exception localException) {
+						}
+					}
+
+					//预览之前先停止上传
+					if (VIDEO_UPLOAD[i]) {
+						stopVideoUpload(i);
+						try {
+							Thread.sleep(100);
+						} catch (Exception localException) {
+						}
+					}
+					//初始化推流工具
+					VIDEO_UPLOAD[i] = true;
+					MainService.getInstance().startVideoUpload2(ipstr, portstr, serialno, i);
+					Lock = false;
+
 				}
-				//初始化推流工具
-				VIDEO_UPLOAD[i] = true;
-				MainService.getInstance().startVideoUpload2(ipstr, portstr,serialno,i);
 			}
 		});                      
 
@@ -187,37 +190,40 @@ public class CameraUtil {
 			if(MainService.mPusher == null){
 				MainService.mPusher = new Pusher();
 			}
-
 			AsyncTask.execute(new Runnable() {
 				@Override
-				public void run() {	 
+				public void run() {
+					if(!Lock) {
 
-					//上传之前先停止回放
-					if(CameraUtil.VIDEO_FILE_UPLOAD){
-						CameraUtil.stopVideoFileStream();
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}	
+						Lock = true;
+						//上传之前先停止回放
+						if (CameraUtil.VIDEO_FILE_UPLOAD) {
+							CameraUtil.stopVideoFileStream();
+							try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+
+						//上传之前先停止预览
+						int i = cameraid - 1;
+						if (VIDEO_UPLOAD[i]) {
+							stopVideoUpload(i);
+							try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+
+						CameraUtil.VIDEO_FILE_UPLOAD = true;
+						Log.d("CMD", " restart" + filename);
+						MainService.mPusher.startfilestream(ip, port, streamName, filename, splaysec, eplaysec, handler, ServerManager.getInstance().getprotocol());
+
 					}
-
-					//上传之前先停止预览
-					int i = cameraid-1;
-					if(VIDEO_UPLOAD[i]){
-						stopVideoUpload(i);
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}	
-					}			
-
-					CameraUtil.VIDEO_FILE_UPLOAD = true;
-					Log.d("CMD", " restart"+filename);
-					MainService.mPusher.startfilestream( ip, port, streamName, filename,splaysec,eplaysec,handler,ServerManager.getInstance().getprotocol());
 				}
 			});
 
