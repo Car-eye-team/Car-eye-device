@@ -38,7 +38,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
+                        android:gravity=""
                         android:text="流媒体服务器IP:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -65,7 +65,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
+                        android:gravity=""
                         android:text="端口:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -93,7 +93,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
+                        android:gravity=""
                         android:text="平台服务器IP:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -120,7 +120,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
+                        android:gravity=""
                         android:text="端口号:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -181,7 +181,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
+                        android:gravity=""
                         android:text="设备号:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -208,7 +208,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="right"
+                        android:gravity=""
                         android:text="帧频率:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -262,31 +262,39 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:gravity="center_vertical"
                     android:padding="15dp" >
 
                     <TextView
-                        android:id="@+id/modeltextView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="模式:"
+                        android:text="传输协议:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <CheckBox
-                        android:id="@+id/modelcheckBox1"
-                        style="@style/CustomCheckboxTheme"
+                    <RadioGroup
+                        android:id="@+id/radioGroup2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:text="RTSP" />
+                        android:orientation="horizontal" >
 
-                    <CheckBox
-                        android:id="@+id/modelcheckBox2"
-                        style="@style/CustomCheckboxTheme"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:text="RTMP" />
+                        <RadioButton
+                            android:id="@+id/radio2"
+                            style="@style/CustomRadioBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:text="RTSP" />
+
+                        <RadioButton
+                            android:id="@+id/radio3"
+                            style="@style/CustomRadioBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:checked="true"
+                            android:text="RTMP" />
+                    </RadioGroup>
                 </LinearLayout>
 
                 <!-- 受控摄像头 start -->
