@@ -106,7 +106,7 @@ public class Constants {
 	/**帧速率*/
 	public static int FRAMERATE = 20;
 	/**摄像头ID*/
-	public static int[] CAMERA_ID = {0,1,5,6};
+	public static int[] CAMERA_ID = {0,1,6,7};
 
 	/**录像状态 true录像中 false 未录像*/
 	public static boolean CAMERA_RECORD[] = {false,false,false,false};
@@ -131,9 +131,9 @@ public class Constants {
 			CAMERA_FILE_DIR = "/CarDVR/";			
 			FRAMERATE = 20;
 			CAMERA_ID[0] = 0;
-			CAMERA_ID[1] = 3;
-			CAMERA_ID[2] = 9;
-			CAMERA_ID[3] = 8;		
+			CAMERA_ID[1] = 1;
+			CAMERA_ID[2] = 6;
+			CAMERA_ID[3] = 7;
 	}
 
 	/**应用启动自动检测一次版本信息*/
