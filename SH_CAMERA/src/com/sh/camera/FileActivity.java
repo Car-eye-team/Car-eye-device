@@ -39,7 +39,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.sh.camera.service.MainService;
+import com.sh.camera.util.CameraFileUtil;
 import com.sh.camera.util.CameraUtil;
 import com.sh.camera.util.Constants;
 import com.sh.camera.util.DateUtil;
@@ -245,10 +247,8 @@ public class FileActivity extends Activity {
 		data = new ArrayList<HashMap<String, String>>();
 		mFileList =new ArrayList<String>();
 
-		for(int j = 0; j < MainService.disk.getDiskCnt(); j++)
-		{
 			String FileName;
-			FileName = MainService.disk.getDiskDirectory(j)+Constants.CAMERA_FILE_DIR;
+			FileName = CameraFileUtil.getRootFilePath() + Constants.CAMERA_PATH;
 			//File f = new File(Constants.CAMERA_FILE_PATH);
 			File f = new File(FileName);
 			if(f.exists()){
@@ -256,9 +256,7 @@ public class FileActivity extends Activity {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				if(fs!=null&&fs.length>0){
 					for (int i = 0; i < fs.length; i++) {
-
 						//Log.d("CMD", "file dirtionary:"+fs[i].getAbsolutePath());
-
 						String name = fs[i].getName();		
 						if(!name.endsWith("jpg") && !name.endsWith("mp4"))
 							continue;
@@ -286,11 +284,8 @@ public class FileActivity extends Activity {
 								}
 							}
 						}
-					}			
-
-				}		
-
-			}	
+					}
+			}
 		}
 
 		if(data.size() == 0)
@@ -367,7 +362,6 @@ public class FileActivity extends Activity {
 		Toast.makeText(FileActivity.this, "摄像头文件不存在", 2000).show();
 		finish();
 	}
-
 
 	class MyAd extends BaseAdapter{
 

@@ -66,12 +66,12 @@ public class MediaCodecManager {
 	 * 释放解码器资源
 	 * @param index
 	 */
-	
- public static  void Startpick(int type)
- {
-	 TakePicture = true;
-	 CAMERA_OPER_MODE = type;	 
- }
+
+	public static  void PrepareTakePicture()
+	{
+		TakePicture = true;
+	}
+
 	
  
  public void StartUpload(int index, Camera camera)
@@ -154,10 +154,16 @@ public void onPreviewFrameUpload(byte[] data,int index,Camera camera){
      }   
      MainService.getInstance().SetPreviewValid(index);
      if(TakePicture && MainService.picid == index )
-     {    	
-    	TakePicture = false;    	
-	  	CameraFileUtil.saveJpeg_snap(index, data, Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT,  MainService.disk.getDiskDirectory(MainService.disk.SelectDisk())+Constants.CAMERA_FILE_DIR+(index+1)+"-"+new Date().getTime()+".jpg");
-     }
+     {
+		 TakePicture = false;
+		 CameraFileUtil.saveJpeg_snap(
+				 index,
+				 data,
+				 Constants.UPLOAD_VIDEO_WIDTH,
+				 Constants.UPLOAD_VIDEO_HEIGHT);
+	 }
+
+
      if(mVC[index]!= null)
      {
     	 Log.d("CMD", " onPreviewFrameUpload1 "+data.length);	

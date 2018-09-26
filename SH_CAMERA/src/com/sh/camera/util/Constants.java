@@ -137,5 +137,7 @@ public class Constants {
 	}
 
 	/**应用启动自动检测一次版本信息*/
+	public static final String CAMERA_PATH ="Careye_pusher/";
+
 	public static boolean checkVersion = true;
 }

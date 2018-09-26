@@ -80,7 +80,6 @@ public class HWConsumer extends Thread implements VideoConsumer {
                 return 0;
             }
         }
-
         data = mVideoConverter.convert(data);
 		inputBuffers = mMediaCodec.getInputBuffers();
 		outputBuffers = mMediaCodec.getOutputBuffers();
@@ -173,8 +172,13 @@ public class HWConsumer extends Thread implements VideoConsumer {
                 e.printStackTrace();
             }
         }while (isAlive());
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+        }
         if (mMediaCodec != null) {
             stopMediaCodec();
+            mMediaCodec = null;
         }
     }
 

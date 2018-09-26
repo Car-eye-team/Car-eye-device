@@ -7,6 +7,7 @@
 package com.sh.camera.socket;
 
 import com.sh.camera.ServerManager.ServerManager;
+import com.sh.camera.bll.ParamsBiz;
 import com.sh.camera.service.ShCommService;
 import com.sh.camera.socket.coder.CommDecoder;
 import com.sh.camera.socket.db.DataMsgDao;
@@ -25,6 +26,7 @@ import com.sh.camera.util.Tools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 
@@ -58,7 +60,7 @@ public class BusinessProcess {
 			AppLog.d(TAG, "协议解析失败");
 		}else{
 			//处理业务
-			process(dsCommData.getMsgid(),dsCommData.getData(), context);
+			process(dsCommData.getMsgid(),dsCommData.getData(),dsCommData.getSeq(), context);
 		}
 
 	}
@@ -69,7 +71,7 @@ public class BusinessProcess {
 	 * @param data 消息数据包
 	 * @param context 上下文对象
 	 */
-	public synchronized static void process(int msgid,byte[] data, final Context context){
+	public synchronized static void process(int msgid,byte[] data,int seq, final Context context){
 		switch (msgid) {
 
 		case 0x8001:	// 平台通用应答
@@ -158,6 +160,7 @@ public class BusinessProcess {
 		case 0x8103:	// 设置参数
 			try {
 
+
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
@@ -174,7 +177,9 @@ public class BusinessProcess {
 				//操作类型 0 实时预览 1 停止预览
 				int type = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
 				num += 1;
-
+				/*Intent intent = new Intent("com.dss.launcher.ACTION_VIDEO_PREVIEW");
+				intent.putExtra("EXTRA_ID", id);
+				intent.putExtra("EXTRA_TYPE", type);*/
 				Log.d("vedio", "Data"+data.length);
 				//兼容老的car-eye-server 和 新的两个平台
 				if(data.length>10)
@@ -192,6 +197,7 @@ public class BusinessProcess {
 					int port = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)), 16);
 					num += 2;
 					ServerManager.getInstance().SetIP(ip);
+
 					ServerManager.getInstance().SetPort(""+port);
 					ServerManager.getInstance().setprotocol(protocolType);
 					Log.d("vedio", "protocolType" + protocolType + "  ip" + ip + "  port:" + port + "  protocol" + ServerManager.getInstance().getprotocol());
@@ -201,7 +207,7 @@ public class BusinessProcess {
 				}else{
 					CameraUtil.stopVideoUpload((id-1));
 				}
-				
+
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
@@ -224,7 +230,13 @@ public class BusinessProcess {
 				//结束时间
 				String etime = ParseUtil.bcd2Str(ParseUtil.byteTobyte(data, num, 6)); 		
 				num += 6;
-				//兼容老的car-eye-server 和 新的两个平台
+
+				/*Intent intent = new Intent("com.dss.launcher.ACTION_VIDEO_PLAYBACK");
+				intent.putExtra("EXTRA_ID", id);
+				intent.putExtra("EXTRA_TYPE", type);
+				intent.putExtra("EXTRA_STIME", stime);
+				intent.putExtra("EXTRA_ETIME", etime);
+				context.sendBroadcast(intent);*/
 				if(data.length>20)
 				{
 					int protocolType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)), 16);
@@ -243,13 +255,8 @@ public class BusinessProcess {
 					ServerManager.getInstance().setprotocol(protocolType);
 
 				}
-				/*Intent intent = new Intent("com.dss.launcher.ACTION_VIDEO_PLAYBACK");
-				intent.putExtra("EXTRA_ID", id);
-				intent.putExtra("EXTRA_TYPE", type);
-				intent.putExtra("EXTRA_STIME", stime);
-				intent.putExtra("EXTRA_ETIME", etime);
-				context.sendBroadcast(intent);*/
 				CommCameraFileUtil.screenVideoFile(stime, etime, id);
+
 
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
@@ -273,7 +280,7 @@ public class BusinessProcess {
 
 		case 0x5113:   //回放指定文件
 			try {
-				
+
 				System.out.println("data=="+ParseUtil.parseByte2HexStr(data));
 				//业务处理
 				int num = 0;
@@ -298,6 +305,414 @@ public class BusinessProcess {
 				e.printStackTrace();
 			}
 			break;
+
+		case 0x9003:   //查询终端音视频属性
+			try {
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9101:   //实时音视频传输请求
+			try {
+				//业务处理
+
+				int num = 0;
+				// 服务器IP地址长度
+				int iplen = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//服务器IP地址
+				byte[] ipbyte = ParseUtil.byteTobyte(data, num, iplen);
+				num += iplen;
+				String ip = ParseUtil.byteToString(ipbyte, 0, ipbyte.length);
+				//TCP端口号
+				int tcpPort = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//UDP端口号
+				int udpPort = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//数据类型
+				int type = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//码流类型
+				int streamType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+				ServerManager.getInstance().SetIP(ip);
+				ServerManager.getInstance().SetPort(""+tcpPort);
+				ServerManager.getInstance().setprotocol(Constants.CAREYE_RTMP_PROTOCOL);
+
+				//设置上传服务器IP
+				//ParamsBiz.setUpdateIP(ip);
+				//设置上传服务器端口
+				//ParamsBiz.setUpdatePort(String.valueOf(tcpPort));
+				Log.d("vedio", "protocolType" + logicChannel + "  ip" + ip + "  port:" + tcpPort + "  protocol" + ServerManager.getInstance().getprotocol());
+				//开始传输
+				CameraUtil.startVideoUpload((logicChannel-1));
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9102:   //音视频实时传输控制
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//控制指令
+				int command = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//关闭类型
+				int closeType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//码流切换类型
+				int switchType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+				if(command ==0 || command ==2){
+					CameraUtil.stopVideoUpload((logicChannel-1));
+					Log.d("vedio", "stop stream");
+				}else if(command ==3){
+					//开始传输
+					Log.d("vedio", "start stream");
+							CameraUtil.startVideoUpload((logicChannel-1));
+				}
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9105:   //实时音视频状态通知
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//丢包率
+				int lostRatio = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9201:   //平台下发远程录像回放请求
+			try {
+				int num = 0;
+				// 服务器IP地址长度
+				int iplen = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//服务器IP地址
+				byte[] ipbyte = ParseUtil.byteTobyte(data, num, iplen);
+				num += iplen;
+				String ip = ParseUtil.byteToString(ipbyte, 0, ipbyte.length);
+				//TCP端口号
+				int tcpPort = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//UDP端口号
+				int udpPort = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//数据类型
+				int type = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//码流类型
+				int streamType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//存储类型
+				int memoryType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//回放方式
+				int playBackType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//快进或快退倍速
+				int playBackRatio = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//开始时间
+				byte[] startTimebyte = ParseUtil.byteTobyte(data, num, 6);
+				String startTime = ParseUtil.bcd2Str(startTimebyte);
+				num += 6;
+
+				//结束时间
+				byte[] endTimebyte = ParseUtil.byteTobyte(data, num, 6);
+				String endTime = ParseUtil.bcd2Str(endTimebyte);
+				num += 6;
+
+				//设置上传服务器IP
+				ParamsBiz.setUpdateIP(ip);
+				//设置上传服务器端口
+				ParamsBiz.setUpdatePort(String.valueOf(tcpPort));				
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9202:   //远程录像回放控制
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//控制指令
+				int command = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//快进或快退倍数
+				int playBackRatio = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//快速拖动位置
+				byte[] fastPoistionbyte = ParseUtil.byteTobyte(data, num, 6);
+				String fastPoistion = ParseUtil.bcd2Str(fastPoistionbyte);
+				num += 6;
+
+
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9205:   //查询资源列表
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//开始时间
+				byte[] startTimebyte = ParseUtil.byteTobyte(data, num, 6);
+				String startTime = ParseUtil.bcd2Str(startTimebyte);
+				num += 6;
+
+				//结束时间
+				byte[] endTimebyte = ParseUtil.byteTobyte(data, num, 6);
+				String endTime = ParseUtil.bcd2Str(endTimebyte);
+				num += 6;
+
+				//报警表示(暂时不处理报警)
+				byte[] alarmbyte = ParseUtil.byteTobyte(data, num, 8);
+				num += 8;
+
+				//音视频资源类型
+				int mediaType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+				//码流类型
+				int streamType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+				//存储类型
+				int memoryType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+				Log.d("vedio", "start file list"+startTime+"endtime"+endTime+"mediaType:"+mediaType+"streamType:"+streamType);
+
+				//获取资源文件并上传
+				CommCameraFileUtil.screenVideoFile1078(startTime, endTime, logicChannel,seq);
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9206:   //文件上传指令
+			try {
+				int num = 0;
+				//服务器IP地址长度
+				int ipLength = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//服务器IP地址
+				byte[] ipbyte = ParseUtil.byteTobyte(data, num, ipLength);
+				num += ipLength;
+				String ip = ParseUtil.byteToString(ipbyte, 0, ipbyte.length);
+				//ftp服务器端口
+				int port = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//用户名长度
+				int userLength = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//用户名
+				byte[] usernamebyte = ParseUtil.byteTobyte(data, num, userLength);
+				num += userLength;
+				String username = ParseUtil.byteToString(usernamebyte, 0, usernamebyte.length);
+				//用户密码长度
+				int passLength = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//密码
+				byte[] passWordbyte = ParseUtil.byteTobyte(data, num, passLength);
+				num += passLength;
+				String passWord = ParseUtil.byteToString(passWordbyte, 0, passWordbyte.length);
+				//文件上传路径长度
+				int pootLength = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//文件路径
+				byte[] pootbyte = ParseUtil.byteTobyte(data, num, pootLength);
+				num += pootLength;
+				String poot = ParseUtil.byteToString(pootbyte, 0, pootbyte.length);
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//开始时间
+				byte[] startTimebyte = ParseUtil.byteTobyte(data, num, 6);
+				String startTime = ParseUtil.bcd2Str(startTimebyte);
+				num += 6;
+				//结束时间
+				byte[] endTimebyte = ParseUtil.byteTobyte(data, num, 6);
+				String endTime = ParseUtil.bcd2Str(endTimebyte);
+				num += 6;
+				//报警表示(暂时不处理报警)
+				byte[] alarmbyte = ParseUtil.byteTobyte(data, num, 8);
+				num += 8;
+				//音视频资源类型
+				int mediaType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//码流类型
+				int streamType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//存储类型
+				int memoryType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//执行条件
+				int taskOp = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9207:   //文件上传控制
+			try {
+				int num = 0;
+				//流水号
+				int seqNumber = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//上传控制	UINT80：暂停1：继续2：取消
+				int control = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9301:   //云台旋转
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//方向
+				int direction = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+				//速度
+				int speed = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9302:   //云台调整焦距
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//方向
+				int direction = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9303:   //云台调整光圈控制
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//方向
+				int direction = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9304:   //云台调整雨刷
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//方向
+				int direction = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9305:   //红外补光控制
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//方向
+				int direction = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
+		case 0x9306:   //变倍控制
+			try {
+				int num = 0;
+				//逻辑通道号
+				int logicChannel = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)),16);
+				num += 2;
+				//方向
+				int direction = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
+				num += 1;
+
+			} catch (Exception e) {
+				AppLog.e(ExceptionUtil.getInfo(e), e);
+				e.printStackTrace();
+			}
+			break;
+
 		default:
 			break;
 		}

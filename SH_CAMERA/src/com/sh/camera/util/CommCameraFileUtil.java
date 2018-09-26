@@ -11,9 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import com.sh.camera.socket.CommCenterUsers;
 import com.sh.camera.socket.coder.CommEncoder;
+import com.sh.camera.socket.model.VideoInfo;
 import com.sh.camera.socket.utils.ParseUtil;
 
 import android.annotation.SuppressLint;
@@ -208,6 +210,127 @@ public class CommCameraFileUtil {
 								}
 							}
 
+						}
+
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+				}
+			}}).start();
+	}
+	
+	/**
+	 * 筛选视频文件
+	 * @param stime 开始时间
+	 * @param etime 结束时间
+	 * @param cameraid 摄像头ID
+	 */
+	public synchronized static void screenVideoFile1078(final String starttime,final String edntime,final int cameraid,final int seq){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+
+				File f = new File(Constants.CAMERA_FILE_PATH);
+				ArrayList<HashMap<String, String>> filedata = null;
+				HashMap<Integer, ArrayList<HashMap<String, String>>> datamap = new HashMap<Integer, ArrayList<HashMap<String, String>>>();
+
+				if(f.exists()){
+					try {
+						File[] fs = f.listFiles();
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						String stime = DateUtil.numberTodate(starttime);
+						String etime = DateUtil.numberTodate(edntime);
+						if(fs!=null&&fs.length>0){
+							filedata = new ArrayList<HashMap<String, String>>();
+							int k = 0;
+							List<VideoInfo> list = new ArrayList<VideoInfo>();
+							for (int i = 0; i < fs.length; i++) {
+								String name = fs[i].getName();
+								if(name.endsWith("mp4")){
+									int cid = Integer.parseInt(name.split("-")[0]);
+									if(cid == cameraid){
+										
+										File file = fs[i];
+
+										//文件开始录制时间
+										String eftime = sdf.format(new Date(file.lastModified()));
+										//文件录制结束时间
+										String utctime = name.split("-")[1].replace(".mp4", "");
+										String sftime = DateUtil.utcTimestampToBjTime(utctime);
+										
+										//总时长
+										int sumrec = DateUtil.secBetween(eftime, sftime);
+										//判断文件结束时间与开始时间 结束时间比较
+										int esec1 = DateUtil.secBetween(eftime, stime);
+										int esec2 = DateUtil.secBetween(eftime, etime);
+
+										int splaysec = 0;  //开始播放秒
+										int eplaysec = 0;  //结束播放秒
+										boolean flag = false;
+										if(esec1 > 0 && esec2 < 0){
+
+											int ssec = DateUtil.secBetween(sftime, stime);
+											if(ssec > 0){
+												splaysec = 0;
+												eplaysec = sumrec;
+											}else{
+												splaysec = DateUtil.secBetween(stime, sftime);
+												eplaysec = sumrec;
+											}
+											flag = true;
+										}else if(esec1 > 0 && esec2 > 0){
+											int esec = DateUtil.secBetween(sftime, etime);
+											if(esec > 0 ){
+												flag = false;
+											}else{
+												int ssec = DateUtil.secBetween(sftime, stime);
+												if(ssec > 0){
+													splaysec = 0;
+													eplaysec = sumrec-DateUtil.secBetween(eftime, etime);
+												}else{
+													splaysec = DateUtil.secBetween(stime, sftime);
+													eplaysec = DateUtil.secBetween(eftime, etime);
+												}
+												flag = true;
+											}
+										}
+
+										if(flag){
+											VideoInfo videoItems = new VideoInfo();
+											//逻辑通道号
+											videoItems.setLogicChannel(cameraid);
+											//开始时间
+											videoItems.setStartTime(sftime);
+											//结束时间
+											videoItems.setEndTime(eftime);
+											//音视频资源类型 0：音视频 1：音频 2：视频 3视频或音视频
+											videoItems.setMediaType(2);
+											//码流类型 0：所有码流 1：主码流 2 子码流
+											videoItems.setStreamType(1);
+											//存储类型 0：所有存储器 1：主存储器 2：灾备服务器
+											videoItems.setMemoryType(1);
+											//文件大小
+											int filesize = (int) (file.length()/1024);
+											videoItems.setSize(filesize);
+											list.add(videoItems);
+										}
+									}
+								}
+
+								//最后一条记录
+								if((i+1) == fs.length){
+									if(filedata.size() > 0){
+										datamap.put(k, filedata);
+										filedata = new ArrayList<HashMap<String, String>>();
+										k++;
+									}
+								}
+							}
+							
+							//发送文件数据
+							byte[] cameradata = CommEncoder.getAudioVideoResourceList(seq, list);
+							CommCenterUsers.witeMsg(cameradata,1);
 						}
 
 					} catch (Exception e) {

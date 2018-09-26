@@ -1,6 +1,7 @@
 
 package com.sh.camera.service;
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import org.push.push.Pusher;
 import android.app.Service;
@@ -47,6 +48,7 @@ import com.sh.camera.DiskManager.DiskManager;
 import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.codec.MediaCodecManager;
 import com.sh.camera.util.AppLog;
+import com.sh.camera.util.CameraFileUtil;
 import com.sh.camera.util.CameraUtil;
 import com.sh.camera.util.Constants;
 import com.sh.camera.util.ExceptionUtil;
@@ -828,32 +830,12 @@ public class MainService extends Service {
 		}).start();
 		return true;		
 	}
-	 public static void TakePictureAll(int type)
+
+
+
+	public static void TakePictureAll(int type)
 	 {
 		 final int pictype = type;
-		 Log.d("CMD", String.format(" TakePictureAll:%d", type));		 
-		 try {		
-				if(type == 1){
-					//if(!SdCardUtil.checkSdCardUtil()){
-					if(MainService.getDiskManager().getDiskCnt()<=0){
-						AppLog.d("CMD", "SD卡不存在");
-						return ;
-					}
-				}else
-				{
-					File f = new File(Constants.SNAP_FILE_PATH);
-					if(!f.exists()){
-						f.mkdirs();
-					}
-				}
-			
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				return ;
-			}
-		 	MediaCodecManager.CAMERA_OPER_MODE = type;
-		 
 		 new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -861,7 +843,7 @@ public class MainService extends Service {
 					for (int i = 0; i < rules.length; i++) {					
 						if((camera[i]!= null) ){							
 							picid = i;
-							MediaCodecManager.Startpick(pictype);	
+							MediaCodecManager.PrepareTakePicture();
 							camera[i].setPreviewCallback(preview[i]);							
 							flag1 = true;							
 							try {
@@ -875,13 +857,7 @@ public class MainService extends Service {
 					}					
 					if( pictype == 1 )
 				 	{
-						if(flag1 ==  true )
-						{
-							Handler handler = MainService.getInstance().handler; 
-							if(handler != null){
-								handler.sendMessage(handler.obtainMessage(1001));
-							}	
-						}else
+						if(flag1 ==  false )
 						{
 							Handler handler = MainService.getInstance().handler; 
 							if(handler != null){
@@ -976,27 +952,15 @@ public class MainService extends Service {
 		if(clickLock) return;
 		switch (id) {
 		case R.id.bt_ly_1://拍照		
-		case R.id.bt_ly_1_bottom://鎷嶇収			
-	
-			//检查SD卡是否存在
-			//if(!SdCardUtil.checkSdCardUtil()){			
-			if(disk.getDiskCnt()<=0){
-				Toast.makeText(c, "未检测到SD卡,将无法执行操作", 1000).show();
-			}else{
-				clickLock = true;
-				//CameraUtil.cameraTakePicture(0, 1);
-				TakePictureAll(1);
-				clickLock = false;
-			}			
+		case R.id.bt_ly_1_bottom://鎷嶇収
+			clickLock = true;
+			//CameraUtil.cameraTakePicture(0, 1);
+			TakePictureAll(1);
+			clickLock = false;
 			break;
 		case R.id.bt_ly_2://录像
 		case R.id.bt_ly_2_bottom://褰曞儚
 
-			//检查SD卡是否存在
-			//if(!SdCardUtil.checkSdCardUtil()){
-			if(disk.getDiskCnt()<=0){
-				Toast.makeText(c, "未检测到SD卡,将无法执行操作", 1000).show();
-			}else{
 				clickLock = true;
 				//先判断是否录制中
 				if(isRecording){
@@ -1022,7 +986,7 @@ public class MainService extends Service {
 					isRecording = true;
 				}
 				clickLock = false;
-			}
+
 			break;
 		case R.id.bt_ly_3://上传
 		case R.id.bt_ly_3_bottom://涓婁紶
@@ -1153,9 +1117,9 @@ public class MainService extends Service {
 			Log.d("SERVICE", " stop upload"+i);
 			CameraUtil.VIDEO_UPLOAD[i] = false;
 			if(camera[rules[i]]!=null){				
-				sc_controls[rules[i]] = false;				
-				MediaCodecManager.getInstance().StopUpload(rules[i]);
+				sc_controls[rules[i]] = false;
 				camera[rules[i]].setPreviewCallback(null);
+				MediaCodecManager.getInstance().StopUpload(rules[i]);
 				mPusher.stopPush(StreamIndex[rules[i]],ServerManager.getInstance().getprotocol());
 			}
 		} catch (Exception e) {
@@ -1171,16 +1135,13 @@ public class MainService extends Service {
 	public void prepareRecorder(int index,int type){
 		try {
 			//if(!SdCardUtil.checkSdCardUtil()){
-			if(disk.getDiskCnt()<=0){
-				Log.d("CMD", " sd card not mount"+index);	
-			}else{
 				btiv1.setImageResource(R.drawable.b02);
 				if(type == 1){
 					recoTime = new Date().getTime();
 				}
 				isRecording = true;				
 				startRecorder(rules[index]);
-			}
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -1227,20 +1188,29 @@ public class MainService extends Service {
 		
 	}
 	
-	private void generateVideoFilename(int index,  int outputFileFormat) {  	 
-        
-        String title = String.format("%d-%d", index+1, new Date().getTime()) ;
-        String filename = title + convertOutputFormatToFileExt(outputFileFormat);
-        String path = disk.getDiskDirectory(disk.SelectDisk())+Constants.CAMERA_FILE_DIR + filename;        
-        String tmpPath = path + ".tmp";        
-        String mime = convertOutputFormatToMimeType(outputFileFormat);  
-        mCurrentVideoValues[index] = new ContentValues(4);
-        mCurrentVideoValues[index].put(Video.Media.TITLE, title);
-        mCurrentVideoValues[index].put(Video.Media.DISPLAY_NAME, filename);
-        mCurrentVideoValues[index].put(Video.Media.MIME_TYPE, mime);
-        mCurrentVideoValues[index].put(Video.Media.DATA, path);
-        MrTempName[index] = tmpPath;
-    }
+	private void generateVideoFilename(int index,  int outputFileFormat) {
+
+		File mFile;
+		try {
+			mFile = CameraFileUtil.CreateText(CameraFileUtil.getRootFilePath() + Constants.CAMERA_PATH);
+			String title = String.format("%d-%d", index+1, new Date().getTime()) ;
+			String filename = title + convertOutputFormatToFileExt(outputFileFormat);
+			File file = new File(mFile,filename);
+			String path = file.getPath();
+			String tmpPath = path + ".tmp";
+			String mime = convertOutputFormatToMimeType(outputFileFormat);
+			mCurrentVideoValues[index] = new ContentValues(4);
+			mCurrentVideoValues[index].put(Video.Media.TITLE, title);
+			mCurrentVideoValues[index].put(Video.Media.DISPLAY_NAME, filename);
+			mCurrentVideoValues[index].put(Video.Media.MIME_TYPE, mime);
+			mCurrentVideoValues[index].put(Video.Media.DATA, path);
+			MrTempName[index] = tmpPath;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	public void startRecorder(int index){
 		try { 

@@ -8,9 +8,11 @@ package com.sh.camera.socket.coder;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import com.sh.camera.model.GPSLocationInfo;
 import com.sh.camera.service.ShCommService;
+import com.sh.camera.socket.model.VideoInfo;
 import com.sh.camera.socket.utils.ConstantsAlarm;
 import com.sh.camera.socket.utils.ConstantsState;
 import com.sh.camera.socket.utils.DistanceUtil;
@@ -35,7 +37,7 @@ import com.sh.camera.util.ExceptionUtil;
  */
 public class CommEncoder {
 
-	private static final String TAG = "ObdEncoder";
+	private static final String TAG = "CommEncoder";
 	private static int seq = 1;
 
 	/**
@@ -453,7 +455,184 @@ public class CommEncoder {
 	}
 	
 	
-
+	/**
+	 * 终端上传音视频资源列表
+	 * @param id
+	 * @return
+	 */
+	public static byte[] getAudioVideoResourceList(int seq,List<VideoInfo> list){
+		try {
+			int dstPos = 0;
+			int len = 0;
+			int total = 0;
+			if(list != null){
+				total = list.size();
+				len = total*28;
+			}
+			byte[] body = new byte[6+len];	
+			//流水号
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(seq,2)), 0, body, dstPos, 2);
+			dstPos+=2;
+			//资源总数
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(total,4)), 0, body, dstPos, 4);
+			dstPos+=4;
+			//资源列表
+			for (VideoInfo videoItems : list) {
+				//逻辑通道号
+				System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoItems.getLogicChannel(),1)), 0, body, dstPos, 1);
+				dstPos+=1;
+				//开始时间
+				byte[] startTimebyte = ParseUtil.str2Bcd(videoItems.getStartTime());
+				System.arraycopy(startTimebyte, 0, body, dstPos, 6);
+				dstPos+=6;
+				//结束时间
+				byte[] endTimebyte = ParseUtil.str2Bcd(videoItems.getEndTime());
+				System.arraycopy(endTimebyte, 0, body, dstPos, 6);
+				dstPos+=6;
+				//报警标志(暂时不处理报警)
+				String alarmBit0 = "00000000";
+				String alarmBit1 = "00000000";
+				String alarmBit2 = "00000000";
+				String alarmBit3 = "00000000";
+				String alarmBit4 = "00000000";
+				String alarmBit5 = "00000000";
+				String alarmBit6 = "00000000";
+				String alarmBit7 = "00000000";
+				byte[] alarmbyte = new byte[8];
+				alarmbyte[0] = ParseUtil.BitToByte(alarmBit0);
+				alarmbyte[1] = ParseUtil.BitToByte(alarmBit1);
+				alarmbyte[2] = ParseUtil.BitToByte(alarmBit2);
+				alarmbyte[3] = ParseUtil.BitToByte(alarmBit3);
+				alarmbyte[4] = ParseUtil.BitToByte(alarmBit4);
+				alarmbyte[5] = ParseUtil.BitToByte(alarmBit5);
+				alarmbyte[6] = ParseUtil.BitToByte(alarmBit6);
+				alarmbyte[7] = ParseUtil.BitToByte(alarmBit7);
+				System.arraycopy(alarmbyte, 0, body, dstPos,8);
+				dstPos+=8;
+				
+				//音视频资源类型
+				System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoItems.getMediaType(),1)), 0, body, dstPos, 1);
+				dstPos+=1;
+				//码流类型
+				System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoItems.getStreamType(),1)), 0, body, dstPos, 1);
+				dstPos+=1;
+				//存储类型
+				System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoItems.getMemoryType(),1)), 0, body, dstPos, 1);
+				dstPos+=1;
+				//文件大小
+				System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoItems.getSize(),4)), 0, body, dstPos, 4);
+				dstPos+=4;
+			}
+			
+			byte[] bytes = getProtocol808(body, 0x1205);
+			return bytes;
+		} catch (Exception e) {
+			AppLog.e(ExceptionUtil.getInfo(e), e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * 终端上传音视频属性0x1003
+	 * @param videoInfo
+	 * @return
+	 */
+	public static byte[] getAudiovideoAttributeUpload(VideoInfo videoInfo){
+		try {
+			int dstPos = 0;
+			byte[] body = new byte[10];	
+			//音频编码格式
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getAudioCodec(),1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			//输入音频通道数
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getChannels(),1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			//输入音频采样率
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getSamplerate(),1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			//音频采样位数
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getSampleBits(),1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			//音频帧长度
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getSampleLength(),2)), 0, body, dstPos, 2);
+			dstPos+=2;
+			//是否支持音频输出
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getEnableflag(),1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			//视频编码格式
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getVediocodec(),1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			//终端支持最大音频通道数量
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getAudiovhannels(),1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			//终端支持的最大视频通道数量
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getVediovhannnels(),1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			
+			byte[] bytes = getProtocol808(body, 0x1003);
+			return bytes;
+		} catch (Exception e) {
+			AppLog.e(ExceptionUtil.getInfo(e), e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * 终端上传乘客流量0X1005
+	 * @param videoInfo
+	 * @return
+	 */
+	public static byte[] getPassengerFlowUpload(VideoInfo videoInfo){
+		try {
+			int dstPos = 0;
+			byte[] body = new byte[16];	
+			//开始时间
+			System.arraycopy(ParseUtil.str2Bcd(videoInfo.getStartTime()), 0, body, dstPos, 6);
+			dstPos+=6;
+			//结束时间
+			System.arraycopy(ParseUtil.str2Bcd(videoInfo.getEndTime()), 0, body, dstPos, 6);
+			dstPos+=6;
+			//上车人数
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getAboard(),2)), 0, body, dstPos, 2);
+			dstPos+=2;
+			//下车人数
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoInfo.getLeave(),2)), 0, body, dstPos, 2);
+			dstPos+=2;
+			byte[] bytes = getProtocol808(body, 0x1005);
+			return bytes;
+		} catch (Exception e) {
+			AppLog.e(ExceptionUtil.getInfo(e), e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * 文件上传结束
+	 * @param seqNumber 对应上传的流水号
+	 * @param result 结果 0：成功 1：失败
+	 * @return
+	 */
+	public static byte[] getEndFileUpload(int seqNumber,int result){
+		try {
+			int dstPos = 0;
+			byte[] body = new byte[3];	
+			//流水号
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(seqNumber,2)), 0, body, dstPos, 2);
+			dstPos+=2;
+			//结构
+			System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(result,1)), 0, body, dstPos, 1);
+			dstPos+=1;
+			byte[] bytes = getProtocol808(body, 0x1206);
+			return bytes;
+		} catch (Exception e) {
+			AppLog.e(ExceptionUtil.getInfo(e), e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *  7EH 《————》 7DH+02H；
 	 *  7DH 《————》 7DH+01H；
