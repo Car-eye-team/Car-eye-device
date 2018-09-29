@@ -38,7 +38,7 @@ public class Pusher {
 	/* rtsp interface*/
 	private Handler handle =null;	
 	public native int    CarEyeInitNetWorkRTSP(Context context,String serverIP, String serverPort, String streamName, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
-	public native int 	 CarEyePusherIsReadyRTSP(int channel);
+	public native int 	CarEyePusherIsReadyRTSP(int channel);
 	public native long   CarEyeSendBufferRTSP(long time, byte[] data, int lenth, int type, int channel);	
 	public native int    CarEyeStopNativeFileRTSP(int channel);	
 	public native int    CarEyeStartNativeFileRTSPEX(Context context, String serverIP, String serverPort, String streamName,  String fileName,int start, int end);
