@@ -15,15 +15,16 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 23
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.sh.camera"
-        minSdkVersion 16
-        targetSdkVersion 21
+        minSdkVersion 21
+        targetSdkVersion 23
     }
 
+    useLibrary 'org.apache.http.legacy'
 
     sourceSets {
         main {
