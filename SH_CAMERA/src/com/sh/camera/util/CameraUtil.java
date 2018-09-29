@@ -218,7 +218,7 @@ public class CameraUtil {
 								e.printStackTrace();
 							}
 						}
-
+						Lock = false;
 						CameraUtil.VIDEO_FILE_UPLOAD = true;
 						Log.d("CMD", " restart" + filename);
 						MainService.mPusher.startfilestream(ip, port, streamName, filename, splaysec, eplaysec, handler, ServerManager.getInstance().getprotocol());

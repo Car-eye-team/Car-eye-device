@@ -29,6 +29,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.io.File;
+
 
 /**
  *     
@@ -452,6 +454,13 @@ public class BusinessProcess {
 				String endTime = ParseUtil.bcd2Str(endTimebyte);
 				num += 6;
 
+				//查找一个文件，然后上传到视频服务器，目前暂时只支持一个文件上传
+				File file;
+				file = CommCameraFileUtil.SearchFile(startTime,endTime,logicChannel);
+				if(file!=null)
+				{
+					CameraUtil.startVideoFileStream(logicChannel, 0,0,file.getAbsolutePath(),null);
+				}
 				//设置上传服务器IP
 				ParamsBiz.setUpdateIP(ip);
 				//设置上传服务器端口
@@ -479,8 +488,6 @@ public class BusinessProcess {
 				byte[] fastPoistionbyte = ParseUtil.byteTobyte(data, num, 6);
 				String fastPoistion = ParseUtil.bcd2Str(fastPoistionbyte);
 				num += 6;
-
-
 
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);

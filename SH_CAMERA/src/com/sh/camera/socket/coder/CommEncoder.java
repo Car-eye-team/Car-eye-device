@@ -482,11 +482,11 @@ public class CommEncoder {
 				System.arraycopy(ParseUtil.sortToByte(ParseUtil.int2Bytes(videoItems.getLogicChannel(),1)), 0, body, dstPos, 1);
 				dstPos+=1;
 				//开始时间
-				byte[] startTimebyte = ParseUtil.str2Bcd(videoItems.getStartTime());
+				byte[] startTimebyte = ParseUtil.str2Bcd(DateUtil.dateToNumber(videoItems.getStartTime()));
 				System.arraycopy(startTimebyte, 0, body, dstPos, 6);
 				dstPos+=6;
 				//结束时间
-				byte[] endTimebyte = ParseUtil.str2Bcd(videoItems.getEndTime());
+				byte[] endTimebyte = ParseUtil.str2Bcd(DateUtil.dateToNumber(videoItems.getEndTime()));
 				System.arraycopy(endTimebyte, 0, body, dstPos, 6);
 				dstPos+=6;
 				//报警标志(暂时不处理报警)

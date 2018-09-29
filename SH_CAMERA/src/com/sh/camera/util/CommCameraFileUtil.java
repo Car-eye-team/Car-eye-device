@@ -19,6 +19,7 @@ import com.sh.camera.socket.model.VideoInfo;
 import com.sh.camera.socket.utils.ParseUtil;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 /**    
  *     
@@ -47,7 +48,9 @@ public class CommCameraFileUtil {
 			@Override
 			public void run() {
 
-				File f = new File(Constants.CAMERA_FILE_PATH);
+				String FileName;
+				FileName = CameraFileUtil.getRootFilePath() + Constants.CAMERA_PATH;
+				File f = new File(FileName);
 				ArrayList<HashMap<String, String>> filedata = null;
 				HashMap<Integer, ArrayList<HashMap<String, String>>> datamap = new HashMap<Integer, ArrayList<HashMap<String, String>>>();
 
@@ -231,7 +234,9 @@ public class CommCameraFileUtil {
 			@Override
 			public void run() {
 
-				File f = new File(Constants.CAMERA_FILE_PATH);
+				String FileName;
+				FileName = CameraFileUtil.getRootFilePath() + Constants.CAMERA_PATH;
+				File f = new File(FileName);
 				ArrayList<HashMap<String, String>> filedata = null;
 				HashMap<Integer, ArrayList<HashMap<String, String>>> datamap = new HashMap<Integer, ArrayList<HashMap<String, String>>>();
 
@@ -241,6 +246,8 @@ public class CommCameraFileUtil {
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						String stime = DateUtil.numberTodate(starttime);
 						String etime = DateUtil.numberTodate(edntime);
+						Log.d("vedio", "start file list"+stime+"endtime"+etime);
+
 						if(fs!=null&&fs.length>0){
 							filedata = new ArrayList<HashMap<String, String>>();
 							int k = 0;
@@ -331,6 +338,7 @@ public class CommCameraFileUtil {
 							//发送文件数据
 							byte[] cameradata = CommEncoder.getAudioVideoResourceList(seq, list);
 							CommCenterUsers.witeMsg(cameradata,1);
+							Log.d("vedio", "cameradata"+Tools.parseByte2HexStr(cameradata));
 						}
 
 					} catch (Exception e) {
@@ -339,5 +347,62 @@ public class CommCameraFileUtil {
 					}
 				}
 			}}).start();
+	}
+
+
+
+
+	public static File SearchFile( String starttime, String edntime, int cameraid){
+
+		String FileName;
+		FileName = CameraFileUtil.getRootFilePath() + Constants.CAMERA_PATH;
+		File f = new File(FileName);
+		ArrayList<HashMap<String, String>> filedata = null;
+		HashMap<Integer, ArrayList<HashMap<String, String>>> datamap = new HashMap<Integer, ArrayList<HashMap<String, String>>>();
+
+		if(f.exists()){
+			try {
+				File[] fs = f.listFiles();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String stime = DateUtil.numberTodate(starttime);
+				String etime = DateUtil.numberTodate(edntime);
+				Log.d("vedio", "start file list"+stime+"endtime"+etime);
+
+				if(fs!=null&&fs.length>0){
+					filedata = new ArrayList<HashMap<String, String>>();
+					int k = 0;
+					for (int i = 0; i < fs.length; i++) {
+						String name = fs[i].getName();
+						if(name.endsWith("mp4")){
+							int cid = Integer.parseInt(name.split("-")[0]);
+							if(cid == cameraid){
+								File file = fs[i];
+								//文件开始录制时间
+								String eftime = sdf.format(new Date(file.lastModified()));
+								//文件录制结束时间
+								String utctime = name.split("-")[1].replace(".mp4", "");
+								String sftime = DateUtil.utcTimestampToBjTime(utctime);
+								//总时长
+								int sumrec = DateUtil.secBetween(sftime, sftime);
+								//判断文件结束时间与开始时间 结束时间比较
+								int esec1 = DateUtil.secBetween(sftime, stime);
+								int esec2 = DateUtil.secBetween(eftime, etime);
+								boolean flag = false;
+								if(esec1 >= 0 && esec2 <= 0){
+									flag = true;
+								}
+								if(flag){
+									return file;
+								}
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }
