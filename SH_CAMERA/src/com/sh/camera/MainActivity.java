@@ -20,6 +20,7 @@ import com.sh.camera.service.MainService;
 import com.sh.camera.util.Constants;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
+import com.sh.camera.service.ShCommService;
 
 
 public class MainActivity extends Activity {
@@ -79,6 +80,7 @@ public class MainActivity extends Activity {
 			intent.putExtra("type", MainService.FULLSCREEN);
 			sendBroadcast(intent);
 		}
+		startService(new Intent(MainActivity.this, ShCommService.class));
 		finish();
 	}
 
