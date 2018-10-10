@@ -101,7 +101,7 @@ public class Constants {
 	public static final  long SD_FREEJX = 200;//清理界限、清理目标达到极限 5M 
 	/**是否正在清理sd内存*/
 	public static  boolean isCleaning = false;
-	public static  boolean AudioRecord = false;
+	public static  boolean AudioRecord = true;
 	public static  final boolean ExtPlayer = false;
 	/**帧速率*/
 	public static int FRAMERATE = 20;
@@ -120,7 +120,11 @@ public class Constants {
 	public static final String ACTION_VIDEO_STOP_PLAYBACK  = "ACTION_VIDEO_STOP_PLAYBACK";
 	public static final String ACTION_VIDEO_FILE_PLAYBACK  = "ACTION_VIDEO_FILE_PLAYBACK";
 	public static final String ACTION_VIDEO_PLAYBACK_LIST =  "ACTION_VIDEO_PLAYBACK_LIST";	
-	public static final String ACTION_UPDATE_LOCATION =  "UPDATE_LOCATION";		
+	public static final String ACTION_UPDATE_LOCATION =  "UPDATE_LOCATION";
+
+	//RTMP pusher key
+	public static final String Key = "%38U1uiVIUHV2uH7%7i7ktj7%71Thu17gS17i7(u1u3ujTJV1uLTJu1uiujuHVIui26";
+
 	/**
 	 * 设置参数	 */
 	public static void setParam(Context context){

@@ -17,6 +17,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
 //    implementation 'org.codehaus.groovy:groovy-all:2.4.12'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
 }
 
 android {
@@ -25,7 +26,7 @@ android {
 
     defaultConfig {
         applicationId "com.sh.camera"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 23
         multiDexEnabled true
     }

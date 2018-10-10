@@ -72,22 +72,21 @@ public class MediaCodecManager {
 		TakePicture = true;
 	}
 
-	
- 
- public void StartUpload(int index, Camera camera)
+	public void StartUpload(int index, Camera camera, long handle)
+
  {   
 	 debugger = EncoderDebugger.debug(MainService.getInstance(), Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 	 previewFormat = sw_codec ? ImageFormat.YV12 : debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;    	 
-	 mVC[index] = new HWConsumer(MainService.getInstance(), MainService.mPusher,index);
+	 mVC[index] = new HWConsumer(MainService.getInstance(), MainService.mPusher,handle);
 	 try {
 		mVC[index].onVideoStart(Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	 if(Constants.AudioRecord)
+	 if(Constants.AudioRecord && audioStream == null)
 	 {	
-		  audioStream = new AudioStream(MainService.mPusher, null, index);
+		  audioStream = new AudioStream(MainService.mPusher, null, handle);
           audioStream.startRecord();
 	 }	 	
  }

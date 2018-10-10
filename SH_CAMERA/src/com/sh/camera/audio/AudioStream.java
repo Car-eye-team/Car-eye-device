@@ -18,6 +18,7 @@ import android.os.Process;
 import android.media.MediaCodec;
 import org.push.push.Pusher;
 
+import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.codec.Muxer;
 
 import java.io.PrintWriter;
@@ -32,7 +33,7 @@ public class AudioStream {
     int mSamplingRateIndex = 0;
     AudioRecord mAudioRecord;
     MediaCodec mMediaCodec;
-    private int m_index;
+    private long m_index;
     Pusher easyPusher;
     private Thread mThread = null;
     String TAG = "audio_stream";
@@ -62,7 +63,7 @@ public class AudioStream {
             -1, // 15
     };
 
-    public AudioStream(Pusher easyPusher, Muxer muxer, int index) {
+    public AudioStream(Pusher easyPusher, Muxer muxer, long index) {
         this.easyPusher = easyPusher;
         this.muxer = muxer;
         m_index = index;
@@ -130,8 +131,8 @@ public class AudioStream {
                                 mBuffer.position(7 + mBufferInfo.size);
                                 addADTStoPacket(mBuffer.array(), mBufferInfo.size + 7);
                                 mBuffer.flip();
-                               //easyPusher.push(mBuffer.array(), 0, mBufferInfo.size + 7, mBufferInfo.presentationTimeUs / 1000, 0);
-                               // easyPusher.SendBuffer(mBufferInfo.presentationTimeUs / 1000, mBuffer.array(),  mBufferInfo.size + 7, 0, m_index);	                                            
+                                easyPusher.SendBuffer_org(mBuffer.array(), mBufferInfo.size + 7, mBufferInfo.presentationTimeUs / 1000, 1, m_index, ServerManager.getInstance().getprotocol());
+
 	                            mMediaCodec.releaseOutputBuffer(index, false);
 	                            break;
 	                            

@@ -105,7 +105,7 @@ public class MainService extends Service {
 	private LinearLayout[] lys;
 	private int[] lyids = {R.id.ly_1_0, R.id.ly_1_1, R.id.ly_1_2, R.id.ly_2_0, R.id.ly_2_1, R.id.ly_2_2};
 	private boolean isTwoCamera = true;
-	public static int[] StreamIndex;
+	public static long[] StreamIndex;
 	public static boolean clickLock = false;
 	public static boolean[] sc_controls = {false, false, false, false};
 	int framerate = Constants.FRAMERATE;
@@ -149,7 +149,7 @@ public class MainService extends Service {
 		application = getApplicationContext();
 		disk = new DiskManager(this);			
 		mPusher = new Pusher();
-		StreamIndex = new int[Constants.MAX_NUM_OF_CAMERAS];
+		StreamIndex = new long[Constants.MAX_NUM_OF_CAMERAS];
 		camera = new Camera[Constants.MAX_NUM_OF_CAMERAS];
 		mrs = new MediaRecorder[Constants.MAX_NUM_OF_CAMERAS];
 		MrTempName = new String[Constants.MAX_NUM_OF_CAMERAS];
@@ -1088,7 +1088,7 @@ public class MainService extends Service {
 					StreamIndex[rules[index]] = mPusher.CarEyeInitNetWorkRTSP(getApplicationContext(), ipstr, portstr, String.format("%s?channel=%d.sdp", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
 				}else
 				{
-					StreamIndex[rules[index]]  = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(),ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
+					StreamIndex[rules[index]]  = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(), Constants.Key,ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				}
 				if(StreamIndex[rules[index]]  < 0)
 				{
@@ -1098,7 +1098,7 @@ public class MainService extends Service {
 				}
 				//控制预览回调
 				sc_controls[rules[index]] = true;
-				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]]);
+				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]], StreamIndex[rules[index]]);
 				camera[rules[index]].setPreviewCallback(preview[rules[index]]);
 			}
 

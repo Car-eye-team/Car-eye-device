@@ -42,8 +42,8 @@ public class HWConsumer extends Thread implements VideoConsumer {
     private ByteBuffer[] outputBuffers;
     private NV21Convertor mVideoConverter;
     private volatile boolean mVideoStarted;
-    private int m_index;
-    public HWConsumer(Context context,Pusher pusher, int index){
+    private long m_index;
+    public HWConsumer(Context context,Pusher pusher, long index){
         mContext = context;
         mPusher = pusher;
         m_index = index;
@@ -67,7 +67,7 @@ public class HWConsumer extends Thread implements VideoConsumer {
         if (!mVideoStarted)return 0;
 
         if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTSP_PROTOCOL) {
-            if(mPusher.CarEyePusherIsReadyRTSP(m_index)==0)
+            if(mPusher.CarEyePusherIsReadyRTSP((int)m_index)==0)
             {
                 Log.d("CMD", " onVideo not ready ");
                 return 0;
