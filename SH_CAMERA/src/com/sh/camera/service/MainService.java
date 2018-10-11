@@ -105,7 +105,7 @@ public class MainService extends Service {
 	private LinearLayout[] lys;
 	private int[] lyids = {R.id.ly_1_0, R.id.ly_1_1, R.id.ly_1_2, R.id.ly_2_0, R.id.ly_2_1, R.id.ly_2_2};
 	private boolean isTwoCamera = true;
-	public static long[] StreamIndex;
+	public  long[] StreamIndex;
 	public static boolean clickLock = false;
 	public static boolean[] sc_controls = {false, false, false, false};
 	int framerate = Constants.FRAMERATE;
@@ -1071,6 +1071,7 @@ public class MainService extends Service {
 		camera.setPreviewCallback(preview[index]);	
 	}	
 
+	long handle;
 	public void startVideoUpload2(String ipstr, String portstr, String serialno,  int index){
 
 		int CameraId;
@@ -1088,17 +1089,18 @@ public class MainService extends Service {
 					StreamIndex[rules[index]] = mPusher.CarEyeInitNetWorkRTSP(getApplicationContext(), ipstr, portstr, String.format("%s?channel=%d.sdp", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
 				}else
 				{
-					StreamIndex[rules[index]]  = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(), Constants.Key,ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
+					handle = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(), Constants.Key,ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				}
-				if(StreamIndex[rules[index]]  < 0)
+				if(handle  == 0)
 				{
-					Log.d("CMD", " init error, error number"+StreamIndex[rules[index]] );
+					Log.d("CMD", " init error, error number"+handle );
 					//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
 					return;
 				}
 				//控制预览回调
 				sc_controls[rules[index]] = true;
-				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]], StreamIndex[rules[index]]);
+				StreamIndex[rules[index]] = handle;
+				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]], handle);
 				camera[rules[index]].setPreviewCallback(preview[rules[index]]);
 			}
 
