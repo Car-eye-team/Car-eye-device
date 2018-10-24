@@ -345,8 +345,9 @@ public class BusinessProcess {
 				int streamType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
 				num += 1;
 
-				ServerManager.getInstance().SetIP(ip);
-				ServerManager.getInstance().SetPort(""+tcpPort);
+				//ServerManager.getInstance().SetIP(ip);
+				//ServerManager.getInstance().SetPort(""+tcpPort);
+
 				ServerManager.getInstance().setprotocol(Constants.CAREYE_RTMP_PROTOCOL);
 
 				//设置上传服务器IP

@@ -49,7 +49,7 @@ public class Constants {
 	/**handle apk 升级消息*/
 	public static final int  MSG_APK_NEW = 1001;
 	/**服务器端口*/
-	public static final String SERVER_PORT = "10554";
+	public static final String SERVER_PORT = "10077";
 	public static final String SERVER_ADDPORT = "10000";
 	
 	/**PT服务器端口*/
@@ -57,7 +57,7 @@ public class Constants {
 	public static final String PT_SERVER_IP = "39.108.246.45";
 	
 	/**设备号*/
-	public static final String STREAM_NAME = "18668171282";
+	public static final String STREAM_NAME = "13510671870";
 
 	
 	/**PT服务端ip*/
@@ -106,7 +106,7 @@ public class Constants {
 	/**帧速率*/
 	public static int FRAMERATE = 20;
 	/**摄像头ID*/
-	public static int[] CAMERA_ID = {0,1,6,7};
+	public static int[] CAMERA_ID = {0,2,6,7};
 
 	/**录像状态 true录像中 false 未录像*/
 	public static boolean CAMERA_RECORD[] = {false,false,false,false};
@@ -135,7 +135,7 @@ public class Constants {
 			CAMERA_FILE_DIR = "/CarDVR/";			
 			FRAMERATE = 20;
 			CAMERA_ID[0] = 0;
-			CAMERA_ID[1] = 1;
+			CAMERA_ID[1] = 2;
 			CAMERA_ID[2] = 6;
 			CAMERA_ID[3] = 7;
 	}
