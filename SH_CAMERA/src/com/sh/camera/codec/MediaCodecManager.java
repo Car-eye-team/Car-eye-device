@@ -165,7 +165,6 @@ public void onPreviewFrameUpload(byte[] data,int index,Camera camera){
 
      if(mVC[index]!= null)
      {
-    	 Log.d("CMD", " onPreviewFrameUpload1 "+data.length);	
     	 mVC[index].onVideo(data, previewFormat);
      }else
      {   	

@@ -353,7 +353,7 @@ public class BusinessProcess {
 				int streamType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
 				num += 1;
 
-				if(Constants.protocol==Constants.CAREYE_RTP_PROTOCOL)
+				if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTP_PROTOCOL)
 				{
 					ServerManager.getInstance().SetIP(ip);
 					ServerManager.getInstance().SetPort(""+tcpPort);
@@ -464,7 +464,7 @@ public class BusinessProcess {
 				String endTime = ParseUtil.bcd2Str(endTimebyte);
 				num += 6;
 				
-				if(Constants.protocol==Constants.CAREYE_RTP_PROTOCOL)
+				if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTP_PROTOCOL)
 				{
 					ServerManager.getInstance().SetIP(ip);
 					ServerManager.getInstance().SetPort(""+tcpPort);

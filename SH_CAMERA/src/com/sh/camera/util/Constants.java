@@ -95,7 +95,7 @@ public class Constants {
 	public static int CAREYE_RTMP_PROTOCOL = 1;
 	public static int CAREYE_RTP_PROTOCOL = 2;
 
-	public static final int protocol = CAREYE_RTP_PROTOCOL;
+	public static final int protocol = CAREYE_RTMP_PROTOCOL;
 
 	/**录像时长 分钟*/
 	public static final int VIDEO_TIME = 10;//10
@@ -133,11 +133,11 @@ public class Constants {
 	public static final String ACTION_UPDATE_LOCATION =  "UPDATE_LOCATION";
 
 	//RTMP pusher key
-	public static final String Key = "%38U1uiVIUHV2uH7%7i7ktj7%71Thu17gS17i7(u1u3ujTJV1uLTJu1uiujuHVIui26";
+	public static final String Key = "937RKqJQjR(Q$q(s3sJsh6Is3sKrkqKsL)KsKsHqKq%qIriQKqgriqKqJqIq(QjqJ50";
 
 
 	//RTP pusher key
-	public static final String rtpKey = "434Q3{jRJQ2RH{26K6j6gsi6K6KU()L6hs36g6j{3{1{iSIR3{hSI{3{j{i{2RJ{j60";
+	public static final String rtpKey = "t306kS2s(6jsiSjQLQ2Q1RHQLQL7J8KQ3ukQkQ2SkSgSH{$skS%{$SkS2SHSjs(S278";
 
 	/**
 	 * 设置参数	 */

@@ -65,7 +65,7 @@ public class HWConsumer extends Thread implements VideoConsumer {
     @Override
     public int onVideo(byte[] data, int format) {
         if (!mVideoStarted)return 0;
-        if(Constants.protocol == Constants.CAREYE_RTMP_PROTOCOL)
+        if(ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTMP_PROTOCOL)
         {
             if(mPusher.CarEyePusherIsReadyRTMP(m_index)==0)
             {

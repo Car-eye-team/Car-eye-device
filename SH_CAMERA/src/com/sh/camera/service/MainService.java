@@ -155,6 +155,7 @@ public class MainService extends Service {
 		MrTempName = new String[Constants.MAX_NUM_OF_CAMERAS];
 		mCurrentVideoValues = new ContentValues[Constants.MAX_NUM_OF_CAMERAS];
 		framerate = ServerManager.getInstance().getFramerate();
+
 		CreateView();		
 		//一开始就初始化编码器，太占用资源		
 		isrun = true;			
@@ -1085,19 +1086,26 @@ public class MainService extends Service {
 			if(camera[rules[index]]!=null){
 				//初始化推流工具
 
-				if(Constants.protocol==Constants.CAREYE_RTMP_PROTOCOL)
+				if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTMP_PROTOCOL)
 				{
 					handle = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(), Constants.Key,ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				}else
 				{
 					handle = mPusher.CarEyeInitNetWorkRTP( getApplicationContext(), Constants.rtpKey,ipstr, portstr, serialno,CameraId, Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				}
-				if(handle  <0)
+				if(handle  <0 && ServerManager.getInstance().getprotocol()== Constants.CAREYE_RTP_PROTOCOL)
 				{
 					Log.d("CMD", " init error, error number"+handle );
 					//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
 					return;
 				}
+				if(handle  ==0 && ServerManager.getInstance().getprotocol()== Constants.CAREYE_RTMP_PROTOCOL)
+				{
+					Log.d("CMD", " init error, error number"+handle );
+					//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
+					return;
+				}
+
 				CameraUtil.VIDEO_UPLOAD[index] = true;
 				//控制预览回调
 				sc_controls[rules[index]] = true;
