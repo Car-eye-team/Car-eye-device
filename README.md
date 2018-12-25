@@ -31,69 +31,70 @@ sh_camera 是car-eye开源团队开发的基于android系统的一个应用程�
 推流的格式如下：
 
 实时直播流：
-rtsp://120.76.235.109:10554/13510671870?channel=1.sdp
-IP为：120.76.235.109
-端口为:10554
+rtmp://www.car-eye.cn:10077/live/13510671870&channel=1     
+IP为：www.car-eye.cn 域名
+端口为:10077
 注册手机号码为13510671870?
 通道0
 
 其中流媒体服务器上的IP和设备端设置的IP，客户端的IP保持一致
 
 回放流：
-rtsp://120.76.235.109:10554/13510671870-channel=1.sdp
+rtmp://www.car-eye.cn:10077/live/13510671870&channel=1 
 
 可以通过第三方播放器，如VLC等进行播放。在car-eye注册平台注册账号，并在客户端控制播放。
-注册网址为：http://39.108.246.45:800/，也可以登录我们的liveoss的流媒体管理平台进行播放
+JT1078 视频平台网址：http://www.liveoss.com:8088/   
+
 
 ## 库接口说明
 
-接口原型： public native int  CarEyeInitNetWork(Context context,String serverIP, String serverPort, String streamName, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);    
-接口功能：初始化流媒体通道  
-参数说明：   
-context：应用句柄   
+接口原型： public native int CarEyeInitNetWorkRTP(Context context,String key,String serverIP, String serverPort, String streamName, int logchannel, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);     
+接口功能：初始化流媒体通道     
+参数说明：   
+key: 授权码    
+context：应用句柄   
 server IP:流媒体服务器的IP，可以是域名如www.car-eye.cn  
-serverPort:RTSP流媒体的端口号     
+serverPort:RTMP流媒体的端口号     
 streamName： 设备名：如手机号码13510671870 是设备的唯一标识    
 videoformat： 视频格式，支持H264，265 MJPEG    
 fps： 帧频率  
 audioformat： 音频格式支持AAC,G711,G726等    
 返回：通道号
 
-接口原型：public native int 	 CarEyePusherIsReady(int channel);     
+接口原型：public native int 	 CarEyePusherIsReadyRTP(int channel);     
 接口功能：判断通道是否准备好，用来开启推送1：已经准备好，0还没准备好。   
 参数说明：   
 channel：通道号
 返回：1 通道已经准备好 0 通道还没准备好
 
-接口原型： public native long   CarEyeSendBuffer(long time, byte[] data, int lenth, int type, int channel);   
-接口功能：填充流媒体数据到RTSP服务器 
+接口原型： public native long   CarEyeSendBufferRTP(long time, byte[] data, int lenth, int type, int channel)
+接口功能：填充流媒体数据到JT1078服务器 
 参数说明：   
 time: 推送时间数，毫秒单位
 data:  多媒体数据   
 lenth：数据长度    
 type ：视频还是音频   
 channel：推送的通道号  
-返回：0 为发送数据成功  其他 为错误码
+返回：0 为发送数据成功  其他 为错误码    
 
-
-接口原型 public native int    CarEyeStopNativeFileRTSP(int channel);   
+接口原型 public native int    CarEyeStopNativeFileRTP(int channel);   
 接口功能：结束文件的推送   
 参数说明:   
 channel:通道号  
 
-接口原型： public native int   CarEyeStartNativeFileRTSPEX(Context context, String serverIP, String serverPort, String streamName,  String fileName,int start, int end);          
+接口原型： public native int   CarEyeStartNativeFileRTPEX(Context context, String serverIP, String serverPort, String streamName,  String fileName,int start, int end);          
 
 接口功能：启动文件的推送 
 参数说明:context：应用句柄  
 serverIP:流媒体服务器的IP，可以是域名如www.car-eye.cn     
-serverPort:RTSP流媒体的端口号      
+serverPort:JT1078流媒体的端口号      
 streamName： 设备名：如手机号码13510671870 是设备的唯一标识  
 fileName：文件的绝对路径      
 start：推送的文件相对偏移的开始时间     
 end：  推送文件的相对偏移的结束时间     
 返回：通道号（1-8） 其他为错误  
 
-接口原型   public void  CarEyeCallBack(int channel, int Result)   
+接口原型   public void  CarEyeCallBack(int channel, int Result)   
 接口功能：推送文件的callback函数      
 参数说明:    
 channel：通道号     
@@ -101,9 +102,9 @@ Result:返回码，为结束或者错误码
 
 # 注意事项
 
-Car-eye-server 目前支持RTSP通信方式的设备管理
+Car-eye-CMS 目前支持RTSP/RTMP通信方式的设备管理
 
-Car-eye CMS 目前支持RTSP/RTMP 两种设备的管理
+Car-eye JT1078流媒体平台 目前支持JT1078/RTMP 两种设备的管理
 
 # 商业合作
 
@@ -114,20 +115,18 @@ Car-eye-device 商业用户需要鉴权，具体请联系团队管理人员
 ![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/android%20DVR%20%E4%BA%8C%E7%BB%B4%E7%A0%81.png)
 
 
-
-
 # 联系我们   
 
-car-eye 开源官方网址：www.car-eye.cn     
+car-eye 开源官方网址：www.car-eye.cn     
 
-car-eye 流媒体平台网址：www.liveoss.com     
+car-eye 流媒体平台网址：www.liveoss.com     
 
 car-eye 技术官方邮箱: support@car-eye.cn   
 
-car-eye技术交流QQ群: 590411159      
+car-eye技术交流QQ群: 590411159      
 
 ![](https://github.com/Car-eye-team/Car-eye-server/blob/master/car-server/doc/QQ.jpg)    
 
-CopyRight©  car-eye 开源团队 2018 
+CopyRight©  car-eye 开源团队 2018 
 
 
