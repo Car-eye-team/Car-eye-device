@@ -105,6 +105,9 @@ public class BusinessProcess {
 							//启动心跳维持连接
 							int interval = SPutil.getComm().getInt("comm_gps_interval",30);
 							CommCenterUsers.startHeartBeat(interval);
+							
+							//启动消息检测定时器
+							CommCenterUsers.startMessageDetect();
 
 						}else{
 							AppLog.i(TAG,"登录失败!");
@@ -198,11 +201,14 @@ public class BusinessProcess {
 					// 绔彛鍙凤紙TCP锛?WORD	瀹炴椂闊宠棰戞湇鍔″櫒TCP绔彛鍙?
 					int port = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)), 16);
 					num += 2;
-					ServerManager.getInstance().SetIP(ip);
+					if(ServerManager.getInstance().getprotocol()== Constants.CAREYE_RTP_PROTOCOL)
+					{
+						ServerManager.getInstance().SetIP(ip);
+						ServerManager.getInstance().SetPort("" + port);
+					}
 
-					ServerManager.getInstance().SetPort(""+port);
-					ServerManager.getInstance().setprotocol(protocolType);
-					Log.d("vedio", "protocolType" + protocolType + "  ip" + ip + "  port:" + port + "  protocol" + ServerManager.getInstance().getprotocol());
+					//ServerManager.getInstance().setprotocol(protocolType);
+					//Log.d("vedio", "protocolType" + protocolType + "  ip" + ip + "  port:" + port + "  protocol" + ServerManager.getInstance().getprotocol());
 				}
 				if(type == 0){
 					CameraUtil.startVideoUpload((id-1));
@@ -252,9 +258,11 @@ public class BusinessProcess {
 					// 绔彛鍙凤紙TCP锛?WORD	瀹炴椂闊宠棰戞湇鍔″櫒TCP绔彛鍙?
 					int port = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 2)), 16);
 					num += 2;
-					ServerManager.getInstance().SetIP(ip);
-					ServerManager.getInstance().SetPort(""+port);
-					ServerManager.getInstance().setprotocol(protocolType);
+					if(ServerManager.getInstance().getprotocol()== Constants.CAREYE_RTP_PROTOCOL) {
+						ServerManager.getInstance().SetIP(ip);
+						ServerManager.getInstance().SetPort("" + port);
+					}
+					//ServerManager.getInstance().setprotocol(protocolType);
 
 				}
 				CommCameraFileUtil.screenVideoFile(stime, etime, id);
@@ -345,16 +353,17 @@ public class BusinessProcess {
 				int streamType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
 				num += 1;
 
-				//ServerManager.getInstance().SetIP(ip);
-				//ServerManager.getInstance().SetPort(""+tcpPort);
-
-				ServerManager.getInstance().setprotocol(Constants.CAREYE_RTMP_PROTOCOL);
+				if(Constants.protocol==Constants.CAREYE_RTP_PROTOCOL)
+				{
+					ServerManager.getInstance().SetIP(ip);
+					ServerManager.getInstance().SetPort(""+tcpPort);
+				}		
 
 				//设置上传服务器IP
 				//ParamsBiz.setUpdateIP(ip);
 				//设置上传服务器端口
 				//ParamsBiz.setUpdatePort(String.valueOf(tcpPort));
-				Log.d("vedio", "protocolType" + logicChannel + "  ip" + ip + "  port:" + tcpPort + "  protocol" + ServerManager.getInstance().getprotocol());
+				//Log.d("vedio", "protocolType" + logicChannel + "  ip" + ip + "  port:" + tcpPort + "  protocol" + ServerManager.getInstance().getprotocol());
 				//开始传输
 				CameraUtil.startVideoUpload((logicChannel-1));
 
@@ -454,14 +463,23 @@ public class BusinessProcess {
 				byte[] endTimebyte = ParseUtil.byteTobyte(data, num, 6);
 				String endTime = ParseUtil.bcd2Str(endTimebyte);
 				num += 6;
-
+				
+				if(Constants.protocol==Constants.CAREYE_RTP_PROTOCOL)
+				{
+					ServerManager.getInstance().SetIP(ip);
+					ServerManager.getInstance().SetPort(""+tcpPort);
+				}		
+	
 				//查找一个文件，然后上传到视频服务器，目前暂时只支持一个文件上传
 				File file;
 				file = CommCameraFileUtil.SearchFile(startTime,endTime,logicChannel);
 				if(file!=null)
 				{
+					Log.d("vedio", "start file player");
 					CameraUtil.startVideoFileStream(logicChannel, 0,0,file.getAbsolutePath(),null);
 				}
+				
+								
 				//设置上传服务器IP
 				ParamsBiz.setUpdateIP(ip);
 				//设置上传服务器端口

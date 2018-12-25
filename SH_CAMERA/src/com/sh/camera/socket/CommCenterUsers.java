@@ -15,17 +15,20 @@ import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.core.session.IoSession;
 
-import com.sh.camera.service.MainService;
+import android.content.Intent;
+
 import com.sh.camera.service.ShCommService;
 import com.sh.camera.socket.db.DataMsgDao;
 import com.sh.camera.socket.timer.TimerAuth;
 import com.sh.camera.socket.timer.TimerConnecter;
 import com.sh.camera.socket.timer.TimerHeartBeat;
+import com.sh.camera.socket.timer.TimerMessageDetect;
 import com.sh.camera.socket.utils.CommConstants;
 import com.sh.camera.socket.utils.NetworkHandler;
 import com.sh.camera.socket.utils.ParseUtil;
 import com.sh.camera.socket.utils.SPutil;
 import com.sh.camera.util.AppLog;
+import com.sh.camera.util.Constants;
 import com.sh.camera.util.StringUtil;
 
 
@@ -66,6 +69,10 @@ public class CommCenterUsers {
 
 	//鉴权timer相关
 	public static Timer lTimer = null;
+	
+	//消息检测
+	public static Timer msgTimer = null;
+	public static TimerMessageDetect messageDetect = null;
 
 	/**
 	 * 检测连接参数
@@ -102,8 +109,11 @@ public class CommCenterUsers {
 	 */
 	public static void restartTimerConnectSvr(){
 		try {
+			
+			AppLog.i(TAG,"===========重新连接======");
+			
 			CommConstants.LOGIN_FLAG = true;
-
+			CommCenterUsers.session = null;
 			//关闭心跳定时器，重新连接
 			if(heartTask != null){
 				heartTask.cancel();
@@ -199,6 +209,24 @@ public class CommCenterUsers {
 	}
 
 	/**
+	 * 启动消息检测定时器
+	 */
+	public static void startMessageDetect() {
+		try {
+			if(messageDetect != null){
+				messageDetect.cancel();
+				messageDetect = null;
+			}
+			//启用心跳之前先判断是否有心跳正在运行
+			msgTimer = new Timer();
+		    messageDetect = new TimerMessageDetect();
+			msgTimer.schedule(messageDetect, 1000,60*1000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * 发送消息
 	 * @param bodyByte 数据包
 	 * @param type 1 正常发送 2 数据补发
@@ -211,6 +239,7 @@ public class CommCenterUsers {
 			try {
 				if(session != null){
 					if(session.isConnected()){
+						AppLog.i(TAG,"==发送消息===");
 						session.write(IoBuffer.wrap(bodyByte));
 					}else{
 						re = 1;
@@ -256,4 +285,5 @@ public class CommCenterUsers {
 		}
 		return re;
 	}
+	
 }

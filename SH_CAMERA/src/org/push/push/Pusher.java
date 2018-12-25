@@ -22,6 +22,8 @@ public class Pusher {
 	static {
 		System.loadLibrary("stream");
 		System.loadLibrary("rtmp");
+		System.loadLibrary("rtp");
+		
 	}
 	/**
 	 * 初始化
@@ -37,13 +39,23 @@ public class Pusher {
 
 	/* rtsp interface*/
 	private Handler handle =null;	
+	//RTSP 推流方式
 	public native int    CarEyeInitNetWorkRTSP(Context context,String serverIP, String serverPort, String streamName, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
 	public native int 	CarEyePusherIsReadyRTSP(int channel);
 	public native long   CarEyeSendBufferRTSP(long time, byte[] data, int lenth, int type, int channel);	
 	public native int    CarEyeStopNativeFileRTSP(int channel);	
 	public native int    CarEyeStartNativeFileRTSPEX(Context context, String serverIP, String serverPort, String streamName,  String fileName,int start, int end);
 	public native void  CarEyeStopPushNetRTSP(int index);
+	
+	//JT1078 RTP数据包格式推流接口
 
+	public native int    CarEyeInitNetWorkRTP(Context context,String serverIP,String key, String serverPort, String streamName, int logchannel, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
+	public native int 	 CarEyePusherIsReadyRTP(int channel);
+	public native long   CarEyeSendBufferRTP(long time, byte[] data, int lenth, int type, int channel);	
+	public native int    CarEyeStopNativeFileRTP(int channel);	
+	public native int    CarEyeStartNativeFileRTPEX(Context context,String key, String serverIP, String serverPort, String streamName, int logchannel,  String fileName,int start, int end);
+	public native void   CarEyeStopPushNetRTP(int index);	
+	
 
 
 	// result： 0 文件传输结束  , 传输出错
@@ -54,6 +66,7 @@ public class Pusher {
 	public native int    CarEyeStopNativeFileRTMP(long handle);
 	public native int    CarEyeStartNativeFileRTMPEX(Context context, String key, String serverIP, String serverPort, String streamName,  String fileName,int start, int end);
 	public native void   CarEyeStopPushNetRTMP(long index);
+	
 
 	public void  CarEyeCallBack(int channel, int Result){		
 		
@@ -86,9 +99,12 @@ public class Pusher {
 		//Log.e("puser", "timestamp:"+timestamp+"length:"+length);
 		if(Constants.CAREYE_RTSP_PROTOCOL == protocol ) {
 			ret = CarEyeSendBufferRTSP(timestamp, data, length, type, (int)handle);
-		}else
+		}else if(Constants.CAREYE_RTMP_PROTOCOL==protocol)
 		{
 			ret =  CarEyeSendBufferRTMP(timestamp, data,length,type, handle);
+		}else
+		{
+			ret =  CarEyeSendBufferRTP(timestamp, data,length,type, (int)handle);
 		}
 		return ret;
 		
@@ -100,9 +116,12 @@ public class Pusher {
 			public void run() {
 				if(Constants.CAREYE_RTSP_PROTOCOL == protocol ) {
 					CarEyeStopPushNetRTSP((int)index);
-				}else
+				}else  if(Constants.CAREYE_RTMP_PROTOCOL==protocol)
 				{
 					CarEyeStopPushNetRTMP(index);
+				}else
+				{
+					CarEyeStopPushNetRTP((int)index);
 				}
 			}
 		}).start();
@@ -110,17 +129,21 @@ public class Pusher {
 	/**
 	 * 停止所有
 	 */
-	public int  startfilestream( final String serverIP, final String serverPort, final String streamName, final String fileName,final int splaysec,final int eplaysec,final Handler handler, int protocol){
+	public int  startfilestream( final String serverIP, final String serverPort, final String streamName, final int logchannel, final String fileName,final int splaysec,final int eplaysec,final Handler handler, int protocol){
 
 		//StartNativeFileRTSP(serverIP,serverPort,streamName, fileName);
 		handle = handler;
 		int channel;
 		if(Constants.CAREYE_RTSP_PROTOCOL == protocol ) {
 			 channel = CarEyeStartNativeFileRTSPEX(MainService.application, serverIP, serverPort, streamName, fileName, splaysec, eplaysec);
-		}else
+		}else if(Constants.CAREYE_RTMP_PROTOCOL==protocol)
 		{
 			 channel =  CarEyeStartNativeFileRTMPEX(MainService.application, Constants.Key, serverIP,serverPort,streamName, fileName,splaysec,eplaysec);
 
+		}else
+		{
+			channel= CarEyeStartNativeFileRTPEX(MainService.application,Constants.rtpKey ,  serverIP,  serverPort,  streamName,  logchannel,   fileName, splaysec,  eplaysec);
+			
 		}
 		return channel;
 	}

@@ -37,7 +37,7 @@ public class Constants {
 	/**上传视频宽度*/
 	public static final int UPLOAD_VIDEO_WIDTH = 640;
 	/**上传视频高度*/
-	public static final int UPLOAD_VIDEO_HEIGHT = 480;	
+	public static final int UPLOAD_VIDEO_HEIGHT = 480;
 	/**录制视频宽度*/
 	public static final int RECORD_VIDEO_WIDTH = 640;
 	/**录制视频高度*/
@@ -82,10 +82,20 @@ public class Constants {
 	public static int CAREYE_ACODE_G711A = 0x10007;
 	public static int CAREYE_ACODE_G726 = 0x10007;
 
+	public static int CAREYE_VCODE_H264_1078 = 98;
+	public static int CAREYE_VCODE_H265_1078 = 99;
+	public static int CAREYE_ACODE_AAC_1078 = 0x13;
+	public static int CAREYE_ACODE_G711U_1078 = 6;
+	public static int CAREYE_ACODE_G711A_1078 = 7;
+	public static int CAREYE_ACODE_G726_1078 = 9;
+
+
 	/* rtsp/rtmp   */
 	public static int CAREYE_RTSP_PROTOCOL = 0;
 	public static int CAREYE_RTMP_PROTOCOL = 1;
-	public static final int protocol = CAREYE_RTSP_PROTOCOL;
+	public static int CAREYE_RTP_PROTOCOL = 2;
+
+	public static final int protocol = CAREYE_RTP_PROTOCOL;
 
 	/**录像时长 分钟*/
 	public static final int VIDEO_TIME = 10;//10
@@ -106,7 +116,7 @@ public class Constants {
 	/**帧速率*/
 	public static int FRAMERATE = 20;
 	/**摄像头ID*/
-	public static int[] CAMERA_ID = {0,2,6,7};
+	public static int[] CAMERA_ID = {0,3,6,7};
 
 	/**录像状态 true录像中 false 未录像*/
 	public static boolean CAMERA_RECORD[] = {false,false,false,false};
@@ -125,6 +135,10 @@ public class Constants {
 	//RTMP pusher key
 	public static final String Key = "%38U1uiVIUHV2uH7%7i7ktj7%71Thu17gS17i7(u1u3ujTJV1uLTJu1uiujuHVIui26";
 
+
+	//RTP pusher key
+	public static final String rtpKey = "434Q3{jRJQ2RH{26K6j6gsi6K6KU()L6hs36g6j{3{1{iSIR3{hSI{3{j{i{2RJ{j60";
+
 	/**
 	 * 设置参数	 */
 	public static void setParam(Context context){
@@ -135,13 +149,11 @@ public class Constants {
 			CAMERA_FILE_DIR = "/CarDVR/";			
 			FRAMERATE = 20;
 			CAMERA_ID[0] = 0;
-			CAMERA_ID[1] = 2;
+			CAMERA_ID[1] = 3;
 			CAMERA_ID[2] = 6;
 			CAMERA_ID[3] = 7;
 	}
-
 	/**应用启动自动检测一次版本信息*/
 	public static final String CAMERA_PATH ="Careye_pusher/";
-
 	public static boolean checkVersion = true;
 }

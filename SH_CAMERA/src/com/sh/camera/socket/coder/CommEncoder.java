@@ -388,7 +388,7 @@ public class CommEncoder {
 			//---结束位
 			System.arraycopy(ParseUtil.parseHexStr2Byte("7e"), 0, bodybyte, dstPos, 1);
 
-			System.out.println(ParseUtil.parseByte2HexStr(bodybyte));
+			AppLog.i(TAG, ParseUtil.parseByte2HexStr(bodybyte));
 			return bodybyte;
 
 		} catch (Exception e) {

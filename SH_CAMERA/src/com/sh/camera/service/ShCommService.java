@@ -13,19 +13,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.sh.camera.model.GPSLocationInfo;
-import com.sh.camera.model.LocationInfo;
-import com.sh.camera.socket.CommCenterUsers;
-import com.sh.camera.socket.db.SystemDataBiz;
-import com.sh.camera.socket.utils.ConstantsState;
-import com.sh.camera.socket.utils.DistanceUtil;
-import com.sh.camera.socket.utils.SPutil;
-import com.sh.camera.util.AppLog;
-import com.sh.camera.util.Constants;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.location.GpsSatellite;
@@ -34,8 +25,20 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
+
+import com.sh.camera.model.GPSLocationInfo;
+import com.sh.camera.model.LocationInfo;
+import com.sh.camera.receiver.DvrNetworkReceiver;
+import com.sh.camera.socket.CommCenterUsers;
+import com.sh.camera.socket.db.SystemDataBiz;
+import com.sh.camera.socket.utils.ConstantsState;
+import com.sh.camera.socket.utils.DistanceUtil;
+import com.sh.camera.socket.utils.SPutil;
+import com.sh.camera.util.AppLog;
+import com.sh.camera.util.Constants;
 
 /**
  * @author zhangrong
@@ -80,6 +83,9 @@ public class ShCommService extends Service {
 		initGPS();
 		//启动通讯
 		initComm();
+		
+		//注册网络广播
+		registerNetworkBroadcast();
 		
 
 	}
@@ -322,6 +328,16 @@ public class ShCommService extends Service {
 		//}
 		return locationInfo;
 	}
-
+	
+	/**
+	 * 注册网络广播
+	 */
+	public void registerNetworkBroadcast(){
+		//注册网络监听  
+		IntentFilter netfilter = new IntentFilter();  
+		DvrNetworkReceiver networkReceiver = new DvrNetworkReceiver();
+		netfilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);  
+		registerReceiver(networkReceiver, netfilter); 
+	}
 
 }	

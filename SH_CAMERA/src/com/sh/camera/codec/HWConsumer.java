@@ -65,16 +65,16 @@ public class HWConsumer extends Thread implements VideoConsumer {
     @Override
     public int onVideo(byte[] data, int format) {
         if (!mVideoStarted)return 0;
-
-        if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTSP_PROTOCOL) {
-            if(mPusher.CarEyePusherIsReadyRTSP((int)m_index)==0)
+        if(Constants.protocol == Constants.CAREYE_RTMP_PROTOCOL)
+        {
+            if(mPusher.CarEyePusherIsReadyRTMP(m_index)==0)
             {
                 Log.d("CMD", " onVideo not ready ");
                 return 0;
             }
         }else
         {
-            if(mPusher.CarEyePusherIsReadyRTMP(m_index)==0)
+            if(mPusher.CarEyePusherIsReadyRTP((int)m_index)==0)
             {
                 Log.d("CMD", " onVideo not ready ");
                 return 0;

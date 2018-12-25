@@ -948,7 +948,6 @@ public class MainService extends Service {
 		click(v.getId());
 	}
 	
-	
 	public void click(int id){
 		if(clickLock) return;
 		switch (id) {
@@ -1082,22 +1081,24 @@ public class MainService extends Service {
 			return;			
 		}		
 		try {
-			CameraUtil.VIDEO_UPLOAD[index] = true;
+
 			if(camera[rules[index]]!=null){
 				//初始化推流工具
 
-				if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTSP_PROTOCOL) {
-					StreamIndex[rules[index]] = mPusher.CarEyeInitNetWorkRTSP(getApplicationContext(), ipstr, portstr, String.format("%s?channel=%d.sdp", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
-				}else
+				if(Constants.protocol==Constants.CAREYE_RTMP_PROTOCOL)
 				{
 					handle = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(), Constants.Key,ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
+				}else
+				{
+					handle = mPusher.CarEyeInitNetWorkRTP( getApplicationContext(), Constants.rtpKey,ipstr, portstr, serialno,CameraId, Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				}
-				if(handle  == 0)
+				if(handle  <0)
 				{
 					Log.d("CMD", " init error, error number"+handle );
 					//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
 					return;
 				}
+				CameraUtil.VIDEO_UPLOAD[index] = true;
 				//控制预览回调
 				sc_controls[rules[index]] = true;
 				StreamIndex[rules[index]] = handle;
@@ -1124,6 +1125,7 @@ public class MainService extends Service {
 				camera[rules[i]].setPreviewCallback(null);
 				MediaCodecManager.getInstance().StopUpload(rules[i]);
 				mPusher.stopPush(StreamIndex[rules[i]],ServerManager.getInstance().getprotocol());
+				StreamIndex[rules[i]] = 0;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -1170,7 +1172,6 @@ public class MainService extends Service {
 	
 	public static void addVideo(final String path,final ContentValues values)
 	{
-		
 		 AsyncTask.execute(new Runnable() {
              @Override
              public void run() {
@@ -1187,7 +1188,6 @@ public class MainService extends Service {
      			}
              }
          });
-		
 		
 	}
 	

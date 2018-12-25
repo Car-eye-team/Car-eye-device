@@ -177,62 +177,49 @@ public class CameraUtil {
 	 */
 	public static void startVideoFileStream(final int cameraid,final int splaysec,final int eplaysec,final String filename,final Handler handler){
 
-		try {
-
-			SharedPreferences sp = MainService.getInstance().getSharedPreferences("fcoltest", MainService.getInstance().MODE_PRIVATE);
-			final String ip = sp.getString("ip",Constants.SERVER_IP);
-			final String port = sp.getString("port",Constants.SERVER_PORT);
-			final String streamname = sp.getString("name",Constants.STREAM_NAME);
-			final String streamName =  String.format("%s-channel=%d.sdp", streamname,cameraid);
-
-			Log.d("CMD", " filePath upload"+filename);
-
-			if(MainService.mPusher == null){
-				MainService.mPusher = new Pusher();
-			}
-			AsyncTask.execute(new Runnable() {
-				@Override
-				public void run() {
-					if(!Lock) {
-
-						Lock = true;
-						//上传之前先停止回放
-						if (CameraUtil.VIDEO_FILE_UPLOAD) {
-							CameraUtil.stopVideoFileStream();
-							try {
-								Thread.sleep(2000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-
-						//上传之前先停止预览
-						int i = cameraid - 1;
-						if (VIDEO_UPLOAD[i]) {
-							stopVideoUpload(i);
-							try {
-								Thread.sleep(2000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						Lock = false;
-						CameraUtil.VIDEO_FILE_UPLOAD = true;
-						Log.d("CMD", " restart" + filename);
-						MainService.mPusher.startfilestream(ip, port, streamName, filename, splaysec, eplaysec, handler, ServerManager.getInstance().getprotocol());
-
-					}
-				}
-			});
-
-
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
+		SharedPreferences sp = MainService.getInstance().getSharedPreferences("fcoltest", MainService.getInstance().MODE_PRIVATE);
+		final String ip = sp.getString("ip",Constants.SERVER_IP);
+		final String port = sp.getString("port",Constants.SERVER_PORT);
+		final String Name = sp.getString("name",Constants.STREAM_NAME);
+		final String streamName;
+		if(Constants.CAREYE_RTMP_PROTOCOL==Constants.protocol)
+		{
+			streamName =  String.format("live/%s&channel=%d", Name,cameraid);
+		}else
+		{
+			streamName =   Name;
 		}
+		if(MainService.mPusher == null){
+			MainService.mPusher = new Pusher();
+		}
+		//涓婁紶涔嬪墠鍏堝仠姝㈠洖鏀?
+		if(CameraUtil.VIDEO_FILE_UPLOAD){
+			CameraUtil.stopVideoFileStream();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		//涓婁紶涔嬪墠鍏堝仠姝㈤瑙?
+		int i = cameraid-1;
+
+		if(VIDEO_UPLOAD[i]){
+			VIDEO_UPLOAD[i] = false;
+			MainService.getInstance().stopVideoUpload(i);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		CameraUtil.VIDEO_FILE_UPLOAD = true;
+		//int channel = MainService.mPusher.startfilestream( CommConstants.playBackIp, ""+CommConstants.playBackPort, streamName, filename,splaysec,eplaysec,handler);
+		MainService.mPusher.startfilestream( ip, port, streamName, cameraid, filename,splaysec,eplaysec,handler,Constants.protocol);
+
 	}
 	/**
 	 * 结束视频回放上传
@@ -249,11 +236,12 @@ public class CameraUtil {
 					}
 					for(int i = 0; i <4; i++)
 					{
-						if(ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTSP_PROTOCOL) {
-							MainService.mPusher.CarEyeStopNativeFileRTSP(i);
+						if(Constants.protocol == Constants.CAREYE_RTMP_PROTOCOL)
+						{
+							MainService.mPusher. CarEyeStopNativeFileRTMP(i);
 						}else
 						{
-							MainService.mPusher.CarEyeStopPushNetRTMP(i);
+							MainService.mPusher. CarEyeStopNativeFileRTP(i);
 						}
 					}					
 				} catch (Exception e) {

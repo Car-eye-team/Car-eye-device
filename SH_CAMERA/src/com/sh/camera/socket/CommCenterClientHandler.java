@@ -15,10 +15,13 @@ import org.apache.mina.core.session.IoSession;
 
 import com.sh.camera.service.ShCommService;
 import com.sh.camera.socket.utils.ParseUtil;
+import com.sh.camera.socket.utils.SPutil;
 import com.sh.camera.util.AppLog;
+import com.sh.camera.util.DateUtil;
 import com.sh.camera.util.ExceptionUtil;
 
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 
 /**    
  *     
@@ -62,6 +65,12 @@ public class CommCenterClientHandler extends IoHandlerAdapter {
 		ioBuffer.get(bytes); 
 		String bytesStr = ParseUtil.parseByte2HexStr(bytes);
 		AppLog.i(TAG,"收到通讯平台GPRS服务器发送过来的数据:"+bytesStr);
+		
+		//保存接收数据的时间
+		Editor commEditor = SPutil.getCommEditor();
+		commEditor.putString("receive_msg_time", DateUtil.getSQLDate());
+		commEditor.commit();
+		
 		//进行粘包处理
 		stick7EPackage(bytes,ShCommService.getInstance());
 

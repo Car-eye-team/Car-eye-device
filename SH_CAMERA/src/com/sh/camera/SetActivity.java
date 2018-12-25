@@ -84,7 +84,7 @@ public class SetActivity extends Activity {
 		sped = sp.edit();
 
 		rg.check(ServerManager.getInstance().getMode());
-		if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTSP_PROTOCOL) {
+		if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTP_PROTOCOL) {
 			rg1.check(rgids1[0]);
 		}else
 		{
@@ -150,7 +150,7 @@ public class SetActivity extends Activity {
 					sped.putInt(Constants.protocol_type, Constants.CAREYE_RTMP_PROTOCOL);
 				}else
 				{
-					sped.putInt(Constants.protocol_type, Constants.CAREYE_RTSP_PROTOCOL);
+					sped.putInt(Constants.protocol_type, Constants.CAREYE_RTP_PROTOCOL);
 				}
 				//服务端ip端口
 				sped.putString(Constants.PTSERVICE_IP, et_ptserviceip.getText().toString());
