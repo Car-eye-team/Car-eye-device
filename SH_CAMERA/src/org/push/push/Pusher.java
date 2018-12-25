@@ -49,14 +49,12 @@ public class Pusher {
 	
 	//JT1078 RTP数据包格式推流接口
 
-	public native int    CarEyeInitNetWorkRTP(Context context,String serverIP,String key, String serverPort, String streamName, int logchannel, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
-	public native int 	 CarEyePusherIsReadyRTP(int channel);
+	public native int    CarEyeInitNetWorkRTP(Context context,String key, String serverIP, String serverPort, String streamName, int logchannel, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
+	public native int 	CarEyePusherIsReadyRTP(int channel);
 	public native long   CarEyeSendBufferRTP(long time, byte[] data, int lenth, int type, int channel);	
 	public native int    CarEyeStopNativeFileRTP(int channel);	
 	public native int    CarEyeStartNativeFileRTPEX(Context context,String key, String serverIP, String serverPort, String streamName, int logchannel,  String fileName,int start, int end);
-	public native void   CarEyeStopPushNetRTP(int index);	
-	
-
+	public native void   CarEyeStopPushNetRTP(int index);
 
 	// result： 0 文件传输结束  , 传输出错
 	/* rtmp interface*/
