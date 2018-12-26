@@ -1085,13 +1085,12 @@ public class MainService extends Service {
 
 			if(camera[rules[index]]!=null){
 				//初始化推流工具
-
 				if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTMP_PROTOCOL)
 				{
 					handle = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(), Constants.Key,ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				}else
 				{
-					handle = mPusher.CarEyeInitNetWorkRTP( getApplicationContext(), Constants.rtpKey,ipstr, portstr, serialno,CameraId, Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
+					handle = mPusher.CarEyeInitNetWorkRTP( getApplicationContext(), Constants.rtpKey,ipstr, portstr, serialno,CameraId, Constants.CAREYE_VCODE_H264_1078,20,Constants.CAREYE_ACODE_AAC_1078,1,8000);
 				}
 				if(handle  <0 && ServerManager.getInstance().getprotocol()== Constants.CAREYE_RTP_PROTOCOL)
 				{

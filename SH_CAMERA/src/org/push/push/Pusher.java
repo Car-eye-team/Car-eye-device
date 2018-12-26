@@ -14,6 +14,7 @@ import com.sh.camera.util.CameraUtil;
 import com.sh.camera.util.Constants;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.content.Context;
@@ -22,9 +23,12 @@ public class Pusher {
 	static {
 		System.loadLibrary("stream");
 		System.loadLibrary("rtmp");
-		System.loadLibrary("rtp");
-
-		
+		if(Build.VERSION.SDK_INT>=23) {
+			System.loadLibrary("CarEye1078MediaLib_shared");//采用EPOLL 框架
+		}else
+		{
+			System.loadLibrary("rtp");			//采用select框架
+		}
 	}
 	/**
 	 * 初始化
@@ -35,9 +39,7 @@ public class Pusher {
 	 * @param format
 	 * @return
 	 */
-
 	/* 特别说明：本SDK商业用途，请与Car-eye 开源团队联系  */
-
 	/* rtsp interface*/
 	private Handler handle =null;	
 	//RTSP 推流方式
