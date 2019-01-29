@@ -60,25 +60,41 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/btn_app_exit"
-                android:textColor="#ffffff"
-                android:layout_width="114.0dip"
+                android:id="@+id/btn_dialog_cancel"
+                android:layout_width="match_parent"
                 android:layout_height="40.0dip"
+                android:layout_marginLeft="7.0dip"
+                android:layout_weight="1"
                 android:background="@drawable/btn_public_selector"
                 android:gravity="center"
                 android:onClick="click"
-                android:text="@string/app_exit" />
+                android:text="@string/dialog_cancel"
+                android:textColor="#ffffff" />
+
+            <Button
+                android:id="@+id/btn_app_exit"
+                android:layout_width="match_parent"
+                android:layout_height="40.0dip"
+                android:layout_marginLeft="7.0dip"
+                android:layout_weight="1"
+                android:background="@drawable/btn_public_selector"
+                android:gravity="center"
+                android:onClick="click"
+                android:text="@string/app_exit"
+                android:textColor="#ffffff" />
 
             <Button
                 android:id="@+id/btn_app_minimize"
-                 android:textColor="#ffffff"
-                android:layout_width="114.0dip"
+                android:layout_width="match_parent"
                 android:layout_height="40.0dip"
-                android:layout_marginLeft="20.0dip"
+                android:layout_marginLeft="7.0dip"
+                android:layout_marginRight="7.0dip"
+                android:layout_weight="1"
                 android:background="@drawable/btn_public_selector"
                 android:gravity="center"
                 android:onClick="click"
-                android:text="@string/app_minimize" />
+                android:text="@string/app_minimize"
+                android:textColor="#ffffff" />
         </LinearLayout>
     </LinearLayout>
 
