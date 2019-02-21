@@ -20,6 +20,7 @@ import org.push.push.Pusher;
 
 import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.codec.Muxer;
+import com.sh.camera.util.Constants;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -109,6 +110,22 @@ public class AudioStream {
                         if (bufferIndex >= 0) {
                             inputBuffers[bufferIndex].clear();
                             len = mAudioRecord.read(inputBuffers[bufferIndex], BUFFER_SIZE);
+
+                            if(ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTMP_PROTOCOL)
+                            {
+                                if(easyPusher.CarEyePusherIsReadyRTMP(m_index)==0)
+                                {
+                                    Log.d("CMD", " onVideo not ready ");
+                                    continue;
+                                }
+                            }else
+                            {
+                                if(easyPusher.CarEyePusherIsReadyRTP((int)m_index)==0)
+                                {
+                                    Log.d("CMD", " onVideo not ready ");
+                                    continue;
+                                }
+                            }
                             if (len == AudioRecord.ERROR_INVALID_OPERATION || len == AudioRecord.ERROR_BAD_VALUE) {
                                 mMediaCodec.queueInputBuffer(bufferIndex, 0, 0, System.nanoTime() / 1000, 0);
                             } else {
@@ -132,7 +149,6 @@ public class AudioStream {
                                 addADTStoPacket(mBuffer.array(), mBufferInfo.size + 7);
                                 mBuffer.flip();
                                 easyPusher.SendBuffer_org(mBuffer.array(), mBufferInfo.size + 7, mBufferInfo.presentationTimeUs / 1000, 1, m_index, ServerManager.getInstance().getprotocol());
-
 	                            mMediaCodec.releaseOutputBuffer(index, false);
 	                            break;
 	                            
