@@ -149,7 +149,7 @@ public class Constants {
 			CAMERA_FILE_DIR = "/CarDVR/";			
 			FRAMERATE = 20;
 			CAMERA_ID[0] = 0;
-			CAMERA_ID[1] = 3;
+			CAMERA_ID[1] = 1;
 			CAMERA_ID[2] = 6;
 			CAMERA_ID[3] = 7;
 	}

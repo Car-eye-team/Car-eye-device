@@ -20,6 +20,7 @@ import android.hardware.usb.UsbManager;
 import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore.Video;
@@ -1090,7 +1091,12 @@ public class MainService extends Service {
 					handle = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(), Constants.Key,ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
 				}else
 				{
-					handle = mPusher.CarEyeInitNetWorkRTP( getApplicationContext(), Constants.rtpKey,ipstr, portstr, serialno,CameraId, Constants.CAREYE_VCODE_H264_1078,20,Constants.CAREYE_ACODE_AAC_1078,1,8000);
+					if(Build.VERSION.SDK_INT>=23) {
+						handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000,1);
+					}else
+					{
+						handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000,0);
+					}
 				}
 				if(handle  <0 && ServerManager.getInstance().getprotocol()== Constants.CAREYE_RTP_PROTOCOL)
 				{
@@ -1104,7 +1110,6 @@ public class MainService extends Service {
 					//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
 					return;
 				}
-
 				CameraUtil.VIDEO_UPLOAD[index] = true;
 				//控制预览回调
 				sc_controls[rules[index]] = true;
