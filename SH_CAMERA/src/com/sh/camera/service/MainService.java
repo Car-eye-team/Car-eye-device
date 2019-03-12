@@ -1123,7 +1123,6 @@ public class MainService extends Service {
 			e.printStackTrace();
 		}
 	}
-
 	/**
 	 * 结束视频上传
 	 * @param i
@@ -1144,7 +1143,6 @@ public class MainService extends Service {
 			e.printStackTrace();
 		}
 	}
-
 	/**
 	 * 准备录像
 	 * @param index

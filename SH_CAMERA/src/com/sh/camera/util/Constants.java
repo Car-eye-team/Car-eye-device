@@ -89,6 +89,11 @@ public class Constants {
 	public static int CAREYE_ACODE_G711A_1078 = 7;
 	public static int CAREYE_ACODE_G726_1078 = 9;
 
+	/* audio paranter  */
+	public static int CAREYE_AUDIO_SAMPLE_RATE_1078= 0; //8KHZ
+	public static int CAREYE_AUDIO_SAMPLE_BITS_1078= 1; //(16BITS)
+
+
 
 	/* rtsp/rtmp   */
 	public static int CAREYE_RTSP_PROTOCOL = 0;

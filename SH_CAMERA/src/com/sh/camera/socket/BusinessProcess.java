@@ -10,10 +10,12 @@ import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.bll.ParamsBiz;
 import com.sh.camera.service.ShCommService;
 import com.sh.camera.socket.coder.CommDecoder;
+import com.sh.camera.socket.coder.CommEncoder;
 import com.sh.camera.socket.db.DataMsgDao;
 import com.sh.camera.socket.model.DSCommData;
 import com.sh.camera.socket.model.PlatformResponse;
 import com.sh.camera.socket.model.TerminalRegist;
+import com.sh.camera.socket.model.VideoInfo;
 import com.sh.camera.socket.utils.CommConstants;
 import com.sh.camera.socket.utils.ParseUtil;
 import com.sh.camera.socket.utils.SPutil;
@@ -310,15 +312,6 @@ public class BusinessProcess {
 				num += 4;
 				String filepath = Constants.CAMERA_FILE_PATH+filename;
 				CameraUtil.startVideoFileStream(cameraid, Integer.parseInt(splaysec),Integer.parseInt(eplaysec), filepath,null);
-			} catch (Exception e) {
-				AppLog.e(ExceptionUtil.getInfo(e), e);
-				e.printStackTrace();
-			}
-			break;
-
-		case 0x9003:   //查询终端音视频属性
-			try {
-
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
@@ -658,8 +651,20 @@ public class BusinessProcess {
 				e.printStackTrace();
 			}
 			break;
-
-		case 0x9302:   //云台调整焦距
+			case 0x9003: //获取音频属性
+				VideoInfo info=new VideoInfo();
+				info.setAudioCodec(Constants.CAREYE_ACODE_AAC_1078);
+				info.setChannels(1);
+				info.setSamplerate(Constants.CAREYE_AUDIO_SAMPLE_RATE_1078);
+				info.setSampleBits(Constants.CAREYE_AUDIO_SAMPLE_BITS_1078);
+				info.setEnableflag(1);
+				info.setVediocodec(Constants.CAREYE_VCODE_H264_1078);
+				info.setAudiovhannels(1);
+				info.setVediovhannnels(4);
+				byte[] cameradata = CommEncoder.getAudiovideoAttributeUpload(info);
+				CommCenterUsers.witeMsg(cameradata,1);
+				break;
+			case 0x9302:   //云台调整焦距
 			try {
 				int num = 0;
 				//逻辑通道号
