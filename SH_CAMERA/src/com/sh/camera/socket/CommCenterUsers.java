@@ -47,7 +47,7 @@ import com.sh.camera.util.StringUtil;
  */
 public class CommCenterUsers {
 
-	private static final String TAG = "DSCenterUsers";
+	private static final String TAG = "CommCenterUsers";
 
 	public static boolean isConnector = false;
 	public static IoConnector minaConnector = null;

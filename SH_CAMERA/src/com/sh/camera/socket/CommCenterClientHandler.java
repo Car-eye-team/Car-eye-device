@@ -38,7 +38,7 @@ import android.content.SharedPreferences.Editor;
  */
 public class CommCenterClientHandler extends IoHandlerAdapter {
 
-	private static final String TAG = "DSMinaUsersHandler";
+	private static final String TAG = "CommCenterClientHandler";
 	private static StringBuffer tcp7EBuffer  = new StringBuffer();
 	// 当客户端连接进入时  
 	@Override  

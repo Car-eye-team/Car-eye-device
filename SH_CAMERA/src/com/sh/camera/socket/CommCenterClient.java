@@ -30,7 +30,7 @@ import com.sh.camera.util.ExceptionUtil;
  */
 public class CommCenterClient {
 
-	private static final String TAG = "DSCenterClient";
+	private static final String TAG = "CommCenterClient";
 
 	/**
 	 * 连接
