@@ -6,8 +6,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5" >
+        android:layout_height="match_parent"
+        android:layout_weight="8">
 
         <ListView
             android:id="@+id/huifang_listView1"
@@ -15,21 +15,23 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:listSelector="#144C67"
-            android:scrollbars="none" >
-        </ListView>
+            android:scrollbars="none"></ListView>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:layout_weight="0.8" >
+        android:layout_weight="0.8"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical" >
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.4"
+            android:gravity="center_vertical">
 
             <LinearLayout
                 android:id="@+id/huifang_lybt1"
@@ -37,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:background="@drawable/bt_click2"
-                android:gravity="center" >
+                android:gravity="center">
 
                 <ImageView
                     android:id="@+id/huifang_bsiv"
@@ -60,7 +62,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:background="@drawable/bt_click2"
-                android:gravity="center" >
+                android:gravity="center">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -82,7 +84,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:background="@drawable/bt_click2"
-                android:gravity="center" >
+                android:gravity="center">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -100,16 +102,16 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:padding="10dp" >
+            android:layout_weight="0.1"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/tv_time"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@drawable/bt_click"
                 android:gravity="center"
                 android:text="时间"
@@ -117,10 +119,9 @@
                 android:textColor="#338fcc" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
-                android:layout_weight="0.7"
                 android:background="#262626"
                 android:gravity="center"
                 android:text="来源"
@@ -129,9 +130,8 @@
 
             <TextView
                 android:id="@+id/huifang_tv_1"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@drawable/bt_click"
                 android:gravity="center"
                 android:text="全部"
@@ -139,10 +139,9 @@
                 android:textColor="#338fcc" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
-                android:layout_weight="0.7"
                 android:background="#262626"
                 android:gravity="center"
                 android:text="类型"
@@ -151,9 +150,8 @@
 
             <TextView
                 android:id="@+id/huifang_tv_2"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@drawable/bt_click"
                 android:gravity="center"
                 android:text="全部"

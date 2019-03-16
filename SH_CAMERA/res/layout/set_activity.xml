@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -6,18 +7,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.0" >
+        android:layout_weight="1.0">
 
         <ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="15dp" >
+                android:padding="15dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -32,11 +33,12 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:padding="5dp" >
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
                         android:text="流媒体服务器IP:"
@@ -44,8 +46,8 @@
 
                     <EditText
                         android:id="@+id/set_editText1"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="5"
                         android:background="#1a1a1a"
                         android:textColor="#ffffff" />
@@ -59,10 +61,11 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:padding="5dp" >
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity=""
@@ -71,8 +74,8 @@
 
                     <EditText
                         android:id="@+id/set_editText2"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="5"
                         android:background="#1a1a1a"
                         android:textColor="#ffffff" />
@@ -87,11 +90,12 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:padding="5dp" >
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
                         android:text="平台服务器IP:"
@@ -99,8 +103,8 @@
 
                     <EditText
                         android:id="@+id/et_ptserviceip"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="5"
                         android:background="#1a1a1a"
                         android:textColor="#ffffff" />
@@ -114,11 +118,12 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:padding="5dp" >
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
                         android:text="端口号:"
@@ -126,8 +131,8 @@
 
                     <EditText
                         android:id="@+id/et_ptserviceport"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="5"
                         android:background="#1a1a1a"
                         android:textColor="#ffffff" />
@@ -147,7 +152,7 @@
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
                     android:padding="5dp"
-                    android:visibility="gone" >
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="0dp"
@@ -175,11 +180,12 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:padding="5dp" >
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
                         android:text="设备号:"
@@ -187,8 +193,8 @@
 
                     <EditText
                         android:id="@+id/set_editText3"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="5"
                         android:background="#1a1a1a"
                         android:textColor="#ffffff" />
@@ -202,11 +208,12 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
-                    android:padding="5dp" >
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
                         android:text="帧频率:"
@@ -214,8 +221,8 @@
 
                     <EditText
                         android:id="@+id/set_editText4"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="5"
                         android:background="#1a1a1a"
                         android:textColor="#ffffff" />
@@ -226,7 +233,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:gravity="center_vertical"
-                    android:padding="15dp" >
+                    android:padding="15dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -238,7 +245,7 @@
                         android:id="@+id/radioGroup1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal">
 
                         <RadioButton
                             android:id="@+id/radio0"
@@ -264,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:gravity="center_vertical"
-                    android:padding="15dp" >
+                    android:padding="15dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -276,7 +283,7 @@
                         android:id="@+id/radioGroup2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal">
 
                         <RadioButton
                             android:id="@+id/radio2"
@@ -304,7 +311,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="15dp"
-                    android:visibility="gone" >
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/textView1"
@@ -354,14 +361,15 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="15dp"
                     android:gravity="center_vertical"
-                    android:padding="15dp" >
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:text="当前版本:"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
