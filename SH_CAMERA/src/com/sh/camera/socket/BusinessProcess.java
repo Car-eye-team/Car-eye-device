@@ -7,6 +7,7 @@
 package com.sh.camera.socket;
 
 import com.sh.camera.ServerManager.ServerManager;
+import com.sh.camera.audio.AudioUtil;
 import com.sh.camera.bll.ParamsBiz;
 import com.sh.camera.service.ShCommService;
 import com.sh.camera.socket.coder.CommDecoder;
@@ -358,7 +359,31 @@ public class BusinessProcess {
 				//ParamsBiz.setUpdatePort(String.valueOf(tcpPort));
 				//Log.d("vedio", "protocolType" + logicChannel + "  ip" + ip + "  port:" + tcpPort + "  protocol" + ServerManager.getInstance().getprotocol());
 				//开始传输
-				CameraUtil.startVideoUpload((logicChannel-1));
+				String datatype0 = "音视频";
+				String datatype1 = "视频";
+				String datatype2 = "双向对讲";
+				String datatype3 = "监听";
+				String datatype4 = "中心广播";
+				String datatype5 = "透传";
+				Log.d(TAG, "0"+ datatype0 );
+				Log.d(TAG, "1"+ datatype1 );
+				Log.d(TAG, "2"+ datatype2 );
+				Log.d(TAG, "3"+ datatype3 );
+				Log.d(TAG, "4"+ datatype4 );
+				Log.d(TAG, "5"+ datatype5 );
+				if(type == 0 || type == 1) {
+					CameraUtil.startVideoUpload((logicChannel - 1));
+					AppLog.i(TAG,"传输类型："+type );
+				}else if(type == 2){
+					CameraUtil.stopVideoUpload((logicChannel - 1));
+					AudioUtil.startTalkBack();
+					AppLog.i(TAG,"传输类型："+type);
+
+				}else if(type == 3){
+					AppLog.i(TAG,"传输类型："+type);
+
+				}
+
 
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);

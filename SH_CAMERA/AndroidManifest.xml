@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sh.camera"
     android:versionCode="2"
     android:versionName="2.4.0" >
@@ -58,7 +59,9 @@
         </activity>
         <activity android:name="com.sh.camera.vedioPlay.MoviePlayer" >
         </activity>
-
+        <activity android:name="com.sh.camera.TalkBackActivity"
+            tools:ignore="DuplicateActivity">
+        </activity>
         <service android:name="com.sh.camera.service.MainService" >
         </service>
 

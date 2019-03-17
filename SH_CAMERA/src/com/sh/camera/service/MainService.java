@@ -47,6 +47,7 @@ import com.sh.camera.SessionLinearLayout;
 import com.sh.camera.SetActivity;
 import com.sh.camera.DiskManager.DiskManager;
 import com.sh.camera.ServerManager.ServerManager;
+import com.sh.camera.TalkBackActivity;
 import com.sh.camera.codec.MediaCodecManager;
 import com.sh.camera.util.AppLog;
 import com.sh.camera.util.CameraFileUtil;
@@ -1143,6 +1144,16 @@ public class MainService extends Service {
 			e.printStackTrace();
 		}
 	}
+	/*
+	* 启动语音对讲
+	* */
+	public void startTalkBack(){
+		Intent dialogIntent = new Intent(getBaseContext(), TalkBackActivity.class);
+		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		getApplication().startActivity(dialogIntent);
+	}
+
+
 	/**
 	 * 准备录像
 	 * @param index
