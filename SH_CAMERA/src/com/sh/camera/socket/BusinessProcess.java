@@ -29,7 +29,6 @@ import com.sh.camera.util.Tools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.File;
@@ -377,6 +376,7 @@ public class BusinessProcess {
 				}else if(type == 2){
 					CameraUtil.stopVideoUpload((logicChannel - 1));
 					AudioUtil.startTalkBack();
+
 					AppLog.i(TAG,"传输类型："+type);
 
 				}else if(type == 3){
