@@ -64,17 +64,24 @@ public class Pusher {
 	public native void   CarEyeStopPushNetRTMP(long index);
 	
 
-	public void  CarEyeCallBack(int channel, int Result){		
+	public void  CarEyeCallBack(int channel, int factor,byte[] pBuf){
 		
-		Log.e("puser", "exit send file!");	
-		if(handle != null){
-			handle.sendMessage(handle.obtainMessage(1006));
-		}else{
-		}		
-		Intent intent = new Intent("com.dss.camera.ACTION_END_VIDEO_PLAYBACK");
-		intent.putExtra("EXTRA_ID", channel);
-		MainService.getInstance().sendBroadcast(intent);
-	}	
+		Log.e("puser", "exit send file!");
+		if(factor==0) {
+			if (handle != null) {
+				handle.sendMessage(handle.obtainMessage(1006));
+			} else {
+			}
+			Intent intent = new Intent("com.dss.camera.ACTION_END_VIDEO_PLAYBACK");
+			intent.putExtra("EXTRA_ID", channel);
+			MainService.getInstance().sendBroadcast(intent);
+		}else
+		{
+			//语音对讲接口解码并播放
+			MainService.getInstance().DeCoderAAC(pBuf);
+		}
+	}
+
 	/**
 	 * 发送H264编码格式
 	 * @param data

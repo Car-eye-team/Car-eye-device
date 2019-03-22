@@ -10,6 +10,8 @@ import java.util.Date;
 
 import org.push.hw.EncoderDebugger;
 import org.push.hw.NV21Convertor;
+import org.push.push.AudioDecoder;
+
 import android.content.Intent;
 
 import android.graphics.ImageFormat;
@@ -53,11 +55,15 @@ public class MediaCodecManager {
 	public static int CAMERA_OPER_MODE = 1;
 	private EncoderDebugger debugger;
 	private AudioStream audioStream;
-	
+	private int m_type = 0;
+	private static AudioDecoder audioDecoder;
+
+
+
 	public static MediaCodecManager getInstance() {
 		if (instance == null) {
 			//mMediaCodec = new MediaCodec[Constants.MAX_NUM_OF_CAMERAS];			
-			
+			audioDecoder = new AudioDecoder(MainService.c);
 			instance = new MediaCodecManager();
 		}
 		return instance;
@@ -72,22 +78,30 @@ public class MediaCodecManager {
 		TakePicture = true;
 	}
 
-	public void StartUpload(int index, Camera camera, long handle)
+	public void StartUpload(int index, Camera camera, long handle, int type)
 
  {   
 	 debugger = EncoderDebugger.debug(MainService.getInstance(), Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 	 previewFormat = sw_codec ? ImageFormat.YV12 : debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;    	 
 	 mVC[index] = new HWConsumer(MainService.getInstance(), MainService.mPusher,handle);
-	 try {
-		mVC[index].onVideoStart(Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	 m_type = type;
+	 if(type == 0) {
+		 try {
+			 mVC[index].onVideoStart(Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
+		 } catch (IOException e) {
+			 // TODO Auto-generated catch block
+			 e.printStackTrace();
+		 }
+	 }
 	 if(Constants.AudioRecord && audioStream == null)
 	 {	
 		  audioStream = new AudioStream(MainService.mPusher, null, handle);
           audioStream.startRecord();
+          if(type == 1)
+		  {
+		  	//开始语音对讲
+			  audioDecoder.startPlay();
+		  }
 	 }	 	
  }
  public void StopUpload(int index)
@@ -103,8 +117,15 @@ public class MediaCodecManager {
          audioStream = null;
          
      }
-	 
- } 
+     if(m_type == 1)
+	 {
+	 	audioDecoder.stop();
+	 }
+ }
+ public void DecodeAAC(byte[] data)
+ {
+	 audioDecoder.decode(data,0,data.length);
+ }
 	public static boolean TakePicture(int cameraid,int type){
 		try {
 			//检查SD卡是否存在			

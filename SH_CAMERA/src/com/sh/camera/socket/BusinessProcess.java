@@ -7,7 +7,6 @@
 package com.sh.camera.socket;
 
 import com.sh.camera.ServerManager.ServerManager;
-import com.sh.camera.audio.AudioUtil;
 import com.sh.camera.bll.ParamsBiz;
 import com.sh.camera.service.ShCommService;
 import com.sh.camera.socket.coder.CommDecoder;
@@ -213,7 +212,7 @@ public class BusinessProcess {
 					//Log.d("vedio", "protocolType" + protocolType + "  ip" + ip + "  port:" + port + "  protocol" + ServerManager.getInstance().getprotocol());
 				}
 				if(type == 0){
-					CameraUtil.startVideoUpload((id-1));
+					CameraUtil.startVideoUpload((id-1),0);
 				}else{
 					CameraUtil.stopVideoUpload((id-1));
 				}
@@ -371,12 +370,11 @@ public class BusinessProcess {
 				Log.d(TAG, "4"+ datatype4 );
 				Log.d(TAG, "5"+ datatype5 );
 				if(type == 0 || type == 1) {
-					CameraUtil.startVideoUpload((logicChannel - 1));
+					CameraUtil.startVideoUpload((logicChannel - 1),0);
 					AppLog.i(TAG,"传输类型："+type );
 				}else if(type == 2){
-					CameraUtil.stopVideoUpload((logicChannel - 1));
-					AudioUtil.startTalkBack();
 
+					CameraUtil.startVideoUpload((logicChannel - 1), 1);
 					AppLog.i(TAG,"传输类型："+type);
 
 				}else if(type == 3){
@@ -413,7 +411,7 @@ public class BusinessProcess {
 				}else if(command ==3){
 					//开始传输
 					Log.d("vedio", "start stream");
-							CameraUtil.startVideoUpload((logicChannel-1));
+							CameraUtil.startVideoUpload((logicChannel-1), 0);
 				}
 
 			} catch (Exception e) {

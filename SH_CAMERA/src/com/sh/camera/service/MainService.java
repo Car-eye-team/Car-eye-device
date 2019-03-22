@@ -1000,7 +1000,7 @@ public class MainService extends Service {
 				//处理上传
 				btiv2.setImageResource(R.drawable.b03);
 				for (int i = 0; i < rules.length; i++) {
-					startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i);
+					startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i,0);
 				}
 				isSC = true;
 			}
@@ -1050,7 +1050,6 @@ public class MainService extends Service {
 				e.printStackTrace();
 			}
 			break;
-
 		}
 	}
 
@@ -1067,7 +1066,11 @@ public class MainService extends Service {
 		isSC = false;
 
 	}
-	
+
+	public void  DeCoderAAC(byte []data)	{
+
+		MediaCodecManager.getInstance().DecodeAAC(data);
+	}
 
 	public   void setCallback(int index, Camera camera)
 	{
@@ -1075,7 +1078,7 @@ public class MainService extends Service {
 	}	
 
 	long handle;
-	public void startVideoUpload2(String ipstr, String portstr, String serialno,  int index){
+	public void startVideoUpload2(String ipstr, String portstr, String serialno,  int index, int type){
 
 		int CameraId;
 		int  m_index_channel;
@@ -1115,7 +1118,7 @@ public class MainService extends Service {
 				//控制预览回调
 				sc_controls[rules[index]] = true;
 				StreamIndex[rules[index]] = handle;
-				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]], handle);
+				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]], handle, type);
 				camera[rules[index]].setPreviewCallback(preview[rules[index]]);
 			}
 
