@@ -26,11 +26,17 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.blankj.utilcode.util.ToastUtils;
 import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.service.MainService;
 import com.sh.camera.socket.CommCenterUsers;
 import com.sh.camera.socket.coder.CommEncoder;
-/**    
+
+import static android.hardware.Camera.getCameraInfo;
+import static android.hardware.Camera.getNumberOfCameras;
+
+/**
  *     
  * 项目名称：DSS_CAMERA    
  * 类名称：CameraUtil    
@@ -70,6 +76,10 @@ public class CameraUtil {
 		//预览之前判断是否回放，如果回放先结束回放
 		if(CameraUtil.VIDEO_FILE_UPLOAD){
 			stopVideoFileStream();
+		}
+
+		if (VIDEO_UPLOAD.length<=i){
+			ToastUtils.showShort("视频上传通道错误！");
 		}
 
 		//预览之前先停止上传
@@ -129,7 +139,6 @@ public class CameraUtil {
 
 	/**
 	 * 指定文件回放
-	 * @param context
 	 * @param cameraid 通道ID
 	 * @param splaysec 开始秒
 	 * @param eplaysec 结束秒
@@ -317,6 +326,20 @@ public class CameraUtil {
 			}  
 			return null;  
 		}  
+	}
+
+	public static ArrayList<Camera> getCameras() {
+		int numberOfCameras = getNumberOfCameras();
+		Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+		ArrayList<Camera> cameras=new ArrayList<>();
+		for (int i = 0; i < numberOfCameras; i++) {
+			getCameraInfo(i, cameraInfo);
+			if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK
+					||cameraInfo.facing==Camera.CameraInfo.CAMERA_FACING_FRONT) {
+				cameras.add(Camera.open(i));
+			}
+		}
+		return cameras;
 	}
 
 }

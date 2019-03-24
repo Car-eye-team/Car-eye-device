@@ -9,10 +9,10 @@ ext {
     ]
 
     dependVersion = [
-            androidSupportSdkVersion: "27.0.1",
+            androidSupportSdkVersion: "28.0.0",
             espressoSdkVersion      : "3.0.2",
             retrofitSdkVersion      : "2.4.0",
-            glideSdkVersion         : "4.6.1",
+            glideSdkVersion         : "4.7.1",
             rxJava                  : "2.1.16",
             rxAndroid               : "2.0.2",
             rxKotlin                : "2.0.0",
@@ -22,9 +22,9 @@ ext {
     supportDeps = [
             "supportv4"        : "com.android.support:support-v4:${dependVersion.androidSupportSdkVersion}",
             "appcompatv7"      : "com.android.support:appcompat-v7:${dependVersion.androidSupportSdkVersion}",
-            "cardview"         : "com.android.support:cardview-v7:${dependVersion.androidSupportSdkVersion}",
+//            "cardview"         : "com.android.support:cardview-v7:${dependVersion.androidSupportSdkVersion}",
             "design"           : "com.android.support:design:${dependVersion.androidSupportSdkVersion}",
-            "constraint-layout": "com.android.support.constraint:constraint-layout:1.1.2",
+//            "constraint-layout": "com.android.support.constraint:constraint-layout:1.1.2",
             "annotations"      : "com.android.support:support-annotations:${dependVersion.androidSupportSdkVersion}"
     ]
 
@@ -40,8 +40,8 @@ ext {
     rxJava = [
             "rxJava"   : "io.reactivex.rxjava2:rxjava:${dependVersion.rxJava}",
             "rxAndroid": "io.reactivex.rxjava2:rxandroid:${dependVersion.rxAndroid}",
-            "rxKotlin" : "io.reactivex.rxjava2:rxkotlin:${dependVersion.rxKotlin}",
-            "anko"     : "org.jetbrains.anko:anko:${dependVersion.anko}"
+//            "rxKotlin" : "io.reactivex.rxjava2:rxkotlin:${dependVersion.rxKotlin}",
+//            "anko"     : "org.jetbrains.anko:anko:${dependVersion.anko}"
     ]
 
     testDeps = [

@@ -7,6 +7,8 @@
 
 package com.sh.camera.version;
 
+import com.sh.camera.util.AppLog;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -44,46 +46,51 @@ public class HttpUtils {
 	 */
 	public static HttpEntity getEntity(String uri, List<NameValuePair> params,
 			int method) throws IOException {
-		HttpEntity entity = null;
-		// 创建客户端对象
-		HttpClient client = new DefaultHttpClient();
-		client.getParams().setParameter(
-				CoreConnectionPNames.CONNECTION_TIMEOUT, 40000);
-		client.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");
-		// 创建请求对象
-		HttpUriRequest request = null;
-		switch (method) {
-		case METHOD_GET:
-			StringBuilder sb = new StringBuilder(uri);
-			if (params != null && !params.isEmpty()) {
-				sb.append('?');
-				for (NameValuePair pair : params) {
-					sb.append(pair.getName()).append('=')
-					.append(pair.getValue()).append('&');
-				}
-				sb.deleteCharAt(sb.length() - 1);
-			}
-			request = new HttpGet(sb.toString());
-			System.out.println("---------------------------"+sb.toString());
-			break;
-		case METHOD_POST:
+		try {
+			HttpEntity entity = null;
+			// 创建客户端对象
+			HttpClient client = new DefaultHttpClient();
+			client.getParams().setParameter(
+					CoreConnectionPNames.CONNECTION_TIMEOUT, 40000);
+			client.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");
+			// 创建请求对象
+			HttpUriRequest request = null;
+			switch (method) {
+				case METHOD_GET:
+					StringBuilder sb = new StringBuilder(uri);
+					if (params != null && !params.isEmpty()) {
+						sb.append('?');
+						for (NameValuePair pair : params) {
+							sb.append(pair.getName()).append('=')
+									.append(pair.getValue()).append('&');
+						}
+						sb.deleteCharAt(sb.length() - 1);
+					}
+					request = new HttpGet(sb.toString());
+					System.out.println("---------------------------"+sb.toString());
+					break;
+				case METHOD_POST:
 //			LogUtil.i("HttpUtil.uri", uri+","+params.toString());
-			request = new HttpPost(uri);
-			if (params != null && !params.isEmpty()) {
-				// 创建请求实体对象
-				UrlEncodedFormEntity reqEntity = new UrlEncodedFormEntity(
-						params,HTTP.UTF_8);
-				// 设置请求实体
-				((HttpPost) request).setEntity(reqEntity);
+					request = new HttpPost(uri);
+					if (params != null && !params.isEmpty()) {
+						// 创建请求实体对象
+						UrlEncodedFormEntity reqEntity = new UrlEncodedFormEntity(
+								params,HTTP.UTF_8);
+						// 设置请求实体
+						((HttpPost) request).setEntity(reqEntity);
+					}
+					break;
 			}
-			break;
+			// 执行请求获取相应对象
+			HttpResponse response = client.execute(request);
+			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				entity = response.getEntity();
+			}
+			return entity;
+		}catch (Exception e){
+			AppLog.e(e.toString());
+			return null;
 		}
-		// 执行请求获取相应对象
-		HttpResponse response = client.execute(request);
-		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-			entity = response.getEntity();
-		}
-		return entity;
 	}
 
 	public static HttpEntity getEntityDelay(String uri, List<NameValuePair> params,

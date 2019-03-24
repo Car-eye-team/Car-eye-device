@@ -25,6 +25,7 @@ import com.sh.camera.SetActivity;
 import com.sh.camera.bll.ParamsBiz;
 import com.sh.camera.util.Constants;
 import com.sh.camera.util.DialogUtil;
+import com.sh.camera.util.JSONUtil;
 import com.sh.camera.util.MyToast;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -225,8 +226,8 @@ public class VersionBiz {
 					HttpEntity httpEntity = HttpUtils.getEntity(url, pairs, HttpUtils.METHOD_POST);
 					InputStream inputStream = HttpUtils.getStream(httpEntity);
 					String json = StringParser.parse(inputStream);
-					JSONObject obj = new JSONObject(json);
-					int status = obj.getInt("status");
+					JSONObject obj = JSONUtil.getJSONObject(json);
+					int status = obj.optInt("status");
 					if (status == 0) {
 						String locVersion = getVersionName(context);
 						String verion = obj.optString("versionIndex", "").replace("v", "");

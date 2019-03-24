@@ -15,8 +15,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.sh.camera.service.MainService;
+import com.sh.camera.util.AppLog;
 import com.sh.camera.util.Constants;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
@@ -29,7 +33,8 @@ public class MainActivity extends Activity {
 	private static String[] PERMISSIONS_STORAGE = { Manifest.permission.READ_EXTERNAL_STORAGE,
 			Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA,
 			Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.RECORD_AUDIO,
-			Manifest.permission.READ_PHONE_STATE};
+			Manifest.permission.READ_PHONE_STATE, PermissionConstants.CAMERA,PermissionConstants.LOCATION,
+			PermissionConstants.CALENDAR};
 	//public FloatWindowManager.MyListener listener;
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -94,6 +99,17 @@ public class MainActivity extends Activity {
 					needapplypermission=true;
 				}
 			}
+			PermissionUtils.requestDrawOverlays(new PermissionUtils.SimpleCallback() {
+				@Override
+				public void onGranted() {
+					AppLog.i("悬浮窗权限获取成功");
+				}
+
+				@Override
+				public void onDenied() {
+					finish();
+				}
+			});
 			if(needapplypermission){
 				ActivityCompat.requestPermissions(MainActivity.this,PERMISSIONS_STORAGE,1);
 			}else{
@@ -113,9 +129,9 @@ public class MainActivity extends Activity {
 				gotoService();
 			}
 			else {
-				//Toast.makeText(MainActivity.this,permissions[i]+"拒绝授权,请再设置中开启权限",Toast.LENGTH_SHORT).show();
-
+				Toast.makeText(MainActivity.this,permissions[i]+"拒绝授权,请再设置中开启权限", Toast.LENGTH_SHORT).show();
 				finish();
+				break;
 			}
 		}
 		//if ready

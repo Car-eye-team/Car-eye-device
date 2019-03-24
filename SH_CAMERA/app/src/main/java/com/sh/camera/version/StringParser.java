@@ -16,6 +16,7 @@ public class StringParser {
 	private static final String TAG = "StringParser";
 
 	public static String parse(InputStream inputStream){
+		if (inputStream==null) return "";
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		StringBuffer sb = new StringBuffer();
 		String line = null;

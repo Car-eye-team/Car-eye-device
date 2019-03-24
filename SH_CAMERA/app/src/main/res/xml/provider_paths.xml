@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <paths >
+        <!-- Context.getFilesDir()  该方式提供在应用的内部存储区的文件/子目录的文件。它对应Context.getFilesDir返回的路径：eg:"/val/val/com.jph.simple/files"。          -->
+        <files-path name="camera_photos" path="" />
+        <!-- Context.getCacheDir()   该方式提供在应用的内部存储区的缓存子目录的文件。它对应getCacheDir返回的路径：eg:“/val/val/com.jph.simple/cache”；-->
+        <cache-path name="camera_photos" path="" />
+        <!-- Environment.getExternalStorageDirectory()  该方式提供在外部存储区域根目录下的文件。它对应Environment.getExternalStorageDirectory返回的路径：eg:"/storage/emulated/0";-->
+        <external-path name="camera_photos" path="" />
+        <!-- 优先：Context#getExternalFilesDir(String) Context.getExternalFilesDir(null).  该方式提供在应用的外部存储区根目录的下的文件。它对应Context#getExternalFilesDir(String) Context.getExternalFilesDir(null)返回的路径。eg:"/storage/emulated/0/Android/val/com.jph.simple/files"。-->
+        <external-files-path name="camera_photos" path="" />
+        <!-- Context.getExternalCacheDir()  该方式提供在应用的外部缓存区根目录的文件。它对应Context.getExternalCacheDir()返回的路径。eg:"/storage/emulated/0/Android/val/com.jph.simple/cache"。-->
+        <external-cache-path name="camera_photos" path="" />
+        <!-- 外置sd卡-->
+        <root-path name="camera_photos" path="" />
+    </paths >
+</resources>

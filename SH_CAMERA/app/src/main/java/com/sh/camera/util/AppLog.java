@@ -57,8 +57,8 @@ public class AppLog {
 	/**
 	 * sd卡中日志文件的最多保存天数
 	 */
-	private static int SDCARD_LOG_FILE_SAVE_DAYS = 0;  
-	
+	private static int SDCARD_LOG_FILE_SAVE_DAYS = 0;
+
 	/**
 	 * 本类输出的日志文件名称
 	 */
@@ -74,6 +74,7 @@ public class AppLog {
 	 */
 	private static SimpleDateFormat logfile = new SimpleDateFormat("yyyy-MM-dd");// 
 
+	private static final String TAG = "AppLog";
 	/**
 	 * 警告信息  
 	 * @param tag
@@ -90,7 +91,15 @@ public class AppLog {
 	 */
 	public static void e(String tag, Object msg) { 
 		log(tag, msg.toString(), 'e');  
-	}  
+	}
+
+	/**
+	 * 错误信息
+	 * @param msg
+	 */
+	public static void e(Object msg) {
+		log(TAG, msg.toString(), 'e');
+	}
 
 	/**
 	 * 调试信息 
@@ -103,7 +112,11 @@ public class AppLog {
 
 	public static void i(String tag, Object msg) {
 		log(tag, msg.toString(), 'i');  
-	}  
+	}
+
+	public static void i(Object msg) {
+		log(TAG, msg.toString(), 'i');
+	}
 
 	public static void v(String tag, Object msg) {  
 		log(tag, msg.toString(), 'v');  

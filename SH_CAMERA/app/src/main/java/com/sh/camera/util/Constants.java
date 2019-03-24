@@ -43,7 +43,7 @@ public class Constants {
 	/**录制视频高度*/
 	public static final int RECORD_VIDEO_HEIGHT = 480;
 	//四路
-	public static final int MAX_NUM_OF_CAMERAS = 4;
+	public static int MAX_NUM_OF_CAMERAS = 4;
 	/**服务器IP*/
 	public static final String SERVER_IP = "120.76.235.109";
 	/**handle apk 升级消息*/
@@ -121,7 +121,7 @@ public class Constants {
 	/**帧速率*/
 	public static int FRAMERATE = 20;
 	/**摄像头ID*/
-	public static int[] CAMERA_ID = {0,3,6,7};
+	public static int[] CAMERA_ID = {0,1,2,3};
 
 	/**录像状态 true录像中 false 未录像*/
 	public static boolean CAMERA_RECORD[] = {false,false,false,false};
@@ -161,4 +161,8 @@ public class Constants {
 	/**应用启动自动检测一次版本信息*/
 	public static final String CAMERA_PATH ="Careye_pusher/";
 	public static boolean checkVersion = true;
+
+	//人脸识别的appId和appKey
+	public static final String APP_ID_FACE = "3rWH4Jgae4iunSweK3cWdm4JfuQ8UHMsoDGRznxanHW2";
+	public static final String SDK_KEY_FACE = "CyuKUsxFHLodXdoVxk6Ly9XcWbypjU5RWEHhetJJ8sZB";
 }

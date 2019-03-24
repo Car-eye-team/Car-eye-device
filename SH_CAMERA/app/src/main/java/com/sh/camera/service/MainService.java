@@ -40,6 +40,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.blankj.utilcode.util.ActivityUtils;
 import com.dss.car.launcher.provider.biz.ProviderBiz;
 import com.sh.camera.FileActivity;
 import com.sh.camera.R;
@@ -49,6 +51,7 @@ import com.sh.camera.DiskManager.DiskManager;
 import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.TalkBackActivity;
 import com.sh.camera.codec.MediaCodecManager;
+import com.sh.camera.faceRecognition.activity.ChooseFunctionActivity;
 import com.sh.camera.util.AppLog;
 import com.sh.camera.util.CameraFileUtil;
 import com.sh.camera.util.CameraUtil;
@@ -61,7 +64,7 @@ public class MainService extends Service {
 	private static final String TAG = "CMD";
 	public static Context c;
 	private static MainService instance;
-	public static Context application;	
+	public static Context application;
 	LayoutInflater inflater;
 	public static boolean isrun = false;
 	/**主界面是否在最前端显示状态*/
@@ -112,17 +115,17 @@ public class MainService extends Service {
 	public static boolean[] sc_controls = {false, false, false, false};
 	int framerate = Constants.FRAMERATE;
 	int bitrate;
-	public static DiskManager disk;	
-	public static Pusher mPusher;	
+	public static DiskManager disk;
+	public static Pusher mPusher;
 	//判断是退出还是打开其他界面
-	boolean isClose = true;	
+	boolean isClose = true;
 	//通知结束录像
 	public static String STOPRECORDER = "stoprecorder";
 	//通知结束上传
 	public static String STOPPUSH = "stoppush";
-	BroadcastReceiver 	SYSBr;	
+	BroadcastReceiver 	SYSBr;
 	boolean usbcameraConnect = true;
-	boolean sd_inject = false;	
+	boolean sd_inject = false;
 
 	// 获取本地application的对象
 	private Button btn_app_minimize,btn_app_exit;
@@ -135,11 +138,11 @@ public class MainService extends Service {
 			instance = new MainService();
 		}
 		return instance;
-	}	
+	}
 	public static DiskManager getDiskManager()
 	{
 		return disk;
-	}	
+	}
 	private boolean isTabletDevice = true;
 
 	public void onCreate() {
@@ -149,8 +152,9 @@ public class MainService extends Service {
 		instance = this;
 		c = MainService.this;
 		application = getApplicationContext();
-		disk = new DiskManager(this);			
+		disk = new DiskManager(this);
 		mPusher = new Pusher();
+		Constants.MAX_NUM_OF_CAMERAS=Camera.getNumberOfCameras();
 		StreamIndex = new long[Constants.MAX_NUM_OF_CAMERAS];
 		camera = new Camera[Constants.MAX_NUM_OF_CAMERAS];
 		mrs = new MediaRecorder[Constants.MAX_NUM_OF_CAMERAS];
@@ -158,14 +162,14 @@ public class MainService extends Service {
 		mCurrentVideoValues = new ContentValues[Constants.MAX_NUM_OF_CAMERAS];
 		framerate = ServerManager.getInstance().getFramerate();
 
-		CreateView();		
+		CreateView();
 		//一开始就初始化编码器，太占用资源		
-		isrun = true;			
+		isrun = true;
 		Constants.setParam(c);
 		cid = Constants.CAMERA_ID;
 		inflater = LayoutInflater.from(c);
 		registerReceiver(br, filter);
-			
+
 		disk.CreateDirctionaryOnDisk(Constants.CAMERA_FILE_DIR);
 		new Thread(new Runnable() {
 			@Override
@@ -178,7 +182,7 @@ public class MainService extends Service {
 							Thread.sleep(2000);
 						}else if(recoTime>0&&disk.GetDiskFreeTotal()<=Constants.SD_FREEJX){
 							//SdCardBiz.getInstance().getDetectionServiceSdCar(Constants.isCleaning,instance);
-							disk.getDetectionServiceSdCar(instance);							
+							disk.getDetectionServiceSdCar(instance);
 						}
 						Thread.sleep(1000);
 					} catch (Exception e) {
@@ -194,13 +198,13 @@ public class MainService extends Service {
 							intent.putExtra("type", MainService.MINIMIZE);
 							sendBroadcast(intent);
 						}
-					}						
+					}
 				}
 			}
 		}).start();
-		
-	}	
-	
+
+	}
+
 	@Override
 	public void onStart(Intent intent, int startId) {
 		// TODO Auto-generated method stub
@@ -209,14 +213,14 @@ public class MainService extends Service {
 		final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
 		SYSBr = new BroadcastReceiver() {
 			@Override
-			public void onReceive(Context context, Intent intent) { 
+			public void onReceive(Context context, Intent intent) {
 
 				String action = intent.getAction();
-				UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);			   		
-				if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action) && device.getDeviceProtocol() ==1) {          
+				UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+				if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action) && device.getDeviceProtocol() ==1) {
 					Toast.makeText(context, "监听到usb摄像头变动1"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
-					usbcameraConnect = false;    
-					closeCamera(0);   		 
+					usbcameraConnect = false;
+					closeCamera(0);
 				} else if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action) && device.getDeviceProtocol()==1) {
 					Toast.makeText(context, "监听到usb摄像头变动0"+device.getDeviceProtocol(), Toast.LENGTH_LONG).show();
 					try {
@@ -224,22 +228,22 @@ public class MainService extends Service {
 					} catch (Exception e) {
 					}
 					usbcameraConnect = true;
-					openCamera(0, 2);   
-				}				
+					openCamera(0, 2);
+				}
 				else if(action.equals(Constants.ACTION_VIDEO_PLAYBACK))
 				{
 					int id = intent.getIntExtra("EXTRA_ID", 1);  //通道ID
 					int type = intent.getIntExtra("EXTRA_TYPE", 0);  //类型  0 图片 1 录像
 					String stime = intent.getStringExtra("EXTRA_STIME");  //回放开始时间
 					String etime = intent.getStringExtra("EXTRA_ETIME");  //回放结束时间
-							
+
 				}else if(action.equals(Constants.ACTION_VIDEO_FILE_PLAYBACK))
-				{		 			
+				{
 					int cameraid = intent.getIntExtra("Channel", 1);  //通道ID
 					String filename = intent.getStringExtra("Name");
-					int splaysec = intent.getIntExtra("Start", 0); 
+					int splaysec = intent.getIntExtra("Start", 0);
 					int eplaysec = intent.getIntExtra("End", 0);
-					CameraUtil.startVideoFileStream(cameraid, splaysec, eplaysec, filename,null);					
+					CameraUtil.startVideoFileStream(cameraid, splaysec, eplaysec, filename,null);
 				}
 				else if(action.equals(Constants.ACTION_VIDEO_FILE_PLAYBACK))
 				{
@@ -251,16 +255,16 @@ public class MainService extends Service {
 					MainService.getInstance().setWindowMin();
 				}
 			}
-		};	      
-		IntentFilter localIntentFilter = new IntentFilter();  
-		localIntentFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);	
-		localIntentFilter.addAction(Constants.ACTION_VIDEO_PLAYBACK);        
-		localIntentFilter.addAction(Constants.ACTION_VIDEO_FILE_PLAYBACK);   
+		};
+		IntentFilter localIntentFilter = new IntentFilter();
+		localIntentFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+		localIntentFilter.addAction(Constants.ACTION_VIDEO_PLAYBACK);
+		localIntentFilter.addAction(Constants.ACTION_VIDEO_FILE_PLAYBACK);
 		localIntentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-		localIntentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS); 		
-		registerReceiver(SYSBr, localIntentFilter);	        		
+		localIntentFilter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+		registerReceiver(SYSBr, localIntentFilter);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -270,7 +274,7 @@ public class MainService extends Service {
 		Log.d("main service", "onDestroy");
 	};
 
-	
+
 	//pass一次window
 	boolean passwin = false;
 	IntentFilter filter = new IntentFilter(ACTION);
@@ -278,7 +282,7 @@ public class MainService extends Service {
 		@Override
 		public void onReceive(Context arg0, Intent intent) {
 			String type = intent.getStringExtra("type");
-			
+
 			if(type.equals(WINDOW)){
 				//				if(passwin){
 				//					passwin = false;
@@ -305,12 +309,12 @@ public class MainService extends Service {
 				passwin = true;
 				restart();
 			}
-			if(type.equals(STARTRECORDER)){				
+			if(type.equals(STARTRECORDER)){
 				int index = intent.getIntExtra("index", 0);
 				/*if(!isRecording){
 					click(R.id.bt_ly_2);
 				}*/
-				prepareRecorder(index, 1);				
+				prepareRecorder(index, 1);
 			}
 			if(type.equals(STOPRECORDER)){
 				if(isRecording){
@@ -349,12 +353,12 @@ public class MainService extends Service {
 		ly_bts.setVisibility(view.VISIBLE);
 		wmParams.x = 1;
 		wmParams.y = 1;
-		
+
 		wmParams.width = 1;
 		wmParams.height = 1;
 		//最小化到后台，需要设置LayoutParams.FLAG_NOT_FOCUSABLE，才能取消对返回键的拦截，并且移除layout
-		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | 
-				LayoutParams.FLAG_NOT_FOCUSABLE | 
+		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL |
+				LayoutParams.FLAG_NOT_FOCUSABLE |
 				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
 		if(layoutPoint != null && layoutPoint.isShown()){
 			mWindowManager.removeView(layoutPoint);
@@ -367,8 +371,8 @@ public class MainService extends Service {
 			}
 		}
 		isWindowViewShow = false;
-	}	
-	
+	}
+
 	//最大化
 	void setWindowFull(){
 		ismatch = true;
@@ -376,12 +380,12 @@ public class MainService extends Service {
 		wmParams.x = 0;
 		wmParams.y = 0;
 		wmParams.width =  WindowManager.LayoutParams.MATCH_PARENT;
-		wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;		
+		wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 		//最大化，不要设置LayoutParams.FLAG_NOT_FOCUSABLE，才能拦截返回键	
-		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | 
+		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL |
 					WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
 		mWindowManager.updateViewLayout(view, wmParams);
-		
+
 		//最大化，添加layout，才能拦截返回键，长宽为1，才不会挡住界面
 		wmParams.width = 1;
 		wmParams.height = 1;
@@ -396,11 +400,27 @@ public class MainService extends Service {
 			if(i!=0&&i!=3){
 				lys[i].setOnClickListener(click_ly);
 			}
-		}		
+		}
 		isWindowViewShow = true;
 		if(Constants.checkVersion){
 			Constants.checkVersion = false;
 			VersionBiz.doCheckVersionFirst(c, handler);
+		}
+		reconnectCameras();
+	}
+
+	/**
+	 * 重连相机
+	 */
+	private void reconnectCameras() {
+		try {
+			for (int j=0; j<camera.length;j++){
+				if (camera[j]!=null){
+					camera[j].startPreview();
+				}
+			}
+		} catch (Exception e) {
+			AppLog.e(e.toString());
 		}
 	}
 
@@ -412,7 +432,7 @@ public class MainService extends Service {
 		wmParams.y = 1;
 		wmParams.width = 1;
 		wmParams.height = 1;
-		
+
 		mWindowManager.updateViewLayout(view, wmParams);
 		for (int i = 0; i < lys.length; i++) {
 			if(i!=0&&i!=3){
@@ -441,8 +461,8 @@ public class MainService extends Service {
 	// 一个点，叠加在Window中，用来监听返回键，最小化后移除，最大化时叠加到window中。
 	SessionLinearLayout layoutPoint;
 	// 触屏监听  
-	float lastX, lastY;  
-	int oldOffsetX, oldOffsetY;  
+	float lastX, lastY;
+	int oldOffsetX, oldOffsetY;
 	private void CreateView() {
 		mWindowManager = (WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
 		wmParams = new WindowManager.LayoutParams();
@@ -456,7 +476,7 @@ public class MainService extends Service {
 		wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 		wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 		addView();
-						
+
 	}
 	private void addView() {
 		if(inflater==null){
@@ -502,11 +522,11 @@ public class MainService extends Service {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+
 		}
-		
+
 	}
-	
+
 	public void removeView() {
 		try {
 			mWindowManager.removeView(view);
@@ -553,7 +573,7 @@ public class MainService extends Service {
 			}
 			if(msg.what==1003){
 				boolean lock = false;
-				Toast.makeText(c, "执行拍照失败", 1000).show();				
+				Toast.makeText(c, "执行拍照失败", 1000).show();
 				if(!lock){
 					clickLock = false;
 				}
@@ -606,8 +626,8 @@ public class MainService extends Service {
 				//				lys[i].setOnClickListener(click_ly);
 				lys[i].setOnClickListener(click2start);
 			}
-		}		
-		
+		}
+
 		//确认四路、二路
 		if(ServerManager.getInstance().getMode() == SetActivity.rgids[0]){
 			lys[3].setVisibility(View.GONE);
@@ -621,12 +641,12 @@ public class MainService extends Service {
 		for (int i = 0; i < rulestr.length(); i++) {
 			rules[i] = Integer.parseInt(rulestr.substring(i, i+1));
 		}
-		for(int i =0; i<Constants.MAX_NUM_OF_CAMERAS; i++){	
+		for(int i =0; i<Constants.MAX_NUM_OF_CAMERAS; i++){
 			if(isTwoCamera&&i>1) break;
-		}		
+		}
 		ttvs = new TextureView[Constants.MAX_NUM_OF_CAMERAS];
-		stHolder = new SurfaceTexture[Constants.MAX_NUM_OF_CAMERAS];		
-		preview = new PreviewCallback[Constants.MAX_NUM_OF_CAMERAS];	
+		stHolder = new SurfaceTexture[Constants.MAX_NUM_OF_CAMERAS];
+		preview = new PreviewCallback[Constants.MAX_NUM_OF_CAMERAS];
 		stListener = new SurfaceTextureListener[Constants.MAX_NUM_OF_CAMERAS];
 		if(isTabletDevice){
 			ly_bts = (LinearLayout) view.findViewById(R.id.main_right_btly);
@@ -645,52 +665,64 @@ public class MainService extends Service {
 		btn_app_exit = (Button) view.findViewById(R.id.btn_app_exit);
 		inc_alertaui = (FrameLayout) view.findViewById(R.id.inc_alertaui);
 
-		//预览回调
-		preview[0] = new PreviewCallback() {
-			@Override
-			public void onPreviewFrame(byte[] data, Camera camera1) {
-				// TODO Auto-generated method stub
-				MediaCodecManager.getInstance().onPreviewFrameUpload(data,0,camera[0]);
-			}
-		};
-		preview[1] = new PreviewCallback() {
+//		//预览回调
+//		preview[0] = new PreviewCallback() {
+//			@Override
+//			public void onPreviewFrame(byte[] data, Camera camera1) {
+//				// TODO Auto-generated method stub
+//				MediaCodecManager.getInstance().onPreviewFrameUpload(data,0,camera[0]);
+//			}
+//		};
+//		preview[1] = new PreviewCallback() {
+//
+//			@Override
+//			public void onPreviewFrame(byte[] data, Camera camera1) {
+//				// TODO Auto-generated method stub
+//				MediaCodecManager.getInstance().onPreviewFrameUpload(data,1,camera[1]);
+//			}
+//		};
+//		preview[2] = new PreviewCallback() {
+//			@Override
+//			public void onPreviewFrame(byte[] data, Camera camera1) {
+//				// TODO Auto-generated method stub
+//				MediaCodecManager.getInstance().onPreviewFrameUpload(data,2,camera[2]);
+//			}
+//		};
+//		preview[3] = new PreviewCallback() {
+//
+//			@Override
+//			public void onPreviewFrame(byte[] data, Camera camera1) {
+//				// TODO Auto-generated method stub
+//				MediaCodecManager.getInstance().onPreviewFrameUpload(data,3,camera[3]);
+//			}
+//		};
+        //初始化摄像头、开始预览
+        for (int i = 0; i < rules.length; i++) {
+            final int finalI = i;
+            preview[i]=new PreviewCallback() {
 
-			@Override
-			public void onPreviewFrame(byte[] data, Camera camera1) {
-				// TODO Auto-generated method stub
-				MediaCodecManager.getInstance().onPreviewFrameUpload(data,1,camera[1]);
-			}
-		};
-		preview[2] = new PreviewCallback() {
-			@Override
-			public void onPreviewFrame(byte[] data, Camera camera1) {
-				// TODO Auto-generated method stub
-				MediaCodecManager.getInstance().onPreviewFrameUpload(data,2,camera[2]);
-			}
-		};
-		preview[3] = new PreviewCallback() {
-
-			@Override
-			public void onPreviewFrame(byte[] data, Camera camera1) {
-				// TODO Auto-generated method stub
-				MediaCodecManager.getInstance().onPreviewFrameUpload(data,3,camera[3]);
-			}
-		};
+                @Override
+                public void onPreviewFrame(byte[] data, Camera camera1) {
+                    // TODO Auto-generated method stub
+                    MediaCodecManager.getInstance().onPreviewFrameUpload(data, finalI, camera[finalI]);
+                }
+            };
+        }
 		//初始化摄像头、开始预览
 		for (int i = 0; i < Constants.MAX_NUM_OF_CAMERAS; i++) {
 			if(isTwoCamera&&i>1) break;
 			initPreview(i);
 		}
 	}
-	
+
 	public void SetPreviewValid(int index)
 	{
-		avaliable[index]  = true;		
+		avaliable[index]  = true;
 	}
 	/**
 	 * 初始化预览
 	 * @param i
-	 */	
+	 */
 
 	public void initPreview(int i){
 
@@ -710,26 +742,28 @@ public class MainService extends Service {
 			}
 			@Override
 			public void onSurfaceTextureAvailable(SurfaceTexture arg0, int arg1,int arg2) {
-				stHolder[index] = arg0;	
-				openCamera(index, 1);
-									
+				stHolder[index] = arg0;
+				boolean isOpenOk= openCamera(index, 1);
+				if (!isOpenOk) {
+					((View)ttvs[index].getParent()).setVisibility(View.GONE);
+				}
 			}
 		};
-		ttvs[i].setSurfaceTextureListener(stListener[i]);	
+		ttvs[i].setSurfaceTextureListener(stListener[i]);
 	}
 	/**
 	 * 关闭释放摄像头
 	 * @param i
 	 */
 	public void colseCamera(int index){
-		try {		
-		
+		try {
+
 			if(camera[index]!=null){
 				camera[index].stopPreview();
 				camera[index].release();
 				camera[index] = null;
 			}
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -737,7 +771,7 @@ public class MainService extends Service {
 	}
 
 	public void stopRecoders_SD_ERR()
-	{		
+	{
 		if(isRecording){
 			btiv1.setImageResource(R.drawable.a02);
 			for (int i = 0; i < rules.length; i++) {
@@ -745,7 +779,7 @@ public class MainService extends Service {
 			}
 			isRecording = false;
 			sd_inject = true;
-		}	
+		}
 	}
 
 	public void startRecoders_SD_ERR()
@@ -757,8 +791,8 @@ public class MainService extends Service {
 			}
 			isRecording = true;
 			sd_inject = false;
-		}	
-	}	
+		}
+	}
 
 	/**
 	 * 打开摄像头并预览
@@ -766,10 +800,11 @@ public class MainService extends Service {
 	 * @param type 1 正常启动  2 重启
 	 */
 	//int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
-		
-	public void openCamera(int index,int type){
+
+	public boolean openCamera(int index,int type){
+		boolean isOpenCameraSuccess=false;
 		try {
-			boolean falg = true;			
+			boolean falg = true;
 			if(falg){
 				try {
 					AppLog.w(TAG, "摄像头数量:"+Camera.getNumberOfCameras());
@@ -789,7 +824,8 @@ public class MainService extends Service {
 					parameters.setPreviewSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);							
 					camera[index].setErrorCallback(new CameraErrorCallback(index));					
 					camera[index].setParameters(parameters);					
-					camera[index].startPreview();													
+					camera[index].startPreview();
+					isOpenCameraSuccess=true;
 				}
 			}
 		} catch (Exception e) {
@@ -797,6 +833,7 @@ public class MainService extends Service {
 			e.printStackTrace();
 			AppLog.d(TAG, ExceptionUtil.getInfo(e));
 		}
+		return isOpenCameraSuccess;
 	}
 	//防止出现一个摄像头坏的情况下影响别的摄像头不能正常工作
 	//2017-06-29
@@ -1049,6 +1086,14 @@ public class MainService extends Service {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			break;
+		case R.id.btn_dialog_cancel:
+			inc_alertaui.setVisibility(View.GONE);
+			break;
+		case R.id.bt_ly_7_bottom:
+			isClose = false;
+			setWindowMin();
+			ActivityUtils.startActivity(ChooseFunctionActivity.class);
 			break;
 		}
 	}
