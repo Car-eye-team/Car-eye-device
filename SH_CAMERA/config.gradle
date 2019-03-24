@@ -1,0 +1,95 @@
+ext {
+    android = [
+            compileSdkVersion: 27,
+            buildToolsVersion: "27.0.3",
+            minSdkVersion    : 18,
+            targetSdkVersion : 27,
+            versionCode      : 6,
+            versionName      : "1.0.5"
+    ]
+
+    dependVersion = [
+            androidSupportSdkVersion: "27.0.1",
+            espressoSdkVersion      : "3.0.2",
+            retrofitSdkVersion      : "2.4.0",
+            glideSdkVersion         : "4.6.1",
+            rxJava                  : "2.1.16",
+            rxAndroid               : "2.0.2",
+            rxKotlin                : "2.0.0",
+            anko                    : "0.10.5"
+    ]
+
+    supportDeps = [
+            "supportv4"        : "com.android.support:support-v4:${dependVersion.androidSupportSdkVersion}",
+            "appcompatv7"      : "com.android.support:appcompat-v7:${dependVersion.androidSupportSdkVersion}",
+            "cardview"         : "com.android.support:cardview-v7:${dependVersion.androidSupportSdkVersion}",
+            "design"           : "com.android.support:design:${dependVersion.androidSupportSdkVersion}",
+            "constraint-layout": "com.android.support.constraint:constraint-layout:1.1.2",
+            "annotations"      : "com.android.support:support-annotations:${dependVersion.androidSupportSdkVersion}"
+    ]
+
+    retrofit = [
+            "retrofit"                : "com.squareup.retrofit2:retrofit:${dependVersion.retrofitSdkVersion}",
+            "retrofitConverterGson"   : "com.squareup.retrofit2:converter-gson:${dependVersion.retrofitSdkVersion}",
+            "retrofitAdapterRxjava2"  : "com.squareup.retrofit2:adapter-rxjava2:${dependVersion.retrofitSdkVersion}",
+            "okhttp3LoggerInterceptor": 'com.squareup.okhttp3:logging-interceptor:3.10.0',
+            "retrofitConverterMoshi"  : 'com.squareup.retrofit2:converter-moshi:2.1.0',
+            "retrofitKotlinMoshi"     : "com.squareup.moshi:moshi-kotlin:1.5.0"
+    ]
+
+    rxJava = [
+            "rxJava"   : "io.reactivex.rxjava2:rxjava:${dependVersion.rxJava}",
+            "rxAndroid": "io.reactivex.rxjava2:rxandroid:${dependVersion.rxAndroid}",
+            "rxKotlin" : "io.reactivex.rxjava2:rxkotlin:${dependVersion.rxKotlin}",
+            "anko"     : "org.jetbrains.anko:anko:${dependVersion.anko}"
+    ]
+
+    testDeps = [
+            "junit"             : 'junit:junit:4.12',
+            "runner"            : 'com.android.support.test:runner:1.0.2',
+            "espresso-core"     : "com.android.support.test.espresso:espresso-core:${dependVersion.espressoSdkVersion}",
+            "espresso-contrib"  : "com.android.support.test.espresso:espresso-contrib:${dependVersion.espressoSdkVersion}",
+            "espresso-intents"  : "com.android.support.test.espresso:espresso-intents:${dependVersion.espressoSdkVersion}",
+            "leakcanary-debug"  : 'com.squareup.leakcanary:leakcanary-android:1.5.4',
+            "leakcanary-release": 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4',
+            "debug-db"          : 'com.amitshekhar.android:debug-db:1.0.4'
+    ]
+
+    commonDeps = [
+            "glide"                 : "com.github.bumptech.glide:glide:${dependVersion.glideSdkVersion}",
+            "brvh"                  : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35',
+            "agentweb"              : 'com.just.agentweb:agentweb:4.0.2',
+            "multidex"              : 'com.android.support:multidex:1.0.3',
+            "vertical-tablayout": 'q.rorbin:VerticalTabLayout:1.2.5',
+            "flow-layout"           : 'com.hyman:flowlayout-lib:1.1.2',
+            "eventbus"              : 'org.greenrobot:eventbus:3.1.1',
+            //"bugly"           : 'com.tencent.bugly:crashreport:2.6.6.1',
+            "bugly-crash-up"        : 'com.tencent.bugly:crashreport_upgrade:1.3.5',
+            "swipeback"             : 'me.imid.swipebacklayout.lib:library:1.1.0',
+            "material-dialogs"      : 'com.afollestad.material-dialogs:commons:0.9.4.4',
+            "logger"                : 'com.orhanobut:logger:2.1.1',
+            "litepal"               : 'org.litepal.android:core:2.0.0',
+            "fab"                   : 'com.github.clans:fab:1.6.4',
+            "materialdatetimepicker": 'com.wdullaer:materialdatetimepicker:3.6.3',
+            "blankj-utils"          : 'com.blankj:utilcode:1.19.1',
+            "FlycoTab"              : 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar',
+            "banner"                : 'com.youth.banner:banner:1.4.10',
+            "roundImg"              : 'com.makeramen:roundedimageview:2.3.0',
+            "smart-refresh"         : 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14',
+            "mattise"               : 'com.zhihu.android:matisse:0.5.2-beta3',
+            "luban"                 : 'top.zibin:Luban:1.1.8'
+    ]
+
+    otherDeps = [
+            "glideCompiler": "com.github.bumptech.glide:compiler:${dependVersion.glideSdkVersion}",
+            "glideOkhttp"  : "com.github.bumptech.glide:okhttp3-integration:${dependVersion.glideSdkVersion}"
+    ]
+
+    supportLibs = supportDeps.values()
+    networkLibs = retrofit.values()
+    rxJavaLibs = rxJava.values()
+    commonLibs = commonDeps.values()
+
+    annotationProcessorLibs = [otherDeps["glideCompiler"]]
+
+}
