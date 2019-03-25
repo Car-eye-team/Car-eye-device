@@ -397,4 +397,21 @@ public class StringUtil {
 			return true;
 		}
 	}
+	 /*
+	  *  字节数组转16进制字符串
+     */
+	public static String bytes2HexString(byte[] array) {
+		StringBuilder builder = new StringBuilder();
+
+		for (byte b : array) {
+			String hex = Integer.toHexString(b & 0xFF);
+			if (hex.length() == 1) {
+				hex = '0' + hex;
+			}
+			builder.append(hex);
+		}
+
+		return builder.toString().toUpperCase();
+
+	}
 }

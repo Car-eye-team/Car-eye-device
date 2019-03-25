@@ -8,12 +8,15 @@ package com.sh.camera.socket;
 
 import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.bll.ParamsBiz;
+import com.sh.camera.service.MainService;
 import com.sh.camera.service.ShCommService;
 import com.sh.camera.socket.coder.CommDecoder;
+import com.sh.camera.socket.coder.CommEncoder;
 import com.sh.camera.socket.db.DataMsgDao;
 import com.sh.camera.socket.model.DSCommData;
 import com.sh.camera.socket.model.PlatformResponse;
 import com.sh.camera.socket.model.TerminalRegist;
+import com.sh.camera.socket.model.VideoInfo;
 import com.sh.camera.socket.utils.CommConstants;
 import com.sh.camera.socket.utils.ParseUtil;
 import com.sh.camera.socket.utils.SPutil;
@@ -26,7 +29,6 @@ import com.sh.camera.util.Tools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.File;
@@ -211,7 +213,7 @@ public class BusinessProcess {
 					//Log.d("vedio", "protocolType" + protocolType + "  ip" + ip + "  port:" + port + "  protocol" + ServerManager.getInstance().getprotocol());
 				}
 				if(type == 0){
-					CameraUtil.startVideoUpload((id-1));
+					CameraUtil.startVideoUpload((id-1),0);
 				}else{
 					CameraUtil.stopVideoUpload((id-1));
 				}
@@ -316,15 +318,6 @@ public class BusinessProcess {
 			}
 			break;
 
-		case 0x9003:   //查询终端音视频属性
-			try {
-
-			} catch (Exception e) {
-				AppLog.e(ExceptionUtil.getInfo(e), e);
-				e.printStackTrace();
-			}
-			break;
-
 		case 0x9101:   //实时音视频传输请求
 			try {
 				//业务处理
@@ -365,8 +358,28 @@ public class BusinessProcess {
 				//ParamsBiz.setUpdatePort(String.valueOf(tcpPort));
 				//Log.d("vedio", "protocolType" + logicChannel + "  ip" + ip + "  port:" + tcpPort + "  protocol" + ServerManager.getInstance().getprotocol());
 				//开始传输
-				CameraUtil.startVideoUpload((logicChannel-1));
+				String datatype0 = "音视频";
+				String datatype1 = "视频";
+				String datatype2 = "双向对讲";
+				String datatype3 = "监听";
+				String datatype4 = "中心广播";
+				String datatype5 = "透传";
+				Log.d(TAG, "0"+ datatype0 );
+				Log.d(TAG, "1"+ datatype1 );
+				Log.d(TAG, "2"+ datatype2 );
+				Log.d(TAG, "3"+ datatype3 );
+				Log.d(TAG, "4"+ datatype4 );
+				Log.d(TAG, "5"+ datatype5 );
+                AppLog.i(TAG,"传输类型："+type + "logicChannel：" + logicChannel);
+				if(type == 0 || type == 1) {
+                    CameraUtil.startVideoUpload((logicChannel - 1),0);
+				}else if(type == 2){
 
+//					CameraUtil.startVideoUpload((logicChannel - 1), 1);
+					MainService.getInstance().startTalkBack();
+				}else if(type == 3){
+
+				}
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
@@ -395,7 +408,10 @@ public class BusinessProcess {
 				}else if(command ==3){
 					//开始传输
 					Log.d("vedio", "start stream");
-							CameraUtil.startVideoUpload((logicChannel-1));
+							CameraUtil.startVideoUpload((logicChannel-1), 0);
+				}else if(command == 4)
+				{
+					MainService.getInstance().stopTalkBack();
 				}
 
 			} catch (Exception e) {
@@ -658,8 +674,20 @@ public class BusinessProcess {
 				e.printStackTrace();
 			}
 			break;
-
-		case 0x9302:   //云台调整焦距
+			case 0x9003: //获取音频属性
+				VideoInfo info=new VideoInfo();
+				info.setAudioCodec(Constants.CAREYE_ACODE_AAC_1078);
+				info.setChannels(1);
+				info.setSamplerate(Constants.CAREYE_AUDIO_SAMPLE_RATE_1078);
+				info.setSampleBits(Constants.CAREYE_AUDIO_SAMPLE_BITS_1078);
+				info.setEnableflag(1);
+				info.setVediocodec(Constants.CAREYE_VCODE_H264_1078);
+				info.setAudiovhannels(1);
+				info.setVediovhannnels(4);
+				byte[] cameradata = CommEncoder.getAudiovideoAttributeUpload(info);
+				CommCenterUsers.witeMsg(cameradata,1);
+				break;
+			case 0x9302:   //云台调整焦距
 			try {
 				int num = 0;
 				//逻辑通道号

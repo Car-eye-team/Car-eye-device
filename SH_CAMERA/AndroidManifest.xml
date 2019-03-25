@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sh.camera"
     android:versionCode="2"
     android:versionName="2.4.0" >
@@ -72,7 +73,14 @@
             <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>   
+        </receiver>
+
+        <receiver android:name="com.sh.camera.receiver.TalkBackReceiver" >
+            <intent-filter android:priority="100" >
+                <action android:name="android.intent.action.TALKBACK" />
+            </intent-filter>
+        </receiver>
+
         <receiver android:name="com.sh.camera.receiver.SdCardBroadCastReceiver" >
             <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />

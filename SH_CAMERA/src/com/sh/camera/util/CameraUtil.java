@@ -56,56 +56,16 @@ public class CameraUtil {
 	/**摄像头操作方式 1 内部操作  2 外部操作*/
 	public static int CAMERA_OPER_MODE = 1;
 
-	/**
-	 * 开始视频上传
-	 * @param i 通道
-	 */
-	private static boolean Lock = false;
 
 
-	public static void startVideoUpload2(final String ipstr, final String portstr, final String serialno,  int CameraId){
-
-		final int i = CameraId -1;
-		AsyncTask.execute(new Runnable() {
-			@Override
-			public void run() {
-				if(!Lock) {
-					Lock = true;
-
-					//预览之前判断是否回放，如果回放先结束回放
-					if (CameraUtil.VIDEO_FILE_UPLOAD) {
-						stopVideoFileStream();
-						try {
-							Thread.sleep(100);
-						} catch (Exception localException) {
-						}
-					}
-
-					//预览之前先停止上传
-					if (VIDEO_UPLOAD[i]) {
-						stopVideoUpload(i);
-						try {
-							Thread.sleep(100);
-						} catch (Exception localException) {
-						}
-					}
-					//初始化推流工具
-					VIDEO_UPLOAD[i] = true;
-					MainService.getInstance().startVideoUpload2(ipstr, portstr, serialno, i);
-					Lock = false;
-
-				}
-			}
-		});                      
-
-
-	}
 
 	/**
 	 * 开始视频上传
 	 * @param i 通道
 	 */
-	public static void startVideoUpload(int i){
+
+	/*  type 0 : vedio   1: talk  */
+	public static void startVideoUpload(int i, int type){
 
 		//预览之前判断是否回放，如果回放先结束回放
 		if(CameraUtil.VIDEO_FILE_UPLOAD){
@@ -118,7 +78,7 @@ public class CameraUtil {
 		}
 		//初始化推流工具
 		VIDEO_UPLOAD[i] = true;
-		MainService.getInstance().startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i);
+		MainService.getInstance().startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i, type);
 	}
 
 	/**

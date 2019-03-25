@@ -57,7 +57,8 @@ public class Constants {
 	public static final String PT_SERVER_IP = "39.108.246.45";
 	
 	/**设备号*/
-	public static final String STREAM_NAME = "13510671870";
+//	public static final String STREAM_NAME = "13510671870";
+	public static final String STREAM_NAME = "15720804002";
 
 	
 	/**PT服务端ip*/
@@ -88,6 +89,11 @@ public class Constants {
 	public static int CAREYE_ACODE_G711U_1078 = 6;
 	public static int CAREYE_ACODE_G711A_1078 = 7;
 	public static int CAREYE_ACODE_G726_1078 = 9;
+
+	/* audio paranter  */
+	public static int CAREYE_AUDIO_SAMPLE_RATE_1078= 0; //8KHZ
+	public static int CAREYE_AUDIO_SAMPLE_BITS_1078= 1; //(16BITS)
+
 
 
 	/* rtsp/rtmp   */
@@ -137,7 +143,7 @@ public class Constants {
 
 
 	//RTP pusher key
-	public static final String rtpKey = "t306kS2s(6jsiSjQLQ2Q1RHQLQL7J8KQ3ukQkQ2SkSgSH{$skS%{$SkS2SHSjs(S278";
+	public static final String rtpKey = "X306kS2s(6jsiSjQLQ2Q1RHQLQL7J8KQ3ukQJQ2SkSgSH{$skS%{$SkS2SHSjs(S275";
 
 	/**
 	 * 设置参数	 */
@@ -149,7 +155,7 @@ public class Constants {
 			CAMERA_FILE_DIR = "/CarDVR/";			
 			FRAMERATE = 20;
 			CAMERA_ID[0] = 0;
-			CAMERA_ID[1] = 3;
+			CAMERA_ID[1] = 1;
 			CAMERA_ID[2] = 6;
 			CAMERA_ID[3] = 7;
 	}
