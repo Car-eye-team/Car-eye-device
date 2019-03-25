@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply from: 'tinker-support.gradle'
 
 android {
     compileSdkVersion 28
@@ -9,6 +10,10 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         multiDexEnabled true
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi'
+        }
     }
 
     dexOptions {
@@ -26,13 +31,35 @@ android {
     lintOptions {
         abortOnError false
     }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles 'proguard.cfg'
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+    signingConfigs {
+        debug { //密匙内容，请换成自己的
+            storeFile file("F:/eclipseDev/CIB_EMobile.keystore")
+            storePassword "netbank"
+            keyAlias "emobilekey"
+            keyPassword "netbank"
+        }
+        release {
+        }
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: '*.jar')
-//    implementation 'org.codehaus.groovy:groovy-all:2.4.12'
+    implementation fileTree(include: '*.jar', dir: 'libs')
+    //    implementation 'org.codehaus.groovy:groovy-all:2.4.12'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    implementation 'com.tencent.tinker:tinker-android-lib:1.9.6'
     implementation rootProject.ext.supportLibs
     implementation rootProject.ext.rxJavaLibs
     implementation 'com.github.bumptech.glide:glide:4.7.1'

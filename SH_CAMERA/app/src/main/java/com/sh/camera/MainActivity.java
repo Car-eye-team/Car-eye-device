@@ -22,9 +22,8 @@ import com.blankj.utilcode.util.PermissionUtils;
 import com.sh.camera.service.MainService;
 import com.sh.camera.util.AppLog;
 import com.sh.camera.util.Constants;
-import com.tencent.bugly.Bugly;
-import com.tencent.bugly.beta.Beta;
 import com.sh.camera.service.ShCommService;
+import com.sh.camera.util.floatPermission.FloatPermissionUtil;
 
 
 public class MainActivity extends Activity {
@@ -44,8 +43,6 @@ public class MainActivity extends Activity {
 		Constants.setParam(this);
 		int version = android.os.Build.VERSION.SDK_INT;
 		Log.d("CMD", "version : " + version);
-		Bugly.init(getApplicationContext(), "9c4b0e3ce3", false);
-		Beta.checkUpgrade(false,false);
 		setContentView(R.layout.activity_splash);
 		/*listener=new FloatWindowManager.MyListener() {
 			@Override
@@ -92,6 +89,11 @@ public class MainActivity extends Activity {
 	public void applypermission(){
 		boolean needapplypermission=false;
 		if(Build.VERSION.SDK_INT>=23){
+			//先去获取悬浮窗权限
+			if (!FloatPermissionUtil.checkPermission(this)){
+				FloatPermissionUtil.applyPermission(this);
+				return;
+			}
 			for(int i=0; i < PERMISSIONS_STORAGE.length ; i++){
 				int chechpermission= ContextCompat.checkSelfPermission(getApplicationContext(),
 						PERMISSIONS_STORAGE[i]);
@@ -99,17 +101,6 @@ public class MainActivity extends Activity {
 					needapplypermission=true;
 				}
 			}
-			PermissionUtils.requestDrawOverlays(new PermissionUtils.SimpleCallback() {
-				@Override
-				public void onGranted() {
-					AppLog.i("悬浮窗权限获取成功");
-				}
-
-				@Override
-				public void onDenied() {
-					finish();
-				}
-			});
 			if(needapplypermission){
 				ActivityCompat.requestPermissions(MainActivity.this,PERMISSIONS_STORAGE,1);
 			}else{
@@ -129,7 +120,7 @@ public class MainActivity extends Activity {
 				gotoService();
 			}
 			else {
-				Toast.makeText(MainActivity.this,permissions[i]+"拒绝授权,请再设置中开启权限", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(MainActivity.this,permissions[i]+"拒绝授权,请再设置中开启权限", Toast.LENGTH_SHORT).show();
 				finish();
 				break;
 			}
@@ -141,6 +132,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		getPermission();
 		/*Boolean checkPer=	FloatWindowManager.getInstance().CheckPer(MainActivity.this);
 		if (checkPer)
 		{

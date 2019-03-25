@@ -198,23 +198,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/a06" />
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/bt_ly_7_bottom"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/bt_click"
-                android:gravity="center"
-                android:onClick="click"
-                android:paddingLeft="5dp"
-                android:paddingRight="10dp" >
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:src="@drawable/bs1down" />
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
    

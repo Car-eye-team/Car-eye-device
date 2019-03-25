@@ -466,7 +466,11 @@ public class MainService extends Service {
 	private void CreateView() {
 		mWindowManager = (WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
 		wmParams = new WindowManager.LayoutParams();
-		wmParams.type = LayoutParams.TYPE_PHONE;
+		if (Build.VERSION.SDK_INT>=26){
+			wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
+		}else {
+			wmParams.type = LayoutParams.TYPE_SYSTEM_ALERT;
+		}
 
 		wmParams.format = PixelFormat.RGBA_8888;
 		wmParams.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
@@ -1089,11 +1093,6 @@ public class MainService extends Service {
 			break;
 		case R.id.btn_dialog_cancel:
 			inc_alertaui.setVisibility(View.GONE);
-			break;
-		case R.id.bt_ly_7_bottom:
-			isClose = false;
-			setWindowMin();
-			ActivityUtils.startActivity(ChooseFunctionActivity.class);
 			break;
 		}
 	}
