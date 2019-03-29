@@ -257,7 +257,7 @@ public class VersionBiz {
 				sb.append("更新内容:" + "\n\n");
 				sb.append(desc);
 			}
-			Dialog dialog = new AlertDialog.Builder(context)
+			Dialog dialog = new AlertDialog.Builder(context,R.style.MyDialogStyle)
 			.setTitle("软件更新")
 			.setMessage(sb.toString())
 			// 设置内容
@@ -374,7 +374,7 @@ public class VersionBiz {
 			e.printStackTrace();
 		}
 
-		Dialog dialog = new AlertDialog.Builder(context)
+		Dialog dialog = new AlertDialog.Builder(context,R.style.MyDialogStyle)
 		.setTitle("软件更新").setMessage(sb.toString())
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			@Override

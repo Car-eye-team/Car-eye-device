@@ -341,7 +341,7 @@ public class OldVersionBiz {
 
 	private void showAlertApkPresssbar(final String vTitle, final String vTextZy ,final String newConten ,  final Context context) {
 		//方案二  自定义  start
-		final AlertDialog dlg = new AlertDialog.Builder(context).create();
+		final AlertDialog dlg = new AlertDialog.Builder(context,R.style.MyDialogStyle).create();
 		dlg.show();
 		dlg.setCancelable(false);
 		Window window = dlg.getWindow();
@@ -419,7 +419,7 @@ public class OldVersionBiz {
 	AlertDialog dlg;
 	private void showAlertApkPresssbarLoad(final String vTitle, final String vTextZy ,final String newConten ,  final Context context) {
 		//方案二  自定义  start
-		dlg = new AlertDialog.Builder(context).create();
+		dlg = new AlertDialog.Builder(context,R.style.MyDialogStyle).create();
 		dlg.show();
 		dlg.setCancelable(false);
 		Window window = dlg.getWindow();

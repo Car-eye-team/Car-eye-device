@@ -197,7 +197,7 @@ public class FaceManageActivity extends AppCompatActivity {
         if (faceNum == 0){
             Toast.makeText(this, R.string.no_face_need_to_delete, Toast.LENGTH_SHORT).show();
         }else {
-            AlertDialog dialog = new AlertDialog.Builder(this)
+            AlertDialog dialog = new AlertDialog.Builder(this,R.style.MyDialogStyle)
                     .setTitle(R.string.notification)
                     .setMessage(getString(R.string.confirm_delete,faceNum)  )
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

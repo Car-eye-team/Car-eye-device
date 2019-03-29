@@ -84,10 +84,10 @@
             android:name="com.sh.camera.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name="com.sh.camera.FileActivity" >
         </activity>
@@ -135,10 +135,10 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".faceRecognition.activity.ChooseFunctionActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
@@ -156,6 +156,17 @@
 
         <activity
             android:name=".faceRecognition.activity.FaceManageActivity"
+            android:launchMode="singleTask" />
+
+        <!--1.2版本的人脸识别 开始-->
+        <activity android:name=".faceRecognition12.FaceRecognition12Activity"
+            android:theme="@null"
+            android:launchMode="singleTask" />
+        <activity android:name=".faceRecognition12.RegisterActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".faceRecognition12.PermissionAcitivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".faceRecognition12.DetecterActivity"
             android:launchMode="singleTask" />
         <!--人脸识别 结束-->
 

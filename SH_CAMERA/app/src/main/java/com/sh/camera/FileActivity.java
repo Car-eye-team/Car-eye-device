@@ -187,7 +187,7 @@ public class FileActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				String[] items = {"全部","摄像头一","摄像头二","摄像头三","摄像头四"};
-				AlertDialog.Builder buil = new AlertDialog.Builder(FileActivity.this);
+				AlertDialog.Builder buil = new AlertDialog.Builder(FileActivity.this,R.style.MyDialogStyle);
 				buil.setTitle("选择文件来源");
 				buil.setItems(items, new DialogInterface.OnClickListener() {
 					@Override
@@ -209,7 +209,7 @@ public class FileActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				String[] items = {"全部","照片","录像"};
-				AlertDialog.Builder buil = new AlertDialog.Builder(FileActivity.this);
+				AlertDialog.Builder buil = new AlertDialog.Builder(FileActivity.this,R.style.MyDialogStyle);
 				buil.setTitle("选择文件类型");
 				buil.setItems(items, new DialogInterface.OnClickListener() {
 					@Override

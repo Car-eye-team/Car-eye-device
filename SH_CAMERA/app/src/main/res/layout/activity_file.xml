@@ -6,39 +6,36 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="8">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <ListView
             android:id="@+id/huifang_listView1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:listSelector="#144C67"
-            android:scrollbars="none"></ListView>
+            android:scrollbars="none"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:layout_weight="0.8"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
-            android:layout_weight="0.4"
-            android:gravity="center_vertical">
+            android:layout_height="25dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
 
             <LinearLayout
                 android:id="@+id/huifang_lybt1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:background="@drawable/bt_click2"
+                android:layout_height="wrap_content"
+                android:paddingRight="3dp"
                 android:gravity="center">
 
                 <ImageView
@@ -53,7 +50,7 @@
                     android:layout_marginLeft="2dp"
                     android:text="全选"
                     android:textColor="#999999"
-                    android:textSize="24px" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -61,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/bt_click2"
+                android:paddingRight="3dp"
                 android:gravity="center">
 
                 <ImageView
@@ -75,7 +72,7 @@
                     android:layout_marginLeft="2dp"
                     android:text="删除"
                     android:textColor="#999999"
-                    android:textSize="24px" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -83,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/bt_click2"
+                android:paddingRight="3dp"
                 android:gravity="center">
 
                 <ImageView
@@ -97,66 +94,76 @@
                     android:layout_marginLeft="2dp"
                     android:text="返回"
                     android:textColor="#999999"
-                    android:textSize="26px" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.1"
+            android:layout_height="25dp"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/bt_click"
                 android:gravity="center"
                 android:text="时间"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#338fcc" />
+                android:textSize="16sp"
+                android:textColor="#338fcc"
+                android:padding="3dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
-                android:background="#262626"
                 android:gravity="center"
                 android:text="来源"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#cccccc" />
+                android:textSize="16sp"
+                android:textColor="#cccccc"
+                android:paddingLeft="3dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"/>
 
             <TextView
                 android:id="@+id/huifang_tv_1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/bt_click"
                 android:gravity="center"
                 android:text="全部"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#338fcc" />
+                android:textSize="16sp"
+                android:textColor="#338fcc"
+                android:paddingRight="3dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
-                android:background="#262626"
                 android:gravity="center"
                 android:text="类型"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#cccccc" />
+                android:textSize="16sp"
+                android:textColor="#cccccc"
+                android:paddingLeft="3dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"/>
 
             <TextView
                 android:id="@+id/huifang_tv_2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/bt_click"
                 android:gravity="center"
                 android:text="全部"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#338fcc" />
+                android:textSize="16sp"
+                android:textColor="#338fcc"
+                android:paddingRight="3dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"/>
         </LinearLayout>
     </LinearLayout>
 

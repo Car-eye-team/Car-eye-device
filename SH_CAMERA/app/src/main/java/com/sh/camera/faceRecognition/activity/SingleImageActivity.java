@@ -152,7 +152,7 @@ public class SingleImageActivity extends AppCompatActivity {
         tvNotice = findViewById(R.id.tv_notice);
         ivShow = findViewById(R.id.iv_show);
         ivShow.setImageResource(R.drawable.faces);
-        progressDialog = new AlertDialog.Builder(this)
+        progressDialog = new AlertDialog.Builder(this,R.style.MyDialogStyle)
                 .setTitle(R.string.processing)
                 .setView(new ProgressBar(this))
                 .create();

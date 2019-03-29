@@ -38,7 +38,7 @@ public class HuaweiUtils {
         try {
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//   ComponentName comp = new ComponentName("com.huawei.systemmanager","com.huawei.permissionmanager.ui.MainActivity");//华为权限管理
+//   ComponentName comp = new ComponentName("com.huawei.systemmanager","com.huawei.permissionmanager.ui.FaceRecognition12Activity");//华为权限管理
 //   ComponentName comp = new ComponentName("com.huawei.systemmanager",
 //      "com.huawei.permissionmanager.ui.SingleAppActivity");//华为权限管理，跳转到指定app的权限管理位置需要华为接口权限，未解决
             ComponentName comp = new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.addviewmonitor.AddViewMonitorActivity");//悬浮窗管理页面
@@ -55,9 +55,9 @@ public class HuaweiUtils {
         } catch (SecurityException e) {
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//   ComponentName comp = new ComponentName("com.huawei.systemmanager","com.huawei.permissionmanager.ui.MainActivity");//华为权限管理
+//   ComponentName comp = new ComponentName("com.huawei.systemmanager","com.huawei.permissionmanager.ui.FaceRecognition12Activity");//华为权限管理
             ComponentName comp = new ComponentName("com.huawei.systemmanager",
-                    "com.huawei.permissionmanager.ui.MainActivity");//华为权限管理，跳转到本app的权限管理页面,这个需要华为接口权限，未解决
+                    "com.huawei.permissionmanager.ui.FaceRecognition12Activity");//华为权限管理，跳转到本app的权限管理页面,这个需要华为接口权限，未解决
 //      ComponentName comp = new ComponentName("com.huawei.systemmanager","com.huawei.systemmanager.addviewmonitor.AddViewMonitorActivity");//悬浮窗管理页面
             intent.setComponent(comp);
             context.startActivity(intent);
@@ -66,7 +66,7 @@ public class HuaweiUtils {
             /**
              * 手机管家版本较低 HUAWEI SC-UL10
              */
-//   Toast.makeText(MainActivity.this, "act找不到", Toast.LENGTH_LONG).show();
+//   Toast.makeText(FaceRecognition12Activity.this, "act找不到", Toast.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             ComponentName comp = new ComponentName("com.Android.settings", "com.android.settings.permission.TabItem");//权限管理页面 android4.4

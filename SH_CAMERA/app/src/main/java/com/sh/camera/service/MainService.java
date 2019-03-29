@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import org.push.push.Pusher;
+
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -24,6 +26,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore.Video;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -42,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.ThreadUtils;
 import com.dss.car.launcher.provider.biz.ProviderBiz;
 import com.sh.camera.FileActivity;
 import com.sh.camera.R;
@@ -52,12 +56,22 @@ import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.TalkBackActivity;
 import com.sh.camera.codec.MediaCodecManager;
 import com.sh.camera.faceRecognition.activity.ChooseFunctionActivity;
+import com.sh.camera.faceRecognition12.FaceRecognition12Activity;
+import com.sh.camera.faceRecognition12.RegisterActivity;
+import com.sh.camera.listener.OnCallbackListener;
 import com.sh.camera.util.AppLog;
 import com.sh.camera.util.CameraFileUtil;
 import com.sh.camera.util.CameraUtil;
 import com.sh.camera.util.Constants;
 import com.sh.camera.util.ExceptionUtil;
 import com.sh.camera.version.VersionBiz;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 public class MainService extends Service {
 
@@ -148,13 +162,12 @@ public class MainService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		isTabletDevice = isTabletDevice(this);
-
 		instance = this;
 		c = MainService.this;
 		application = getApplicationContext();
 		disk = new DiskManager(this);
 		mPusher = new Pusher();
-		Constants.MAX_NUM_OF_CAMERAS=Camera.getNumberOfCameras();
+//		Constants.MAX_NUM_OF_CAMERAS=Camera.getNumberOfCameras();
 		StreamIndex = new long[Constants.MAX_NUM_OF_CAMERAS];
 		camera = new Camera[Constants.MAX_NUM_OF_CAMERAS];
 		mrs = new MediaRecorder[Constants.MAX_NUM_OF_CAMERAS];
@@ -228,7 +241,7 @@ public class MainService extends Service {
 					} catch (Exception e) {
 					}
 					usbcameraConnect = true;
-					openCamera(0, 2);
+					openCamera(0, 2,null);
 				}
 				else if(action.equals(Constants.ACTION_VIDEO_PLAYBACK))
 				{
@@ -412,7 +425,7 @@ public class MainService extends Service {
 	/**
 	 * 重连相机
 	 */
-	private void reconnectCameras() {
+	public void reconnectCameras() {
 		try {
 			for (int j=0; j<camera.length;j++){
 				if (camera[j]!=null){
@@ -509,29 +522,33 @@ public class MainService extends Service {
 		if(isSC){
 			stopSC();
 		}
-		for (int i = 0; i < rules.length; i++) {
-			sc_controls[rules[i]] = false;
-			try {
-				Thread.sleep(200);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				stopMrs(rules[i]);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				closeCamera(rules[i]);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+        closeAllCamer();
 
-		}
+    }
 
-	}
+    public void closeAllCamer() {
+        for (int i = 0; i < rules.length; i++) {
+            sc_controls[rules[i]] = false;
+            try {
+                Thread.sleep(200);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                stopMrs(rules[i]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                closeCamera(rules[i]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-	public void removeView() {
+        }
+    }
+
+    public void removeView() {
 		try {
 			mWindowManager.removeView(view);
 			view = null;
@@ -641,6 +658,7 @@ public class MainService extends Service {
 			isTwoCamera = false;
 		}
 		String rulestr = ServerManager.getInstance().getRule();
+//		rulestr="0";
 		rules = new int[rulestr.length()];
 		for (int i = 0; i < rulestr.length(); i++) {
 			rules[i] = Integer.parseInt(rulestr.substring(i, i+1));
@@ -741,37 +759,24 @@ public class MainService extends Service {
 			}
 			@Override
 			public boolean onSurfaceTextureDestroyed(SurfaceTexture arg0) {
-				colseCamera(index);
+				closeCamera(index);
 				return true;
 			}
-			@Override
+			@SuppressLint("CheckResult")
+            @Override
 			public void onSurfaceTextureAvailable(SurfaceTexture arg0, int arg1,int arg2) {
 				stHolder[index] = arg0;
-				boolean isOpenOk= openCamera(index, 1);
-				if (!isOpenOk) {
-					((View)ttvs[index].getParent()).setVisibility(View.GONE);
-				}
+				openCamera(index, 1, new OnCallbackListener<Boolean>() {
+                    @Override
+                    public void onCallback(Boolean aBoolean) {
+                        if (!aBoolean){//打开相机失败
+                            ((View)ttvs[index].getParent()).setVisibility(View.GONE);
+                        }
+                    }
+                });
 			}
 		};
 		ttvs[i].setSurfaceTextureListener(stListener[i]);
-	}
-	/**
-	 * 关闭释放摄像头
-	 * @param i
-	 */
-	public void colseCamera(int index){
-		try {
-
-			if(camera[index]!=null){
-				camera[index].stopPreview();
-				camera[index].release();
-				camera[index] = null;
-			}
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
 	}
 
 	public void stopRecoders_SD_ERR()
@@ -805,39 +810,52 @@ public class MainService extends Service {
 	 */
 	//int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
-	public boolean openCamera(int index,int type){
-		boolean isOpenCameraSuccess=false;
-		try {
-			boolean falg = true;
-			if(falg){
-				try {
-					AppLog.w(TAG, "摄像头数量:"+Camera.getNumberOfCameras());
-					camera[index] = Camera.open(cid[index]);
-				} catch (Exception e) {
-					e.printStackTrace();
-					camera[index] = null;
-				}	
-				avaliable[index] = false;
-				if (camera[index] != null) {
-					try {
-						camera[index].setPreviewTexture(stHolder[index]);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					Camera.Parameters parameters = camera[index].getParameters();
-					parameters.setPreviewSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);							
-					camera[index].setErrorCallback(new CameraErrorCallback(index));					
-					camera[index].setParameters(parameters);					
-					camera[index].startPreview();
-					isOpenCameraSuccess=true;
-				}
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			AppLog.d(TAG, ExceptionUtil.getInfo(e));
-		}
-		return isOpenCameraSuccess;
+	public void openCamera(final int index, int type, @Nullable final OnCallbackListener<Boolean> listener){
+        new ThreadUtils.SimpleTask<Camera>() {
+            @Nullable
+            @Override
+            public Camera doInBackground() throws Throwable {
+                Camera camera=null;
+                try {
+                    AppLog.w(TAG, "摄像头数量:"+Camera.getNumberOfCameras());
+                    camera= Camera.open(cid[index]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    camera = null;
+                }
+                return camera;
+            }
+
+            @Override
+            public void onSuccess(@Nullable Camera result) {
+                try {
+					camera[index]=result;
+                    boolean falg = true;
+                    if(falg){
+                        avaliable[index] = false;
+                        if (camera[index] != null) {
+                            try {
+                                camera[index].setPreviewTexture(stHolder[index]);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            Camera.Parameters parameters = camera[index].getParameters();
+                            parameters.setPreviewSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);
+                            camera[index].setErrorCallback(new CameraErrorCallback(index));
+                            camera[index].setParameters(parameters);
+                            camera[index].startPreview();
+                            if (result!=null&&listener != null) {
+                                listener.onCallback(true);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                    AppLog.d(TAG, ExceptionUtil.getInfo(e));
+                }
+            }
+        }.run();
 	}
 	//防止出现一个摄像头坏的情况下影响别的摄像头不能正常工作
 	//2017-06-29
@@ -1048,7 +1066,7 @@ public class MainService extends Service {
 			clickLock = false;
 			break;
 		case R.id.bt_ly_4://回放
-		case R.id.bt_ly_4_bottom://鍥炴斁
+		case R.id.bt_ly_4_bottom://文件
 
 			isClose = false;
 			setWindowMin();
@@ -1093,6 +1111,12 @@ public class MainService extends Service {
 			break;
 		case R.id.btn_dialog_cancel:
 			inc_alertaui.setVisibility(View.GONE);
+			break;
+		case R.id.bt_ly_7_bottom:
+			isClose = false;
+			setWindowMin();
+			closeAllCamer();
+			ActivityUtils.startActivity(FaceRecognition12Activity.class);
 			break;
 		}
 	}
@@ -1389,7 +1413,7 @@ public class MainService extends Service {
 				//遍历受控数组，停止录像
 				for (int i = 0; i < rules.length; i++) {
 					stoprecorder(rules[i],i);
-					openCamera(i,1);
+					openCamera(i,1,null);
 				}
 				isRecording = false;
 			}

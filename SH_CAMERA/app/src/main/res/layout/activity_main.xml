@@ -91,7 +91,7 @@
         <LinearLayout
             android:id="@+id/main_bottom_btly"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:orientation="horizontal"
             android:visibility="gone" >
 
@@ -197,6 +197,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/a06" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/bt_ly_7_bottom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bt_click"
+                android:gravity="center"
+                android:onClick="click"
+                android:paddingLeft="5dp"
+                android:paddingRight="10dp" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_face_recognition" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

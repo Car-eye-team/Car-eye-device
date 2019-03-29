@@ -153,7 +153,7 @@ public class SelectTimeActivity extends Activity implements OnClickListener{
 
 		wheelMain.initDateTimePicker(year, month, day, h, m);
 		wheelMain.setTextSize(26, 30);
-		new AlertDialog.Builder(this)
+		new AlertDialog.Builder(this,R.style.MyDialogStyle)
 		.setTitle(title)
 		.setView(timepickerview)
 		.setPositiveButton("取消", new DialogInterface.OnClickListener() {

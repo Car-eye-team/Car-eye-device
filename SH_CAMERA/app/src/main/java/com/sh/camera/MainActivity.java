@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
-		Log.d("-------------------", "MainActivity onCreate" );
+		Log.d("-------------------", "FaceRecognition12Activity onCreate" );
 		Constants.setParam(this);
 		int version = android.os.Build.VERSION.SDK_INT;
 		Log.d("CMD", "version : " + version);
@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 		mainactivity = this;
 		getPermission();
 		//启动通讯service\
-		//FloatWindowManager.getInstance().applyOrShowFloatWindow(MainActivity.this);
+		//FloatWindowManager.getInstance().applyOrShowFloatWindow(FaceRecognition12Activity.this);
 
 	}
 
@@ -76,7 +76,7 @@ public class MainActivity extends Activity {
 	public void gotoService(){
 		if(!MainService.isrun){
 			startService(new Intent(MainActivity.this, MainService.class));
-			Log.d("MainActivity" , "You got error here 0?");
+			Log.d("FaceRecognition12Activity" , "You got error here 0?");
 		}else{
 			Intent intent = new Intent(MainService.ACTION);
 			intent.putExtra("type", MainService.FULLSCREEN);
@@ -116,11 +116,11 @@ public class MainActivity extends Activity {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		for(int i=0;i<grantResults.length;i++){
 			if(grantResults[i]== PackageManager.PERMISSION_GRANTED){
-				//Toast.makeText(MainActivity.this, permissions[i]+"已授权",Toast.LENGTH_SHORT).show();
+				//Toast.makeText(FaceRecognition12Activity.this, permissions[i]+"已授权",Toast.LENGTH_SHORT).show();
 				gotoService();
 			}
 			else {
-//				Toast.makeText(MainActivity.this,permissions[i]+"拒绝授权,请再设置中开启权限", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(FaceRecognition12Activity.this,permissions[i]+"拒绝授权,请再设置中开启权限", Toast.LENGTH_SHORT).show();
 				finish();
 				break;
 			}
@@ -133,7 +133,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		getPermission();
-		/*Boolean checkPer=	FloatWindowManager.getInstance().CheckPer(MainActivity.this);
+		/*Boolean checkPer=	FloatWindowManager.getInstance().CheckPer(FaceRecognition12Activity.this);
 		if (checkPer)
 		{
 			getPermission();

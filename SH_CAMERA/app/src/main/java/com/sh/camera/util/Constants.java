@@ -162,7 +162,11 @@ public class Constants {
 	public static final String CAMERA_PATH ="Careye_pusher/";
 	public static boolean checkVersion = true;
 
-	//人脸识别的appId和appKey
-	public static final String APP_ID_FACE = "3rWH4Jgae4iunSweK3cWdm4JfuQ8UHMsoDGRznxanHW2";
-	public static final String SDK_KEY_FACE = "CyuKUsxFHLodXdoVxk6Ly9XcWbypjU5RWEHhetJJ8sZB";
+	//人脸识别2.0版本的appId和appKey
+	public static final String APP_ID_FACE_2 = "3rWH4Jgae4iunSweK3cWdm4JfuQ8UHMsoDGRznxanHW2";
+	public static final String SDK_KEY_FACE_2 = "CyuKUsxFHLodXdoVxk6Ly9XcWbypjU5RWEHhetJJ8sZB";
+
+	//人脸识别1.2版本的appId和appKey
+	public static final String APP_ID_FACE_12 = "3rWH4Jgae4iunSweK3cWdm4JfuQ8UHMsoDGRznxanHW2";
+	public static final String SDK_KEY_FACE_12 = "CyuKUsxFHLodXdoVxk6Ly9Byjq2aBCaY9BwrVZoJrFCL,CyuKUsxFHLodXdoVxk6Ly9C6uEHgKVXeqq5oixFZULsZ,CyuKUsxFHLodXdoVxk6Ly9CbYqLNWJjan8C7cHVfRrEV,CyuKUsxFHLodXdoVxk6Ly9CqsdrjkSXWnJvC91pUMKfB,CyuKUsxFHLodXdoVxk6Ly9Cy337twAWtb1K9cQsUJKpx,";
 }
