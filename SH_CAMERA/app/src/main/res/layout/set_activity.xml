@@ -29,7 +29,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="#1a1a1a"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
@@ -41,23 +40,20 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
-                        android:text="流媒体服务器IP:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="流媒体服务器IP:"/>
 
                     <EditText
                         android:id="@+id/set_editText1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:background="#1a1a1a"
-                        android:textColor="#ffffff" />
+                        android:layout_weight="5" />
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:background="#1a1a1a"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
@@ -69,16 +65,12 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity=""
-                        android:text="端口:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
+                        android:text="端口:"/>
                     <EditText
                         android:id="@+id/set_editText2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:background="#1a1a1a"
-                        android:textColor="#ffffff" />
+                        android:layout_weight="5" />
                 </LinearLayout>
                 <!-- 平台 服务器 配置start -->
 
@@ -86,7 +78,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:background="#1a1a1a"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
@@ -98,23 +89,19 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
-                        android:text="平台服务器IP:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="平台服务器IP:"/>
 
                     <EditText
                         android:id="@+id/et_ptserviceip"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:background="#1a1a1a"
-                        android:textColor="#ffffff" />
+                        android:layout_weight="5" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:background="#1a1a1a"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
@@ -126,16 +113,13 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
-                        android:text="端口号:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="端口号:"/>
 
                     <EditText
                         android:id="@+id/et_ptserviceport"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:background="#1a1a1a"
-                        android:textColor="#ffffff" />
+                        android:layout_weight="5" />
                 </LinearLayout>
 
                 <!-- 平台 服务器 配置end -->
@@ -147,7 +131,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:background="#1a1a1a"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
@@ -159,16 +142,13 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="控制端口:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="控制端口:"/>
 
                     <EditText
                         android:id="@+id/et_editTextkzport"
                         android:layout_width="0dp"
                         android:layout_height="30dp"
-                        android:layout_weight="5"
-                        android:background="#1a1a1a"
-                        android:textColor="#ffffff" />
+                        android:layout_weight="5" />
                 </LinearLayout>
                 <!-- 控制端口 end -->
 
@@ -176,7 +156,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:background="#1a1a1a"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
@@ -188,23 +167,19 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
-                        android:text="设备号:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="设备号:"/>
 
                     <EditText
                         android:id="@+id/set_editText3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:background="#1a1a1a"
-                        android:textColor="#ffffff" />
+                        android:layout_weight="5" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:background="#1a1a1a"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center_vertical"
@@ -216,16 +191,13 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity=""
-                        android:text="帧频率:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="帧频率:"/>
 
                     <EditText
                         android:id="@+id/set_editText4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:background="#1a1a1a"
-                        android:textColor="#ffffff" />
+                        android:layout_weight="5" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -238,8 +210,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="模式:"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="模式:"/>
 
                     <RadioGroup
                         android:id="@+id/radioGroup1"
@@ -380,6 +351,11 @@
                         android:layout_marginLeft="15dp"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
                 </LinearLayout>
+                <Button
+                    android:id="@+id/btn_register_face"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="注册人脸识别数据"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
@@ -395,10 +371,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_weight="1"
-            android:background="@drawable/bt_click"
             android:padding="10dp"
             android:text="保存"
-            android:textColor="#f0f0f0"
+            android:textColor="@color/main_text_color"
             android:textSize="22sp" />
 
         <Button
@@ -408,10 +383,9 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_weight="1"
-            android:background="@drawable/bt_click"
             android:padding="10dp"
             android:text="取消"
-            android:textColor="#f0f0f0"
+            android:textColor="@color/main_text_color"
             android:textSize="22sp" />
     </LinearLayout>
 

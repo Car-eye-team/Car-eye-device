@@ -12,6 +12,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
@@ -27,6 +28,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore.Video;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -46,7 +48,9 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.dss.car.launcher.provider.biz.ProviderBiz;
+import com.sh.camera.BaseApp;
 import com.sh.camera.FileActivity;
 import com.sh.camera.R;
 import com.sh.camera.SessionLinearLayout;
@@ -56,7 +60,9 @@ import com.sh.camera.ServerManager.ServerManager;
 import com.sh.camera.TalkBackActivity;
 import com.sh.camera.codec.MediaCodecManager;
 import com.sh.camera.faceRecognition.activity.ChooseFunctionActivity;
+import com.sh.camera.faceRecognition12.DetecterActivity;
 import com.sh.camera.faceRecognition12.FaceRecognition12Activity;
+import com.sh.camera.faceRecognition12.FaceRgUtils;
 import com.sh.camera.faceRecognition12.RegisterActivity;
 import com.sh.camera.listener.OnCallbackListener;
 import com.sh.camera.util.AppLog;
@@ -64,6 +70,7 @@ import com.sh.camera.util.CameraFileUtil;
 import com.sh.camera.util.CameraUtil;
 import com.sh.camera.util.Constants;
 import com.sh.camera.util.ExceptionUtil;
+import com.sh.camera.util.Tools;
 import com.sh.camera.version.VersionBiz;
 
 import io.reactivex.Observable;
@@ -143,7 +150,7 @@ public class MainService extends Service {
 
 	// 获取本地application的对象
 	private Button btn_app_minimize,btn_app_exit;
-	private FrameLayout inc_alertaui;
+	private FrameLayout inc_alertaui,fl_dialog_normal;
 	private FrameLayout   inc_url;
 	private TextView text_url;
 
@@ -167,7 +174,8 @@ public class MainService extends Service {
 		application = getApplicationContext();
 		disk = new DiskManager(this);
 		mPusher = new Pusher();
-//		Constants.MAX_NUM_OF_CAMERAS=Camera.getNumberOfCameras();
+		//最大相机数不包括前置相机，前置和后置不能同时打开，按照现在的逻辑，加进去会有问题
+		Constants.MAX_NUM_OF_CAMERAS=ServerManager.getMaxNumCamera();
 		StreamIndex = new long[Constants.MAX_NUM_OF_CAMERAS];
 		camera = new Camera[Constants.MAX_NUM_OF_CAMERAS];
 		mrs = new MediaRecorder[Constants.MAX_NUM_OF_CAMERAS];
@@ -216,6 +224,7 @@ public class MainService extends Service {
 			}
 		}).start();
 
+		FaceRgUtils.loadFaceData();
 	}
 
 	@Override
@@ -657,6 +666,8 @@ public class MainService extends Service {
 			lys[3].setVisibility(View.VISIBLE);
 			isTwoCamera = false;
 		}
+		//通过最大相机数，设置相机预览界面显示多少个
+		setPerviewShowByCamera(Constants.MAX_NUM_OF_CAMERAS);
 		String rulestr = ServerManager.getInstance().getRule();
 //		rulestr="0";
 		rules = new int[rulestr.length()];
@@ -686,6 +697,7 @@ public class MainService extends Service {
 		btn_app_minimize = (Button) view.findViewById(R.id.btn_app_minimize);
 		btn_app_exit = (Button) view.findViewById(R.id.btn_app_exit);
 		inc_alertaui = (FrameLayout) view.findViewById(R.id.inc_alertaui);
+		fl_dialog_normal=view.findViewById(R.id.fl_dialog_normal);
 
 //		//预览回调
 //		preview[0] = new PreviewCallback() {
@@ -735,6 +747,17 @@ public class MainService extends Service {
 			if(isTwoCamera&&i>1) break;
 			initPreview(i);
 		}
+	}
+
+	/**
+	 * 通过最大相机数，设置相机预览界面显示多少个
+	 * @param maxNumOfCameras
+	 */
+	private void setPerviewShowByCamera(int maxNumOfCameras) {
+		lys[1].setVisibility(maxNumOfCameras>=1?View.VISIBLE:View.GONE);
+		lys[2].setVisibility(maxNumOfCameras>=2?View.VISIBLE:View.GONE);
+		lys[4].setVisibility(maxNumOfCameras>=3?View.VISIBLE:View.GONE);
+		lys[5].setVisibility(maxNumOfCameras>=4?View.VISIBLE:View.GONE);
 	}
 
 	public void SetPreviewValid(int index)
@@ -1079,6 +1102,7 @@ public class MainService extends Service {
 
 			isClose = false;
 			setWindowMin();
+			closeAllCamer();
 			Intent intent_set = new Intent(c, SetActivity.class);
 			intent_set.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent_set);
@@ -1113,10 +1137,17 @@ public class MainService extends Service {
 			inc_alertaui.setVisibility(View.GONE);
 			break;
 		case R.id.bt_ly_7_bottom:
+			if (((BaseApp)getApplication())
+						  .mFaceDB.mRegister.isEmpty()){
+				showTipDialog("没有注册人脸，请先到设置里面注册！");
+				return;
+			}
 			isClose = false;
 			setWindowMin();
 			closeAllCamer();
-			ActivityUtils.startActivity(FaceRecognition12Activity.class);
+			Intent intent=new Intent(this,DetecterActivity.class);
+			intent.putExtra("Camera", 1);//1是前置
+			ActivityUtils.startActivity(intent);
 			break;
 		}
 	}
@@ -1424,6 +1455,20 @@ public class MainService extends Service {
 	private boolean isTabletDevice(Context context) {
 		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
 				Configuration.SCREENLAYOUT_SIZE_LARGE;
-	}	
+	}
+
+	//展示提示对话框
+	private void showTipDialog(String msg){
+		TextView tvMsg= fl_dialog_normal.findViewById(R.id.message);
+		fl_dialog_normal.setVisibility(View.VISIBLE);
+		tvMsg.setText(msg);
+		fl_dialog_normal.findViewById(R.id.btn_confirm).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				fl_dialog_normal.setVisibility(View.GONE);
+			}
+		});
+	}
+
 	
 }

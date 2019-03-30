@@ -32,7 +32,7 @@ public class FaceDB {
 	public static String gender_key = "CyuKUsxFHLodXdoVxk6Ly9Cy337twAWtb1K9cQsUJKpx";
 
 	String mDBPath;
-	List<FaceRegist> mRegister;
+	public List<FaceRegist> mRegister;
 	AFR_FSDKEngine mFREngine;
 	AFR_FSDKVersion mFRVersion;
 	boolean mUpgrade;

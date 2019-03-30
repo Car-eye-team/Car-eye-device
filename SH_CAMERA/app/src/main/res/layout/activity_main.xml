@@ -220,6 +220,8 @@
     <!-- 底部选项 1 e   left-->
 <include layout="@layout/dialog_normal_layout"
     />
+        <include layout="@layout/dialog_normal2_layout"/>
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

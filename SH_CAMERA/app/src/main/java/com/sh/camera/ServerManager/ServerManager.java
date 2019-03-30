@@ -6,6 +6,7 @@
 package com.sh.camera.ServerManager;
 
 import android.content.SharedPreferences;
+import android.hardware.Camera;
 import android.widget.EditText;
 
 import com.sh.camera.util.Constants;
@@ -97,9 +98,22 @@ public class ServerManager {
 		return mode;
 	}
 
+	/**
+	 * 取出的值会作为角标去mainService里camera数组取出camera对象，
+	 * 由于camera数组保存的对象都是后置摄像头，按角标顺序保存，
+	 * 所以这里如果取到1，去camera数组取到的值可以正常取到cameraId为2的camera对象。
+	 * @return
+	 */
 	public String getRule() {
-		String rule = sp.getString(Constants.rule, "01");
-		return rule;
+	    //这里注释是因为这边获取的是在设置界面所设置的双路和四路的配置
+        // ，但是相机组件是固定那么多个的，所以设置这些是无效的。
+//		String rule = sp.getString(Constants.rule, "01");
+		StringBuilder stringBuilder=new StringBuilder();
+		int cameraNum=getMaxNumCamera();
+		for (int i=0;i<cameraNum;i++){
+			stringBuilder.append(i+"");
+		}
+		return stringBuilder.toString();
 	}
 	/**RTSP  RTMP*/
 	public int getprotocol() {
@@ -111,6 +125,18 @@ public class ServerManager {
 		sped = sp.edit();
 		sped.putInt(Constants.protocol_type, protocol);
 		sped.commit();
+	}
+
+	/**
+	 * 获取可用的最大摄像头数量，需要去掉前置的摄像头，因为前后摄像头无法同时打开
+	 * @return
+	 */
+	public static int getMaxNumCamera() {
+		int cameraNum= Camera.getNumberOfCameras();
+		if (cameraNum>1){
+			cameraNum=cameraNum-1;
+		}
+		return cameraNum;
 	}
 
 }

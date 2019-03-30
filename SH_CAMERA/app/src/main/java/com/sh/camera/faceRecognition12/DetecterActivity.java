@@ -1,6 +1,7 @@
 package com.sh.camera.faceRecognition12;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -47,6 +48,7 @@ import com.guo.android_extend.widget.CameraGLSurfaceView;
 import com.guo.android_extend.widget.CameraSurfaceView.OnCameraListener;
 import com.sh.camera.BaseApp;
 import com.sh.camera.R;
+import com.sh.camera.service.MainService;
 import com.sh.camera.widget.CameraSurfaceView;
 
 import java.io.IOException;
@@ -288,6 +290,12 @@ public class DetecterActivity extends Activity implements OnCameraListener, View
 
 		ASGE_FSDKError err2 = mGenderEngine.ASGE_FSDK_UninitGenderEngine();
 		Log.d(TAG, "ASGE_FSDK_UninitGenderEngine =" + err2.getCode());
+
+		Intent intent = new Intent(MainService.ACTION);
+		intent.putExtra("type", MainService.FULLSCREEN);
+		sendBroadcast(intent);
+		MainService.getInstance().openCamera(0,0,null);
+		MainService.getInstance().reconnectCameras();
 	}
 
 	@Override

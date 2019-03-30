@@ -153,10 +153,11 @@ public class Constants {
 			SNAP_FILE_PATH = INNER_CARD_PATH+"CarDVR/";
 			CAMERA_FILE_DIR = "/CarDVR/";			
 			FRAMERATE = 20;
+			//摄像头id,1取值为2是因为不需要前置摄像头，前置和后置不能一起打开
 			CAMERA_ID[0] = 0;
-			CAMERA_ID[1] = 1;
-			CAMERA_ID[2] = 6;
-			CAMERA_ID[3] = 7;
+			CAMERA_ID[1] = 2;
+			CAMERA_ID[2] = 3;
+			CAMERA_ID[3] = 4;
 	}
 	/**应用启动自动检测一次版本信息*/
 	public static final String CAMERA_PATH ="Careye_pusher/";
