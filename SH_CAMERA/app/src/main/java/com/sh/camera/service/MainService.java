@@ -1181,49 +1181,61 @@ public class MainService extends Service {
 
 		int CameraId;
 		int  m_index_channel;
-		CameraId = index+1;		
-		if(camera[rules[index]]!=null && sc_controls[rules[index]]!=false){
-			return;			
-		}		
-		try {
+		CameraId = index+1;
 
-			if(camera[rules[index]]!=null){
-				//初始化推流工具
-				if(ServerManager.getInstance().getprotocol()==Constants.CAREYE_RTMP_PROTOCOL)
-				{
-					handle = mPusher.CarEyeInitNetWorkRTMP( getApplicationContext(), Constants.Key,ipstr, portstr, String.format("live/%s&channel=%d",serialno,CameraId), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
-				}else
-				{
-					if(Build.VERSION.SDK_INT>=23) {
-						handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000,1);
-					}else
-					{
-						handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000,0);
-					}
-				}
-				if(handle  <0 && ServerManager.getInstance().getprotocol()== Constants.CAREYE_RTP_PROTOCOL)
-				{
-					Log.d("CMD", " init error, error number"+handle );
-					//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
-					return;
-				}
-				if(handle  ==0 && ServerManager.getInstance().getprotocol()== Constants.CAREYE_RTMP_PROTOCOL)
-				{
-					Log.d("CMD", " init error, error number"+handle );
-					//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
-					return;
-				}
-				CameraUtil.VIDEO_UPLOAD[index] = true;
-				//控制预览回调
-				sc_controls[rules[index]] = true;
-				StreamIndex[rules[index]] = handle;
-				MediaCodecManager.getInstance().StartUpload(rules[index],camera[rules[index]], handle, type);
-				camera[rules[index]].setPreviewCallback(preview[rules[index]]);
+		if(type == 0) {
+
+			if (camera[rules[index]] != null && sc_controls[rules[index]] != false) {
+				return;
 			}
+			try {
 
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
+				if (camera[rules[index]] != null) {
+					//初始化推流工具
+					if (ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTMP_PROTOCOL) {
+						handle = mPusher.CarEyeInitNetWorkRTMP(getApplicationContext(), Constants.Key, ipstr, portstr, String.format("live/%s&channel=%d", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
+					} else {
+						if (Build.VERSION.SDK_INT >= 21) {
+							handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, 1);
+						} else {
+							handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, 0);
+						}
+					}
+					if (handle < 0 && ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTP_PROTOCOL) {
+						Log.d("CMD", " init error, error number" + handle);
+						//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
+						return;
+					}
+					if (handle == 0 && ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTMP_PROTOCOL) {
+						Log.d("CMD", " init error, error number" + handle);
+						//Toast.makeText(MainService.getInstance(), "閾炬帴鏈嶅姟鍣ㄥけ璐ワ細"+m_index_channel, 1000).show();
+						return;
+					}
+					CameraUtil.VIDEO_UPLOAD[index] = true;
+					//控制预览回调
+					sc_controls[rules[index]] = true;
+					StreamIndex[rules[index]] = handle;
+					MediaCodecManager.getInstance().StartUpload(rules[index], camera[rules[index]], handle, type);
+					camera[rules[index]].setPreviewCallback(preview[rules[index]]);
+				}
+
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		}else
+		{
+			if (ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTMP_PROTOCOL) {
+				handle = mPusher.CarEyeInitNetWorkRTMP(getApplicationContext(), Constants.Key, ipstr, portstr, String.format("live/%s&channel=%d", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
+			} else {
+				if (Build.VERSION.SDK_INT >= 21) {
+					handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, 1);
+				} else {
+					Log.d("CMD", " start talk" + handle);
+					handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, 0);
+				}
+			}
+			MediaCodecManager.getInstance().StartUpload(0, null, handle, type);
 		}
 	}
 	/**

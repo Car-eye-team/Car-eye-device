@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: 'tinker-support.gradle'
+//apply from: 'tinker-support.gradle'
 
 android {
     compileSdkVersion 28
@@ -43,12 +43,12 @@ android {
         }
     }
     signingConfigs {
-        debug { //密匙内容，请换成自己的
+      /*  debug { //密匙内容，请换成自己的
             storeFile file("F:/eclipseDev/CIB_EMobile.keystore")
             storePassword "netbank"
             keyAlias "emobilekey"
             keyPassword "netbank"
-        }
+        }*/
         release {
         }
     }
@@ -59,7 +59,7 @@ dependencies {
     //    implementation 'org.codehaus.groovy:groovy-all:2.4.12'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
-    implementation 'com.tencent.tinker:tinker-android-lib:1.9.6'
+ //   implementation 'com.tencent.tinker:tinker-android-lib:1.9.6'
     implementation rootProject.ext.supportLibs
     implementation rootProject.ext.rxJavaLibs
     implementation 'com.github.bumptech.glide:glide:4.7.1'

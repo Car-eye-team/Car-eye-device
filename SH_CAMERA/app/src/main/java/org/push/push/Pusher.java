@@ -66,7 +66,7 @@ public class Pusher {
 
 	public void  CarEyeCallBack(int channel, int factor,byte[] pBuf){
 		
-		Log.e("puser", "exit send file!");
+
 		if(factor==0) {
 			if (handle != null) {
 				handle.sendMessage(handle.obtainMessage(1006));
@@ -79,6 +79,7 @@ public class Pusher {
 		{
 			//语音对讲接口解码并播放
 			MainService.getInstance().DeCoderAAC(pBuf);
+			Log.e("CMD", "AUDIO BUFFER!");
 		}
 	}
 
@@ -144,7 +145,7 @@ public class Pusher {
 
 		}else
 		{
-			if(Build.VERSION.SDK_INT>=23) {
+			if(Build.VERSION.SDK_INT>=21) {
 				channel = CarEyeStartNativeFileRTPEX(MainService.application, Constants.rtpKey, serverIP, serverPort, streamName, logchannel, fileName, splaysec, eplaysec,1);
 			}else
 			{

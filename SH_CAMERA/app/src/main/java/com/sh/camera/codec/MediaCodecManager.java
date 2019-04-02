@@ -10,6 +10,7 @@ import java.util.Date;
 
 import org.push.hw.EncoderDebugger;
 import org.push.hw.NV21Convertor;
+import org.push.push.AudioDecoder;
 //import org.push.push.AudioDecoder;
 
 import android.content.Intent;
@@ -56,7 +57,8 @@ public class MediaCodecManager {
 	private EncoderDebugger debugger;
 	private AudioStream audioStream;
 	private int m_type = 0;
-//	private static AudioDecoder audioDecoder;
+
+	private static AudioDecoder audioDecoder;
 
 
 
@@ -80,12 +82,13 @@ public class MediaCodecManager {
 
 	public void StartUpload(int index, Camera camera, long handle, int type)
 
- {   
-	 debugger = EncoderDebugger.debug(MainService.getInstance(), Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
+ {
+	 if(type == 0) {
+ 	 debugger = EncoderDebugger.debug(MainService.getInstance(), Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 	 previewFormat = sw_codec ? ImageFormat.YV12 : debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;    	 
 	 mVC[index] = new HWConsumer(MainService.getInstance(), MainService.mPusher,handle);
 	 m_type = type;
-	 if(type == 0) {
+
 		 try {
 			 mVC[index].onVideoStart(Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 		 } catch (IOException e) {
@@ -100,7 +103,7 @@ public class MediaCodecManager {
           if(type == 1)
 		  {
 		  	//开始语音对讲
-//			  audioDecoder.startPlay();
+			  audioDecoder.startPlay();
 		  }
 	 }	 	
  }
@@ -119,12 +122,12 @@ public class MediaCodecManager {
      }
      if(m_type == 1)
 	 {
-//	 	audioDecoder.stop();
+		audioDecoder.stop();
 	 }
  }
  public void DecodeAAC(byte[] data)
  {
-//	 audioDecoder.decode(data,0,data.length);
+	 audioDecoder.decode(data,0,data.length);
  }
 	public static boolean TakePicture(int cameraid,int type){
 		try {

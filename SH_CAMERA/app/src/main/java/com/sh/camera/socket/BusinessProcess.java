@@ -369,20 +369,19 @@ public class BusinessProcess {
 				Log.d(TAG, "3"+ datatype3 );
 				Log.d(TAG, "4"+ datatype4 );
 				Log.d(TAG, "5"+ datatype5 );
-				if(type == 0 || type == 1) {
+
+				Log.d(TAG, "type"+ type );
+				if(type == 0 || type == 1 || type==4) {
 					CameraUtil.startVideoUpload((logicChannel - 1),0);
 					AppLog.i(TAG,"传输类型："+type );
 				}else if(type == 2){
-
+					logicChannel = 6; //channel6 is talkback channel default
 					CameraUtil.startVideoUpload((logicChannel - 1), 1);
-					AppLog.i(TAG,"传输类型："+type);
+					Log.d(TAG,"传输类型："+logicChannel);
 
 				}else if(type == 3){
-					AppLog.i(TAG,"传输类型："+type);
-
+					CameraUtil.startVideoUpload((logicChannel - 1),0);
 				}
-
-
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
@@ -494,7 +493,6 @@ public class BusinessProcess {
 					Log.d("vedio", "start file player");
 					CameraUtil.startVideoFileStream(logicChannel, 0,0,file.getAbsolutePath(),null);
 				}
-				
 								
 				//设置上传服务器IP
 				ParamsBiz.setUpdateIP(ip);

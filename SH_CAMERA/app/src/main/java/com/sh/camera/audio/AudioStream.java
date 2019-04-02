@@ -37,7 +37,7 @@ public class AudioStream {
     private long m_index;
     Pusher easyPusher;
     private Thread mThread = null;
-    String TAG = "audio_stream";
+    String TAG = "CMD";
     //final String path = Environment.getExternalStorageDirectory() + "/123450001.aac";
 
     protected MediaCodec.BufferInfo mBufferInfo = new MediaCodec.BufferInfo();
