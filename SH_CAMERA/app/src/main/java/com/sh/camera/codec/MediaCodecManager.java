@@ -65,7 +65,7 @@ public class MediaCodecManager {
 	public static MediaCodecManager getInstance() {
 		if (instance == null) {
 			//mMediaCodec = new MediaCodec[Constants.MAX_NUM_OF_CAMERAS];			
-//			audioDecoder = new AudioDecoder(MainService.c);
+  			audioDecoder = new AudioDecoder(MainService.c);
 			instance = new MediaCodecManager();
 		}
 		return instance;

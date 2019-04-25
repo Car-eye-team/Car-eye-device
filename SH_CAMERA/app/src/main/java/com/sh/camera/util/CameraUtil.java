@@ -71,18 +71,16 @@ public class CameraUtil {
 	 */
 
 	/*  type 0 : verdio   1: talk  */
-	public static void startVideoUpload(int i, int type){
+	public static void startVideoUpload(int i, int type, int talk){
 
 		//预览之前判断是否回放，如果回放先结束回放
 		if(type == 0) {
 			if (CameraUtil.VIDEO_FILE_UPLOAD) {
 				stopVideoFileStream();
 			}
-
 			if (VIDEO_UPLOAD.length <= i) {
 				ToastUtils.showShort("视频上传通道错误！");
 			}
-
 			//预览之前先停止上传
 			if (VIDEO_UPLOAD[i]) {
 				stopVideoUpload(i);
@@ -90,9 +88,8 @@ public class CameraUtil {
 			//初始化推流工具
 			VIDEO_UPLOAD[i] = true;
 		}
-		MainService.getInstance().startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i, type);
+		MainService.getInstance().startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i, type, talk);
 	}
-
 	/**
 	 * 结束视频上传
 	 * @param i

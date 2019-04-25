@@ -47,11 +47,11 @@ public class Pusher {
 	
 	//JT1078 RTP数据包格式推流接口
 
-	public native int    CarEyeInitNetWorkRTP(Context context,String key, String serverIP, String serverPort, String streamName, int logchannel, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate, int epoll);
+	public native int    CarEyeInitNetWorkRTP(Context context,String key, String serverIP, String serverPort, String streamName, int logchannel, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate, int talk);
 	public native int 	CarEyePusherIsReadyRTP(int channel);
 	public native long   CarEyeSendBufferRTP(long time, byte[] data, int lenth, int type, int channel);	
 	public native int    CarEyeStopNativeFileRTP(int channel);	
-	public native int    CarEyeStartNativeFileRTPEX(Context context,String key, String serverIP, String serverPort, String streamName, int logchannel,  String fileName,int start, int end, int epoll);
+	public native int    CarEyeStartNativeFileRTPEX(Context context,String key, String serverIP, String serverPort, String streamName, int logchannel,  String fileName,int start, int end);
 	public native void   CarEyeStopPushNetRTP(int index);
 
 	// result： 0 文件传输结束  , 传输出错
@@ -66,7 +66,6 @@ public class Pusher {
 
 	public void  CarEyeCallBack(int channel, int factor,byte[] pBuf){
 		
-
 		if(factor==0) {
 			if (handle != null) {
 				handle.sendMessage(handle.obtainMessage(1006));
@@ -78,6 +77,7 @@ public class Pusher {
 		}else
 		{
 			//语音对讲接口解码并播放
+			Log.e("CMD", "AUDIO BUFFER!");
 			MainService.getInstance().DeCoderAAC(pBuf);
 			Log.e("CMD", "AUDIO BUFFER!");
 		}
@@ -142,15 +142,9 @@ public class Pusher {
 		}else if(Constants.CAREYE_RTMP_PROTOCOL==protocol)
 		{
 			 channel =  CarEyeStartNativeFileRTMPEX(MainService.application, Constants.Key, serverIP,serverPort,streamName, fileName,splaysec,eplaysec);
-
 		}else
 		{
-			if(Build.VERSION.SDK_INT>=21) {
-				channel = CarEyeStartNativeFileRTPEX(MainService.application, Constants.rtpKey, serverIP, serverPort, streamName, logchannel, fileName, splaysec, eplaysec,1);
-			}else
-			{
-				channel = CarEyeStartNativeFileRTPEX(MainService.application, Constants.rtpKey, serverIP, serverPort, streamName, logchannel, fileName, splaysec, eplaysec,0);
-			}
+			channel = CarEyeStartNativeFileRTPEX(MainService.application, Constants.rtpKey, serverIP, serverPort, streamName, logchannel, fileName, splaysec, eplaysec);
 		}
 		return channel;
 	}

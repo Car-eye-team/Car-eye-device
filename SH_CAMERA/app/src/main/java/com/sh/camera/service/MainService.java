@@ -1082,7 +1082,7 @@ public class MainService extends Service {
 				//处理上传
 				btiv2.setImageResource(R.drawable.b03);
 				for (int i = 0; i < rules.length; i++) {
-					startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i,0);
+					startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i,0, 0);
 				}
 				isSC = true;
 			}
@@ -1177,7 +1177,7 @@ public class MainService extends Service {
 	}	
 
 	long handle;
-	public void startVideoUpload2(String ipstr, String portstr, String serialno,  int index, int type){
+	public void startVideoUpload2(String ipstr, String portstr, String serialno,  int index, int type, int  talk){
 
 		int CameraId;
 		int  m_index_channel;
@@ -1195,11 +1195,7 @@ public class MainService extends Service {
 					if (ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTMP_PROTOCOL) {
 						handle = mPusher.CarEyeInitNetWorkRTMP(getApplicationContext(), Constants.Key, ipstr, portstr, String.format("live/%s&channel=%d", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
 					} else {
-						if (Build.VERSION.SDK_INT >= 21) {
-							handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, 1);
-						} else {
-							handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, 0);
-						}
+							handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, talk);
 					}
 					if (handle < 0 && ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTP_PROTOCOL) {
 						Log.d("CMD", " init error, error number" + handle);
@@ -1228,12 +1224,7 @@ public class MainService extends Service {
 			if (ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTMP_PROTOCOL) {
 				handle = mPusher.CarEyeInitNetWorkRTMP(getApplicationContext(), Constants.Key, ipstr, portstr, String.format("live/%s&channel=%d", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
 			} else {
-				if (Build.VERSION.SDK_INT >= 21) {
-					handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, 1);
-				} else {
-					Log.d("CMD", " start talk" + handle);
-					handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, 0);
-				}
+					handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, talk);
 			}
 			MediaCodecManager.getInstance().StartUpload(0, null, handle, type);
 		}

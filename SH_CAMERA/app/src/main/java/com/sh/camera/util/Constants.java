@@ -100,7 +100,7 @@ public class Constants {
 	public static int CAREYE_RTMP_PROTOCOL = 1;
 	public static int CAREYE_RTP_PROTOCOL = 2;
 
-	public static final int protocol = CAREYE_RTMP_PROTOCOL;
+	public static final int protocol = CAREYE_RTP_PROTOCOL;
 
 	/**录像时长 分钟*/
 	public static final int VIDEO_TIME = 10;//10
