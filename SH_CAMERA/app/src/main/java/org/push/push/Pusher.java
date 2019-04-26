@@ -77,9 +77,9 @@ public class Pusher {
 		}else
 		{
 			//语音对讲接口解码并播放
-			Log.e("CMD", "AUDIO BUFFER!");
+
 			MainService.getInstance().DeCoderAAC(pBuf);
-			Log.e("CMD", "AUDIO BUFFER!");
+
 		}
 	}
 

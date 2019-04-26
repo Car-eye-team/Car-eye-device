@@ -214,7 +214,7 @@ public class BusinessProcess {
 				if(type == 0){
 					CameraUtil.startVideoUpload((id-1),0,0);
 				}else{
-					CameraUtil.stopVideoUpload((id-1));
+					CameraUtil.stopVideoUpload((id-1),0);
 				}
 
 			} catch (Exception e) {
@@ -404,12 +404,16 @@ public class BusinessProcess {
 				num += 1;
 
 				if(command ==0 || command ==2){
-					CameraUtil.stopVideoUpload((logicChannel-1));
+					CameraUtil.stopVideoUpload((logicChannel-1),0);
 					Log.d("vedio", "stop stream");
 				}else if(command ==3){
 					//开始传输
 					Log.d("vedio", "start stream");
 							CameraUtil.startVideoUpload((logicChannel-1), 0,0);
+				} else if(command ==4)
+				{
+					Log.d("vedio", "stop stream");
+					CameraUtil.stopVideoUpload((logicChannel-1),1);
 				}
 
 			} catch (Exception e) {

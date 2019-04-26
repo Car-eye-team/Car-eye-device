@@ -1156,7 +1156,7 @@ public class MainService extends Service {
 	private void stopSC() {
 		btiv2.setImageResource(R.drawable.a03);
 		for (int i = 0; i < rules.length; i++) {
-			stopVideoUpload(i);
+			stopVideoUpload(i,0);
 			try {
 				Thread.sleep(500);
 			} catch (Exception e) {
@@ -1233,16 +1233,22 @@ public class MainService extends Service {
 	 * 结束视频上传
 	 * @param i
 	 */
-	public void stopVideoUpload(int i){
+	public void stopVideoUpload(int i, int talk){
 		try {
 			Log.d("SERVICE", " stop upload"+i);
-			CameraUtil.VIDEO_UPLOAD[i] = false;
-			if(camera[rules[i]]!=null){				
-				sc_controls[rules[i]] = false;
-				camera[rules[i]].setPreviewCallback(null);
-				MediaCodecManager.getInstance().StopUpload(rules[i]);
-				mPusher.stopPush(StreamIndex[rules[i]],ServerManager.getInstance().getprotocol());
-				StreamIndex[rules[i]] = 0;
+			if(talk==0) {
+				CameraUtil.VIDEO_UPLOAD[i] = false;
+				if (camera[rules[i]] != null) {
+					sc_controls[rules[i]] = false;
+					camera[rules[i]].setPreviewCallback(null);
+					MediaCodecManager.getInstance().StopUpload(rules[i],talk);
+					mPusher.stopPush(StreamIndex[rules[i]], ServerManager.getInstance().getprotocol());
+					StreamIndex[rules[i]] = 0;
+				}
+			}else
+			{
+				MediaCodecManager.getInstance().StopUpload(0,talk);
+				mPusher.stopPush(handle, ServerManager.getInstance().getprotocol());
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

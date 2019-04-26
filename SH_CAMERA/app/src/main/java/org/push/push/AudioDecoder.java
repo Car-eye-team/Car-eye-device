@@ -7,6 +7,7 @@ import android.media.AudioTrack;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
+import android.os.Process;
 import android.util.Log;
 
 import java.io.FileOutputStream;
@@ -41,18 +42,12 @@ public class AudioDecoder {
     private ByteBuffer[] encodeOutputBuffers;
 
     public boolean isStop = false;
-    FileOutputStream fout;
+
 
     public AudioDecoder(Context context) {
         this.context = context;
             prepare();
-        try {
 
-            fout = new FileOutputStream("/mnt/sdcard/1.bin");
-
-        } catch (Exception e) {
-        e.printStackTrace();
-    }
 
     }
 
@@ -81,12 +76,12 @@ public class AudioDecoder {
                 "Audio Thread");
         Log.d(TAG, " startPlay");
         audioThread.start();
-        try {
+      /*  try {
             audioThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
             return;
-        }
+        }*/
 
     }
 
@@ -94,22 +89,13 @@ public class AudioDecoder {
     /**
      * 停止并且重启解码器以便下次使用
      */
-    public void stop() {
+    public void stop() throws InterruptedException {
         isStop = true;
+        Thread t = audioThread;
         if (audioThread != null) {
             audioThread.interrupt();
-        }
-        try {
-            audioDecoder.stop();
-            audioDecoder.release();
-            prepare();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-        try {
-            fout.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            audioThread = null;
+            t.join();
         }
     }
 
@@ -139,10 +125,12 @@ public class AudioDecoder {
 
         @Override
         public void run() {
+
+            Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO);
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             do {
                 encodeOutputBuffers = audioDecoder.getOutputBuffers();
-                int outputBufferIndex = audioDecoder.dequeueOutputBuffer(bufferInfo, 1000);
+                int outputBufferIndex = audioDecoder.dequeueOutputBuffer(bufferInfo, 300000);
                 Log.i("outputBufferIndex**", "\n" + outputBufferIndex + "\n");
 
                 if (outputBufferIndex == MediaCodec.INFO_TRY_AGAIN_LATER) {
@@ -164,11 +152,10 @@ public class AudioDecoder {
                     outputBuffer = encodeOutputBuffers[outputBufferIndex];
                     //用来保存解码后的数据
                     byte[] outData = new byte[bufferInfo.size];
-                    Log.i("outputBufferIndex", "\n" + bufferInfo.size+ "\n");
+
                     outputBuffer.get(outData);
                     //清空缓存
                     outputBuffer.clear();
-                    Log.i("audioTrack--outData**", "\n" + outData.length + "\n");
                     //播放解码后的数据
                     if(outData.length>0) {
                         audioTrack.write(outData, 0, outData.length);
@@ -177,7 +164,8 @@ public class AudioDecoder {
                     audioDecoder.releaseOutputBuffer(outputBufferIndex, false);
                 }
             }while(!isStop);
-            stop();
+               audioDecoder.stop();
+              audioDecoder.release();
         }
     }
 

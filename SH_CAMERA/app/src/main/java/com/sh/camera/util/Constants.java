@@ -107,7 +107,7 @@ public class Constants {
 	/**SD卡路径*/
 	public static String CAMERA_FILE_PATH = "";
 	public static String CAMERA_FILE_DIR = "";
-	public static String SD_CARD_PATH = "";
+	public static String SD_CARD_PATH = "/mnt/sdcard";
 	public static String INNER_CARD_PATH = "";
 	public static String SNAP_FILE_PATH = "";
 	/**SD清理界限、清理目标  100M 14950M*/

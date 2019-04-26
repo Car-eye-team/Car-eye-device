@@ -83,13 +83,12 @@ public class MediaCodecManager {
 	public void StartUpload(int index, Camera camera, long handle, int type)
 
  {
+	 m_type = type;
 	 if(type == 0) {
  	 debugger = EncoderDebugger.debug(MainService.getInstance(), Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 	 previewFormat = sw_codec ? ImageFormat.YV12 : debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;    	 
 	 mVC[index] = new HWConsumer(MainService.getInstance(), MainService.mPusher,handle);
-	 m_type = type;
-
-		 try {
+	  try {
 			 mVC[index].onVideoStart(Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 		 } catch (IOException e) {
 			 // TODO Auto-generated catch block
@@ -103,26 +102,30 @@ public class MediaCodecManager {
           if(type == 1)
 		  {
 		  	//开始语音对讲
-			  audioDecoder.startPlay();
+			 audioDecoder.startPlay();
 		  }
 	 }	 	
  }
- public void StopUpload(int index)
+ public void StopUpload(int index, int talk)
  {
-	 if(mVC[index]!= null)
-	 {
-		 mVC[index].onVideoStop();
-		 mVC[index] =null;
-		 
-	 }	
-	 if (audioStream != null) {
-         audioStream.stop();
-         audioStream = null;
-         
-     }
+ 	if(talk==0) {
+		if (mVC[index] != null) {
+			mVC[index].onVideoStop();
+			mVC[index] = null;
+
+		}
+		if (audioStream != null) {
+			audioStream.stop();
+			audioStream = null;
+		}
+	}
      if(m_type == 1)
 	 {
-		audioDecoder.stop();
+		 try {
+			 audioDecoder.stop();
+		 } catch (InterruptedException e) {
+			 e.printStackTrace();
+		 }
 	 }
  }
  public void DecodeAAC(byte[] data)

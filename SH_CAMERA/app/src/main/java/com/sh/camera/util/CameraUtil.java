@@ -54,7 +54,7 @@ public class CameraUtil {
 	private static final String tag = "CameraUtil.";
 
 	/**视频上传*/
-	public static boolean VIDEO_UPLOAD[] = {false,false,false,false};
+	public static boolean VIDEO_UPLOAD[] = {false,false,false,false,false,false,false,false};
 
 	/**视频回放,文件上传只能上传一路  true 正在回放  false 未回放*/
 	public static boolean VIDEO_FILE_UPLOAD = false;
@@ -83,10 +83,15 @@ public class CameraUtil {
 			}
 			//预览之前先停止上传
 			if (VIDEO_UPLOAD[i]) {
-				stopVideoUpload(i);
+				stopVideoUpload(i,talk);
 			}
 			//初始化推流工具
 			VIDEO_UPLOAD[i] = true;
+		}else
+		{
+			if (VIDEO_UPLOAD[i]) {
+				stopVideoUpload(i,talk);
+			}
 		}
 		MainService.getInstance().startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i, type, talk);
 	}
@@ -94,9 +99,11 @@ public class CameraUtil {
 	 * 结束视频上传
 	 * @param i
 	 */
-	public static void stopVideoUpload(int i){
-		VIDEO_UPLOAD[i] = false;
-		MainService.getInstance().stopVideoUpload(i);
+	public static void stopVideoUpload(int i, int talk){
+
+			VIDEO_UPLOAD[i] = false;
+			MainService.getInstance().stopVideoUpload(i, talk);
+
 	}
 
 	/**
@@ -176,7 +183,7 @@ public class CameraUtil {
 
 		if(VIDEO_UPLOAD[i]){
 			VIDEO_UPLOAD[i] = false;
-			MainService.getInstance().stopVideoUpload(i);
+			MainService.getInstance().stopVideoUpload(i,0);
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
