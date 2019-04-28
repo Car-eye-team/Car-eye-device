@@ -90,7 +90,7 @@ public class CommCenterUsers {
 			}else{
 				//判断网络是否连接 true 已连接 false 未连接
 				boolean isConnected = NetworkHandler.isConnect(ShCommService.getInstance());
-				AppLog.i(TAG,"=======================网络连接=====================+"+isConnected);
+				AppLog.i(TAG,"=======================network status=====================+"+isConnected);
 				if(isConnected){
 					return true;
 				}else{
@@ -110,7 +110,7 @@ public class CommCenterUsers {
 	public static void restartTimerConnectSvr(){
 		try {
 			
-			AppLog.i(TAG,"===========重新连接======");
+			AppLog.i(TAG,"===========reconnect ======");
 			
 			CommConstants.LOGIN_FLAG = true;
 			CommCenterUsers.session = null;
@@ -147,15 +147,13 @@ public class CommCenterUsers {
 	 */
 	public static void startTimerConnectSvr() {
 
-		AppLog.i(TAG,"=====启动通讯连接定时器...");
+		AppLog.i(TAG,"=====start connect server...");
 		session = null;
 		try {
-
 			if(connTimer!=null){
 				connTimer.cancel();
 			}
 			connTimer = new Timer();
-
 			if(timerConnecter != null){
 				timerConnecter.cancel();
 			}
@@ -239,8 +237,9 @@ public class CommCenterUsers {
 			try {
 				if(session != null){
 					if(session.isConnected()){
-						AppLog.i(TAG,"==发送消息===");
+						AppLog.i(TAG,"==send message===");
 						session.write(IoBuffer.wrap(bodyByte));
+
 					}else{
 						re = 1;
 						startTimerConnectSvr();
@@ -269,13 +268,13 @@ public class CommCenterUsers {
 
 				if(msgid != 0x0001){
 
-					AppLog.i(TAG, "[seq:"+seq+"] [msgid:"+msgid+"] [bodyhex:"+bodyhex+"]写入数据库中");
+					AppLog.i(TAG, "[seq:"+seq+"] [msgid:"+msgid+"] [bodyhex:"+bodyhex+"] write data base");
 
 					//获取系统时间
 					String createtime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()); 
 					//插入数据库中
 					DataMsgDao.getInstance(ShCommService.getInstance()).insert(seq, msgid, bodyhex,createtime);
-					System.out.println("数据库记录条数："+DataMsgDao.getInstance(ShCommService.getInstance()).getCount());
+					System.out.println("data base："+DataMsgDao.getInstance(ShCommService.getInstance()).getCount());
 
 				}
 			}

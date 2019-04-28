@@ -74,12 +74,15 @@ public class Pusher {
 			Intent intent = new Intent("com.dss.camera.ACTION_END_VIDEO_PLAYBACK");
 			intent.putExtra("EXTRA_ID", channel);
 			MainService.getInstance().sendBroadcast(intent);
-		}else
+		}else if(factor==1)
 		{
 			//语音对讲接口解码并播放
 
 			MainService.getInstance().DeCoderAAC(pBuf);
 
+		}else if(factor==2)
+		{
+			MainService.getInstance().stopVideoUpload(channel);
 		}
 	}
 

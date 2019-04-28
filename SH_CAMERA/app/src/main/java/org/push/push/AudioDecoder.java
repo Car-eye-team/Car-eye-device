@@ -46,9 +46,6 @@ public class AudioDecoder {
 
     public AudioDecoder(Context context) {
         this.context = context;
-            prepare();
-
-
     }
 
 
@@ -72,6 +69,7 @@ public class AudioDecoder {
     public void startPlay() {
         isStop = false;
         prevPresentationTimes = 0;
+        prepare();
         audioThread = new Thread(new AudioThread(),
                 "Audio Thread");
         Log.d(TAG, " startPlay");
@@ -164,8 +162,16 @@ public class AudioDecoder {
                     audioDecoder.releaseOutputBuffer(outputBufferIndex, false);
                 }
             }while(!isStop);
-               audioDecoder.stop();
-              audioDecoder.release();
+                if(audioDecoder!=null) {
+                    audioDecoder.stop();
+                    audioDecoder.release();
+                    audioDecoder = null;
+                }
+            if (audioTrack != null) {
+                audioTrack.stop();
+                audioTrack.release();
+                audioTrack = null;
+            }
         }
     }
 

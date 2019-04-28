@@ -5,6 +5,8 @@
  */
 package com.sh.camera.socket.timer;
 
+import android.util.Log;
+
 import java.util.TimerTask;
 
 import com.sh.camera.socket.CommCenterUsers;
@@ -33,7 +35,7 @@ public class TimerHeartBeat extends TimerTask {
 	@Override
 	public void run() {
 		try {
-			AppLog.i(TAG,"发送心跳包.......");
+			Log.d(TAG,"发送心跳包.......");
 			byte[] vehicleFlameoutDataByte = CommEncoder.getLocationInformation();
 			CommCenterUsers.witeMsg(vehicleFlameoutDataByte,1);
 		

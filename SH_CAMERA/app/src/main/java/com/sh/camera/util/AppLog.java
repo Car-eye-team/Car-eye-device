@@ -52,7 +52,7 @@ public class AppLog {
 	/**
 	 * 日志文件在sdcard中的路径
 	 */
-	private static String MYLOG_PATH_SDCARD_DIR = Constants.SD_CARD_PATH+"/dscameralog/";
+	private static String MYLOG_PATH_SDCARD_DIR = "/mnt/sdcard/dscameralog/";
 	
 	/**
 	 * sd卡中日志文件的最多保存天数
@@ -175,7 +175,8 @@ public class AppLog {
 	 * @param tag
 	 * @param text
 	 */
-	private static void writeLogtoFile(String mylogtype, String tag, String text) {  
+	private static void writeLogtoFile(String mylogtype, String tag, String text) {
+
 
 		File f = new File(Constants.SD_CARD_PATH);
 		if(!f.exists()){
@@ -222,7 +223,6 @@ public class AppLog {
 		if(!filePath.exists()){
 			filePath.mkdir();
 		}
-
 
 		File file = new File(MYLOG_PATH_SDCARD_DIR+"log/", needWriteFiel  + MYLOGFILEName);
 

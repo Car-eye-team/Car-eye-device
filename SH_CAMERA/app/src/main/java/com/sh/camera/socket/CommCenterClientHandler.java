@@ -22,6 +22,7 @@ import com.sh.camera.util.ExceptionUtil;
 
 import android.content.Context;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 /**    
  *     
@@ -51,7 +52,7 @@ public class CommCenterClientHandler extends IoHandlerAdapter {
 			throws Exception {  
 		CommCenterUsers.session = null;
 		CommCenterUsers.restartTimerConnectSvr();
-		AppLog.i(TAG,"服务器连接断开..........................");
+		Log.d(TAG,"服务器连接断开..........................");
 	}  
 
 	// 当客户端发送消息到达时  
@@ -64,7 +65,7 @@ public class CommCenterClientHandler extends IoHandlerAdapter {
 		byte[] bytes = new byte[ioBuffer.limit()];
 		ioBuffer.get(bytes); 
 		String bytesStr = ParseUtil.parseByte2HexStr(bytes);
-		AppLog.i(TAG,"收到通讯平台GPRS服务器发送过来的数据:"+bytesStr);
+		Log.d(TAG,"recive GPRS服务器发送过来的数据:"+bytesStr);
 		
 		//保存接收数据的时间
 		Editor commEditor = SPutil.getCommEditor();
@@ -77,8 +78,8 @@ public class CommCenterClientHandler extends IoHandlerAdapter {
 	}  
 
 	@Override  
-	public void sessionClosed(IoSession session) throws Exception {  
-		AppLog.i(TAG,"===========远程服务器主动断开=========");
+	public void sessionClosed(IoSession session) throws Exception {
+		Log.d(TAG,"===========远程服务器主动断开=========");
 		CloseFuture future = session.close(true);
 		future.addListener(new IoFutureListener(){
 			public void operationComplete(IoFuture future){

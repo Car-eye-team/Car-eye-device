@@ -147,6 +147,7 @@ public class MainService extends Service {
 	BroadcastReceiver 	SYSBr;
 	boolean usbcameraConnect = true;
 	boolean sd_inject = false;
+	int upload_type; //0:real vedio 1:talkback
 
 	// 获取本地application的对象
 	private Button btn_app_minimize,btn_app_exit;
@@ -1156,7 +1157,7 @@ public class MainService extends Service {
 	private void stopSC() {
 		btiv2.setImageResource(R.drawable.a03);
 		for (int i = 0; i < rules.length; i++) {
-			stopVideoUpload(i,0);
+			stopVideoUpload(i);
 			try {
 				Thread.sleep(500);
 			} catch (Exception e) {
@@ -1182,7 +1183,7 @@ public class MainService extends Service {
 		int CameraId;
 		int  m_index_channel;
 		CameraId = index+1;
-
+		upload_type = talk;
 		if(type == 0) {
 
 			if (camera[rules[index]] != null && sc_controls[rules[index]] != false) {
@@ -1233,21 +1234,21 @@ public class MainService extends Service {
 	 * 结束视频上传
 	 * @param i
 	 */
-	public void stopVideoUpload(int i, int talk){
+	public void stopVideoUpload(int i){
 		try {
 			Log.d("SERVICE", " stop upload"+i);
-			if(talk==0) {
+			if(upload_type==0) {
 				CameraUtil.VIDEO_UPLOAD[i] = false;
 				if (camera[rules[i]] != null) {
 					sc_controls[rules[i]] = false;
 					camera[rules[i]].setPreviewCallback(null);
-					MediaCodecManager.getInstance().StopUpload(rules[i],talk);
+					MediaCodecManager.getInstance().StopUpload(rules[i],upload_type);
 					mPusher.stopPush(StreamIndex[rules[i]], ServerManager.getInstance().getprotocol());
 					StreamIndex[rules[i]] = 0;
 				}
 			}else
 			{
-				MediaCodecManager.getInstance().StopUpload(0,talk);
+				MediaCodecManager.getInstance().StopUpload(0,upload_type);
 				mPusher.stopPush(handle, ServerManager.getInstance().getprotocol());
 			}
 		} catch (Exception e) {
@@ -1255,14 +1256,7 @@ public class MainService extends Service {
 			e.printStackTrace();
 		}
 	}
-	/*
-	* 启动语音对讲
-	* */
-	public void startTalkBack(){
-		Intent dialogIntent = new Intent(getBaseContext(), TalkBackActivity.class);
-		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		getApplication().startActivity(dialogIntent);
-	}
+
 
 
 	/**

@@ -83,14 +83,14 @@ public class CameraUtil {
 			}
 			//预览之前先停止上传
 			if (VIDEO_UPLOAD[i]) {
-				stopVideoUpload(i,talk);
+				stopVideoUpload(i);
 			}
 			//初始化推流工具
 			VIDEO_UPLOAD[i] = true;
 		}else
 		{
 			if (VIDEO_UPLOAD[i]) {
-				stopVideoUpload(i,talk);
+				stopVideoUpload(i);
 			}
 		}
 		MainService.getInstance().startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i, type, talk);
@@ -99,10 +99,10 @@ public class CameraUtil {
 	 * 结束视频上传
 	 * @param i
 	 */
-	public static void stopVideoUpload(int i, int talk){
+	public static void stopVideoUpload(int i){
 
 			VIDEO_UPLOAD[i] = false;
-			MainService.getInstance().stopVideoUpload(i, talk);
+			MainService.getInstance().stopVideoUpload(i);
 
 	}
 
@@ -180,10 +180,9 @@ public class CameraUtil {
 		}
 		//涓婁紶涔嬪墠鍏堝仠姝㈤瑙?
 		int i = cameraid-1;
-
 		if(VIDEO_UPLOAD[i]){
 			VIDEO_UPLOAD[i] = false;
-			MainService.getInstance().stopVideoUpload(i,0);
+			MainService.getInstance().stopVideoUpload(i);
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {

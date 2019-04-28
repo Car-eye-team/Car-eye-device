@@ -114,18 +114,18 @@ public class MediaCodecManager {
 			mVC[index] = null;
 
 		}
-		if (audioStream != null) {
-			audioStream.stop();
-			audioStream = null;
+
+	}else
+	{
+		try {
+			audioDecoder.stop();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
-     if(m_type == 1)
-	 {
-		 try {
-			 audioDecoder.stop();
-		 } catch (InterruptedException e) {
-			 e.printStackTrace();
-		 }
+	 if (audioStream != null) {
+		 audioStream.stop();
+		 audioStream = null;
 	 }
  }
  public void DecodeAAC(byte[] data)
