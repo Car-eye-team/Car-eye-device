@@ -77,11 +77,11 @@ public class Pusher {
 		}else if(factor==1)
 		{
 			//语音对讲接口解码并播放
-
 			MainService.getInstance().DeCoderAAC(pBuf);
 
 		}else if(factor==2)
 		{
+			Log.d("CMD", " factor" +factor );
 			MainService.getInstance().stopVideoUpload(channel);
 		}
 	}
