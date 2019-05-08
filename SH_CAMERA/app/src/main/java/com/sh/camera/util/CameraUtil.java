@@ -62,7 +62,7 @@ public class CameraUtil {
 	/**摄像头操作方式 1 内部操作  2 外部操作*/
 	public static int CAMERA_OPER_MODE = 1;
 
-
+	public static boolean VIDEO_TALK = false;
 
 
 	/**
@@ -83,15 +83,23 @@ public class CameraUtil {
 			}
 			//预览之前先停止上传
 			if (VIDEO_UPLOAD[i]) {
-				stopVideoUpload(i);
+				stopVideoUpload(i,0);
+			}
+			if(VIDEO_TALK == true)
+			{
+				stopVideoUpload(i,1);
 			}
 			//初始化推流工具
 			VIDEO_UPLOAD[i] = true;
 		}else
 		{
-			if (VIDEO_UPLOAD[i]) {
-				stopVideoUpload(i);
+			for(int j = 0; j<8; j++)
+			{
+				if (VIDEO_UPLOAD[j]) {
+					stopVideoUpload(j, 0);
+				}
 			}
+			VIDEO_TALK = true;
 		}
 		MainService.getInstance().startVideoUpload2(ServerManager.getInstance().getIp(),ServerManager.getInstance().getPort(),ServerManager.getInstance().getStreamname(),i, type, talk);
 	}
@@ -99,11 +107,20 @@ public class CameraUtil {
 	 * 结束视频上传
 	 * @param i
 	 */
-	public static void stopVideoUpload(int i){
-
-			VIDEO_UPLOAD[i] = false;
-			MainService.getInstance().stopVideoUpload(i);
-
+	public static void stopVideoUpload( int i, int talk){
+		if(talk==0)
+		{
+			if(VIDEO_UPLOAD[i]){
+				VIDEO_UPLOAD[i] = false;
+				MainService.getInstance().stopVideoUpload(i);
+			}
+		}else
+		{
+			if(VIDEO_TALK == true)
+			{
+				MainService.getInstance().stopVideoUpload(i);
+			}
+		}
 	}
 
 	/**

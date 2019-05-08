@@ -214,7 +214,7 @@ public class BusinessProcess {
 				if(type == 0){
 					CameraUtil.startVideoUpload((id-1),0,0);
 				}else{
-					CameraUtil.stopVideoUpload((id-1));
+					CameraUtil.stopVideoUpload((id-1),0);
 				}
 
 			} catch (Exception e) {
@@ -402,20 +402,19 @@ public class BusinessProcess {
 				//码流切换类型
 				int switchType = Integer.parseInt(ParseUtil.parseByte2HexStr(ParseUtil.byteTobyte(data, num, 1)),16);
 				num += 1;
-
 				if(command ==0 || command ==2){
-					CameraUtil.stopVideoUpload((logicChannel-1));
-					Log.d("vedio", "stop stream");
+					CameraUtil.stopVideoUpload((logicChannel-1),0);
+					Log.d("CMD", "stop stream1");
 				}else if(command ==3){
-					//开始传输
-					Log.d("vedio", "start stream");
-							CameraUtil.startVideoUpload((logicChannel-1), 0,0);
+					//寮€濮嬩紶杈?
+					Log.d("CMD", "start stream2");
+					CameraUtil.startVideoUpload((logicChannel-1), 0,0);
 				} else if(command ==4)
 				{
-					Log.d("vedio", "stop stream");
-					CameraUtil.stopVideoUpload((logicChannel-1));
-				}
+					Log.d("CMD", "stop stream3");
 
+					CameraUtil.stopVideoUpload((logicChannel-1),1);
+				}
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();

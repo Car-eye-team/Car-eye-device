@@ -102,7 +102,13 @@ public class MediaCodecManager {
           if(type == 1)
 		  {
 		  	//开始语音对讲
-			 audioDecoder.startPlay();
+			  try {
+				  audioDecoder.startPlay();
+			  } catch (IOException e) {
+				  // TODO Auto-generated catch block
+				  e.printStackTrace();
+			  }
+
 		  }
 	 }	 	
  }
@@ -112,16 +118,10 @@ public class MediaCodecManager {
 		if (mVC[index] != null) {
 			mVC[index].onVideoStop();
 			mVC[index] = null;
-
 		}
-
 	}else
 	{
-		try {
-			audioDecoder.stop();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		audioDecoder.stopdecoder();
 	}
 	 if (audioStream != null) {
 		 audioStream.stop();

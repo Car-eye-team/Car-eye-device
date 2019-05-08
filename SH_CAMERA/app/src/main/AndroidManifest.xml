@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.sh.camera"
     android:versionCode="2"
-    android:versionName="2.4.0">
+    android:versionName="3.0.1">
 
     <!-- <uses-sdk -->
     <!-- android:minSdkVersion="16" -->

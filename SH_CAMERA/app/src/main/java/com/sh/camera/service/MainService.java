@@ -122,6 +122,7 @@ public class MainService extends Service {
 	//摄像头id
 	public static int[] cid = null;
 	//受控摄像头
+
 	public static int[] rules;
 	//记录当前录制视屏的起点，未录制时-1；
 	long recoTime = -1;
@@ -131,7 +132,8 @@ public class MainService extends Service {
 	private LinearLayout[] lys;
 	private int[] lyids = {R.id.ly_1_0, R.id.ly_1_1, R.id.ly_1_2, R.id.ly_2_0, R.id.ly_2_1, R.id.ly_2_2};
 	private boolean isTwoCamera = true;
-	public  long[] StreamIndex;
+	public static long[] StreamIndex={-1,-1,-1,-1};
+
 	public static boolean clickLock = false;
 	public static boolean[] sc_controls = {false, false, false, false};
 	int framerate = Constants.FRAMERATE;
@@ -154,6 +156,7 @@ public class MainService extends Service {
 	private FrameLayout inc_alertaui,fl_dialog_normal;
 	private FrameLayout   inc_url;
 	private TextView text_url;
+	long talkback;
 
 	public static MainService getInstance() {
 		if (instance == null) {
@@ -1222,12 +1225,13 @@ public class MainService extends Service {
 			}
 		}else
 		{
+
 			if (ServerManager.getInstance().getprotocol() == Constants.CAREYE_RTMP_PROTOCOL) {
-				handle = mPusher.CarEyeInitNetWorkRTMP(getApplicationContext(), Constants.Key, ipstr, portstr, String.format("live/%s&channel=%d", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
+				talkback = mPusher.CarEyeInitNetWorkRTMP(getApplicationContext(), Constants.Key, ipstr, portstr, String.format("live/%s&channel=%d", serialno, CameraId), Constants.CAREYE_VCODE_H264, 20, Constants.CAREYE_ACODE_AAC, 1, 8000);
 			} else {
-					handle = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, talk);
+				talkback = mPusher.CarEyeInitNetWorkRTP(getApplicationContext(), Constants.rtpKey, ipstr, portstr, serialno, CameraId, Constants.CAREYE_VCODE_H264_1078, 20, Constants.CAREYE_ACODE_AAC_1078, 1, 8000, talk);
 			}
-			MediaCodecManager.getInstance().StartUpload(0, null, handle, type);
+			MediaCodecManager.getInstance().StartUpload(0, null, talkback, type);
 		}
 	}
 	/**
@@ -1236,25 +1240,27 @@ public class MainService extends Service {
 	 */
 	public void stopVideoUpload(int i){
 		try {
-			Log.d("SERVICE", " stop upload"+i);
 			if(upload_type==0) {
+
 				CameraUtil.VIDEO_UPLOAD[i] = false;
-				if (camera[rules[i]] != null) {
+				if((camera[rules[i]]!=null)&&(StreamIndex[rules[i]]!=-1)){
 					sc_controls[rules[i]] = false;
-					camera[rules[i]].setPreviewCallback(null);
 					MediaCodecManager.getInstance().StopUpload(rules[i],upload_type);
-					mPusher.stopPush(StreamIndex[rules[i]], ServerManager.getInstance().getprotocol());
-					StreamIndex[rules[i]] = 0;
+					camera[rules[i]].setPreviewCallback(null);
+					mPusher.stopPush(StreamIndex[rules[i]],Constants.protocol);
+					StreamIndex[rules[i]] = -1;
 				}
-			}else
+			}else if(CameraUtil.VIDEO_TALK==true)
 			{
 				MediaCodecManager.getInstance().StopUpload(0,upload_type);
-				mPusher.stopPush(handle, ServerManager.getInstance().getprotocol());
+				mPusher.stopPush(talkback, Constants.protocol);
+				CameraUtil.VIDEO_TALK = false;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+
 	}
 
 

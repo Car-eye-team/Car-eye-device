@@ -21,9 +21,8 @@ import android.content.Context;
 public class Pusher {
 
 	static {
-		System.loadLibrary("stream");
 		System.loadLibrary("rtmp");
-		System.loadLibrary("CarEye1078MediaLib_shared");//采用EPOLL 框架	0:select 1:epool
+		System.loadLibrary("CarEye1078MediaLib_shared");
 	}
 	/**
 	 * 初始化
@@ -77,15 +76,13 @@ public class Pusher {
 		}else if(factor==1)
 		{
 			//语音对讲接口解码并播放
-			MainService.getInstance().DeCoderAAC(pBuf);
+			MainService.getInstance().DeCoderAAC(pBuf);			
 
 		}else if(factor==2)
 		{
-			Log.d("CMD", " factor" +factor );
 			MainService.getInstance().stopVideoUpload(channel);
 		}
 	}
-
 	/**
 	 * 发送H264编码格式
 	 * @param data
