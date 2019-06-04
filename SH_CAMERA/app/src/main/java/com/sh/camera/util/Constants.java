@@ -142,7 +142,7 @@ public class Constants {
 
 
 	//RTP pusher key
-	public static final String rtpKey = "X306kS2s(6jsiSjQLQ2Q1RHQLQL7J8KQ3ukQJQ2SkSgSH{$skS%{$SkS2SHSjs(S275";
+	public static final String rtpKey = "$34Q3{jRJQ2RH{26K6j6gsi6K6KU()L6kT36%6j{3{1{iSIR3{hSI{3{j{i{2RJ{j16";
 
 	/**
 	 * 设置参数	 */
