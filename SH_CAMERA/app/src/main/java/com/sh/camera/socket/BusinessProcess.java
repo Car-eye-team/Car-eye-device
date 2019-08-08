@@ -374,7 +374,6 @@ public class BusinessProcess {
 					CameraUtil.startVideoUpload((logicChannel - 1),0,0);
 					AppLog.i(TAG,"传输类型："+type );
 				}else if(type == 2){
-					logicChannel = 6; //channel6 is talkback channel default
 					CameraUtil.startVideoUpload((logicChannel - 1), 1,1);
 					Log.d(TAG,"传输类型："+logicChannel);
 
