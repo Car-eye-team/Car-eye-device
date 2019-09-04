@@ -8,6 +8,8 @@ package com.sh.camera.socket;
 
 import java.net.InetSocketAddress;
 
+import org.apache.mina.core.future.ConnectFuture;
+import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 import com.sh.camera.socket.utils.ParseUtil;
@@ -30,22 +32,22 @@ import com.sh.camera.util.ExceptionUtil;
  */
 public class CommCenterClient {
 
-	private static final String TAG = "CommCenterClient";
-
+	private static final String TAG = "DSCenterClient";
 	/**
 	 * 连接
 	 */
 	public static void connect() {
 
 		if (CommCenterUsers.session == null || !(CommCenterUsers.session.isConnected())) {
-
+			IoConnector minaConnector = null;
 			String ip = "";
 			String port = "";
 			try {
 				CommCenterUsers.isConnector = false;
-				CommCenterUsers.minaConnector = new NioSocketConnector();
-				CommCenterUsers.minaConnector.getSessionConfig().setReadBufferSize(131072);
-				CommCenterUsers.minaConnector.setHandler(new CommCenterClientHandler());
+				minaConnector = new NioSocketConnector();
+				minaConnector.getSessionConfig().setReadBufferSize(131072);
+				minaConnector.setHandler(new CommCenterClientHandler());
+				minaConnector.getFilterChain().addFirst("filter", new CommServerFilter());
 				try {
 
 					ip = SPutil.getComm().getString("master_server_ip", "");
@@ -63,13 +65,13 @@ public class CommCenterClient {
 				}
 
 				AppLog.i(TAG,"Client: 连接服务中心:"+ip+",端口:"+port);
-				CommCenterUsers.future = CommCenterUsers.minaConnector.connect(new InetSocketAddress(ip, Integer.parseInt(port)));
-				CommCenterUsers.future.awaitUninterruptibly();
-				CommCenterUsers.session = CommCenterUsers.future.getSession();
+				ConnectFuture future = minaConnector.connect(new InetSocketAddress(ip, Integer.parseInt(port)));
+				future.awaitUninterruptibly();
+				CommCenterUsers.session = future.getSession();
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				CommCenterUsers.minaConnector = null;
+				minaConnector = null;
 				AppLog.i(TAG,"Client: 连接服务中心:"+ip+",端口:"+port+"失败"+e.getMessage());
 			}
 		} else {
@@ -77,7 +79,5 @@ public class CommCenterClient {
 		}
 
 	}
-
-
 
 }

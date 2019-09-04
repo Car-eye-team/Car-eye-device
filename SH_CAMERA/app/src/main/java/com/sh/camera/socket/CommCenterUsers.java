@@ -11,11 +11,7 @@ import java.util.Calendar;
 import java.util.Timer;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.mina.core.future.ConnectFuture;
-import org.apache.mina.core.service.IoConnector;
 import org.apache.mina.core.session.IoSession;
-
-import android.content.Intent;
 
 import com.sh.camera.service.ShCommService;
 import com.sh.camera.socket.db.DataMsgDao;
@@ -28,7 +24,6 @@ import com.sh.camera.socket.utils.NetworkHandler;
 import com.sh.camera.socket.utils.ParseUtil;
 import com.sh.camera.socket.utils.SPutil;
 import com.sh.camera.util.AppLog;
-import com.sh.camera.util.Constants;
 import com.sh.camera.util.StringUtil;
 
 
@@ -49,17 +44,18 @@ public class CommCenterUsers {
 
 	private static final String TAG = "CommCenterUsers";
 
-	public static boolean isConnector = false;
-	public static IoConnector minaConnector = null;
-	public static ConnectFuture future = null;
 	public static IoSession session = null;
+
+	public static boolean isConnector = false;
 	public static boolean isConnTimer = false;
 	public static boolean isHeartBeat = false;
 	public static boolean isAuth = false;
-	public static String rememberId = null;
 
+	//连接timer
 	public static Timer connTimer = null;
 	public static TimerConnecter timerConnecter = null;
+
+	//心跳timer
 	public static Timer heartTimer = null;
 	public static TimerHeartBeat heartTask = null;
 
@@ -67,9 +63,6 @@ public class CommCenterUsers {
 	public static Timer authTimer = null;
 	public static TimerAuth timerAuth = null;
 
-	//鉴权timer相关
-	public static Timer lTimer = null;
-	
 	//消息检测
 	public static Timer msgTimer = null;
 	public static TimerMessageDetect messageDetect = null;
@@ -90,7 +83,7 @@ public class CommCenterUsers {
 			}else{
 				//判断网络是否连接 true 已连接 false 未连接
 				boolean isConnected = NetworkHandler.isConnect(ShCommService.getInstance());
-				AppLog.i(TAG,"=======================network status=====================+"+isConnected);
+				AppLog.i(TAG,"=======================网络连接=====================+"+isConnected);
 				if(isConnected){
 					return true;
 				}else{
@@ -107,11 +100,10 @@ public class CommCenterUsers {
 	/**
 	 * 重新连接
 	 */
-	public static void restartTimerConnectSvr(){
+	public static synchronized void restartTimerConnectSvr(){
 		try {
-			
-			AppLog.i(TAG,"===========reconnect ======");
-			
+			AppLog.i(TAG,"===========重新连接======");
+
 			CommConstants.LOGIN_FLAG = true;
 			CommCenterUsers.session = null;
 			//关闭心跳定时器，重新连接
@@ -145,42 +137,50 @@ public class CommCenterUsers {
 	/**
 	 * 启动连接
 	 */
-	public static void startTimerConnectSvr() {
+	public static synchronized void startTimerConnectSvr() {
 
-		AppLog.i(TAG,"=====start connect server...");
+		AppLog.i(TAG,"=====启动通讯连接定时器...");
 		session = null;
 		try {
+
 			if(connTimer!=null){
 				connTimer.cancel();
 			}
-			connTimer = new Timer();
+
 			if(timerConnecter != null){
 				timerConnecter.cancel();
 			}
+
+			connTimer = new Timer();
+			timerConnecter = new TimerConnecter();
+			connTimer.schedule(timerConnecter, 5000, 15000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		timerConnecter = new TimerConnecter();
-		connTimer.schedule(timerConnecter, 5000, 15000);
 	}
 
 	/**
 	 * 启动鉴权
 	 */
-	public static void startTimerAuthSvr(){
+	public static synchronized void startTimerAuthSvr(){
 		if (isConnTimer) {
 			try {
 				if(timerAuth != null){
 					timerAuth.cancel();
 				}
+
+				if(authTimer != null){
+					authTimer.cancel();
+				}
+
+				authTimer = new Timer();
+				timerAuth = new TimerAuth();
+				authTimer.schedule(timerAuth, 0, 30000);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-			authTimer = new Timer();
-			timerAuth = new TimerAuth();
-			authTimer.schedule(timerAuth, 0, 30000);
 		}
 	}
 
@@ -190,13 +190,18 @@ public class CommCenterUsers {
 	 * 启动心跳定时器
 	 * @param interval 定时间隔
 	 */
-	public static void startHeartBeat(int interval) {
+	public static synchronized void startHeartBeat(int interval) {
 
 		try {
 			//启用心跳之前先判断是否有心跳正在运行
 			if(heartTask != null){
 				heartTask.cancel();
 				heartTask = null;
+			}
+
+			if(heartTimer != null){
+				heartTimer.cancel();
+				heartTimer = null;
 			}
 			heartTimer = new Timer();
 			heartTask = new TimerHeartBeat();
@@ -209,21 +214,25 @@ public class CommCenterUsers {
 	/**
 	 * 启动消息检测定时器
 	 */
-	public static void startMessageDetect() {
+	public static synchronized void startMessageDetect() {
 		try {
 			if(messageDetect != null){
 				messageDetect.cancel();
 				messageDetect = null;
 			}
+			if(msgTimer != null){
+				msgTimer.cancel();
+				msgTimer = null;
+			}
 			//启用心跳之前先判断是否有心跳正在运行
 			msgTimer = new Timer();
-		    messageDetect = new TimerMessageDetect();
+			messageDetect = new TimerMessageDetect();
 			msgTimer.schedule(messageDetect, 1000,60*1000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 发送消息
 	 * @param bodyByte 数据包
@@ -237,9 +246,8 @@ public class CommCenterUsers {
 			try {
 				if(session != null){
 					if(session.isConnected()){
-						AppLog.i(TAG,"==send message===");
+						AppLog.i(TAG,"==发送消息===");
 						session.write(IoBuffer.wrap(bodyByte));
-
 					}else{
 						re = 1;
 						startTimerConnectSvr();
@@ -268,13 +276,13 @@ public class CommCenterUsers {
 
 				if(msgid != 0x0001){
 
-					AppLog.i(TAG, "[seq:"+seq+"] [msgid:"+msgid+"] [bodyhex:"+bodyhex+"] write data base");
+					AppLog.i(TAG, "[seq:"+seq+"] [msgid:"+msgid+"] [bodyhex:"+bodyhex+"]写入数据库中");
 
 					//获取系统时间
 					String createtime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()); 
 					//插入数据库中
 					DataMsgDao.getInstance(ShCommService.getInstance()).insert(seq, msgid, bodyhex,createtime);
-					System.out.println("data base："+DataMsgDao.getInstance(ShCommService.getInstance()).getCount());
+					System.out.println("数据库记录条数："+DataMsgDao.getInstance(ShCommService.getInstance()).getCount());
 
 				}
 			}
@@ -284,5 +292,5 @@ public class CommCenterUsers {
 		}
 		return re;
 	}
-	
+
 }

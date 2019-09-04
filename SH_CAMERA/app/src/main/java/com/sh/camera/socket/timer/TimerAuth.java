@@ -27,7 +27,7 @@ import com.sh.camera.util.ExceptionUtil;
  */
 public class TimerAuth extends TimerTask {
 	private static final String TAG = "TimerAuth";
-	
+
 	/**
 	 * 鉴权连接次数
 	 */
@@ -39,11 +39,14 @@ public class TimerAuth extends TimerTask {
 			if(authtimes < 5){
 				AppLog.i(TAG,"Client: 开始鉴权,鉴权次数:"+authtimes);
 				//向服务器发送鉴权
-				CommCenterUsers.witeMsg(CommEncoder.getAuthentication(),1);
+				CommCenterUsers.witeMsg(CommEncoder.getAuthentication(),0);
 			}else{
 				if(CommCenterUsers.timerAuth != null){
 					AppLog.i(TAG,"关闭鉴权定时器......");
 					CommCenterUsers.timerAuth.cancel();
+					if(CommCenterUsers.authTimer != null){
+						CommCenterUsers.authTimer.cancel();
+					}
 				}
 			}
 		} catch (Exception e) {

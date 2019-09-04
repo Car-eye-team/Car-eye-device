@@ -31,7 +31,8 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
-
+import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.mina.core.session.IoSession;
 
 /**
  *     
@@ -56,14 +57,19 @@ public class BusinessProcess {
 	 * @param bytes
 	 * @param context
 	 */
-	public static void decoderData(byte[] bytes, Context context){
+	public static void decoderData(byte[] bytes,IoSession session, Context context){
 
 		DSCommData dsCommData = CommDecoder.decoder808Data(bytes, context);
 		if(dsCommData == null){
 			AppLog.d(TAG, "协议解析失败");
 		}else{
 			//处理业务
-			process(dsCommData.getMsgid(),dsCommData.getData(),dsCommData.getSeq(), context);
+			int result = process(dsCommData.getMsgid(),dsCommData.getData(),dsCommData.getSeq(), context);
+			//回复终端通用应答
+			if(dsCommData.getMsgid() != 0x8001){
+				byte[] generalResponseBytes = CommEncoder.getTerminalGeneralResponse(dsCommData.getSeq(), dsCommData.getMsgid(), result);
+				session.write(IoBuffer.wrap(generalResponseBytes));
+			}
 		}
 
 	}
@@ -74,7 +80,8 @@ public class BusinessProcess {
 	 * @param data 消息数据包
 	 * @param context 上下文对象
 	 */
-	public synchronized static void process(int msgid,byte[] data,int seq, final Context context){
+	public synchronized static int process(int msgid,byte[] data,int seq, final Context context){
+		int result =0;
 		switch (msgid) {
 
 		case 0x8001:	// 平台通用应答
@@ -159,6 +166,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 
 			break;
@@ -170,6 +178,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -220,6 +229,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -272,6 +282,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -286,6 +297,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -314,6 +326,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -383,6 +396,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -417,6 +431,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -433,6 +448,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -484,7 +500,7 @@ public class BusinessProcess {
 				{
 					ServerManager.getInstance().SetIP(ip);
 					ServerManager.getInstance().SetPort(""+tcpPort);
-				}		
+				}
 	
 				//查找一个文件，然后上传到视频服务器，目前暂时只支持一个文件上传
 				File file;
@@ -503,6 +519,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -526,6 +543,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -569,6 +587,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -636,6 +655,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -671,6 +691,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 			case 0x9003: //获取音频属性
@@ -699,6 +720,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -715,6 +737,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -731,6 +754,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -747,6 +771,7 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
@@ -763,12 +788,14 @@ public class BusinessProcess {
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
+				result = 1;
 			}
 			break;
 
 		default:
 			break;
 		}
+		return result;
 	}
 
 }
