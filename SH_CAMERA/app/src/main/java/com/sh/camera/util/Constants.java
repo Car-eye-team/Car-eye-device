@@ -139,10 +139,8 @@ public class Constants {
 
 	//RTMP pusher key
 	public static final String Key = "937RKqJQjR(Q$q(s3sJsh6Is3sKrkqKsL)KsKsHqKq%qIriQKqgriqKqJqIq(QjqJ50";
-
-
 	//RTP pusher key
-	public static final String rtpKey = "$34Q3{jRJQ2RH{26K6j6gsi6K6KU()L6kT36%6j{3{1{iSIR3{hSI{3{j{i{2RJ{j16";
+	public static final String rtpKey = "F04A.B0~YA<~9B<byb0bv>^bybyezd,bZ|,b.CwB.BwB^cX~.B_cXB.B0B^B<~YB067";
 
 	/**
 	 * 设置参数	 */
