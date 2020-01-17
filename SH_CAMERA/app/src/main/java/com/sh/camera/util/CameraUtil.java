@@ -167,7 +167,7 @@ public class CameraUtil {
 	 * @param eplaysec 结束秒
 	 * @param filename 文件名称
 	 */
-	public static void startVideoFileStream(final int cameraid,final int splaysec,final int eplaysec,final String filename,final Handler handler){
+	public static int startVideoFileStream(final int cameraid,final int splaysec,final int eplaysec,final String filename,final Handler handler){
 
 		SharedPreferences sp = MainService.getInstance().getSharedPreferences("fcoltest", MainService.getInstance().MODE_PRIVATE);
 		final String ip = sp.getString("ip",Constants.SERVER_IP);
@@ -209,8 +209,13 @@ public class CameraUtil {
 		}
 		CameraUtil.VIDEO_FILE_UPLOAD = true;
 		//int channel = MainService.mPusher.startfilestream( CommConstants.playBackIp, ""+CommConstants.playBackPort, streamName, filename,splaysec,eplaysec,handler);
-		MainService.mPusher.startfilestream( ip, port, streamName, cameraid, filename,splaysec,eplaysec,handler,Constants.protocol);
+		return MainService.mPusher.startfilestream( ip, port, streamName, cameraid, filename,splaysec,eplaysec,handler,Constants.protocol);
 
+	}
+
+	public static  int CarEyePausedPusher(int channel, int pause)
+	{
+		return MainService.mPusher.CarEyePausedPusher(channel,pause );
 	}
 	/**
 	 * 结束视频回放上传

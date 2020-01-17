@@ -51,6 +51,7 @@ public class Pusher {
 	public native long   CarEyeSendBufferRTP(long time, byte[] data, int lenth, int type, int channel);	
 	public native int    CarEyeStopNativeFileRTP(int channel);	
 	public native int    CarEyeStartNativeFileRTPEX(Context context,String key, String serverIP, String serverPort, String streamName, int logchannel,  String fileName,int start, int end);
+	public native int    CarEyePausedPusher (int channel, int aPause );
 	public native void   CarEyeStopPushNetRTP(int index);
 
 	// result： 0 文件传输结束  , 传输出错

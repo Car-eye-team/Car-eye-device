@@ -51,6 +51,8 @@ import org.apache.mina.core.session.IoSession;
 public class BusinessProcess {
 
 	private static final String TAG = "BusinessProcess";
+	static int playback_channel = 0;
+	static boolean  playbacking = false;
 
 	/**
 	 * 解码808协议数据
@@ -508,9 +510,10 @@ public class BusinessProcess {
 				if(file!=null)
 				{
 					Log.d("vedio", "start file player");
-					CameraUtil.startVideoFileStream(logicChannel, 0,0,file.getAbsolutePath(),null);
+					playback_channel = CameraUtil.startVideoFileStream(logicChannel, 0,0,file.getAbsolutePath(),null);
+					playbacking = true;
 				}
-								
+
 				//设置上传服务器IP
 				ParamsBiz.setUpdateIP(ip);
 				//设置上传服务器端口
@@ -539,7 +542,13 @@ public class BusinessProcess {
 				byte[] fastPoistionbyte = ParseUtil.byteTobyte(data, num, 6);
 				String fastPoistion = ParseUtil.bcd2Str(fastPoistionbyte);
 				num += 6;
-
+				if(playbacking==true) {
+					if (command == 0) {
+						CameraUtil.CarEyePausedPusher(playback_channel,0);
+					} else if (command == 1) {
+						CameraUtil.CarEyePausedPusher(playback_channel,1);
+					}
+				}
 			} catch (Exception e) {
 				AppLog.e(ExceptionUtil.getInfo(e), e);
 				e.printStackTrace();
