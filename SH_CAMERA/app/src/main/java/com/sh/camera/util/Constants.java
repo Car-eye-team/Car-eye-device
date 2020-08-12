@@ -1,4 +1,4 @@
-/*  car eye 车辆管理平台 
+﻿/*  car eye 车辆管理平台 
  * car-eye管理平台   www.car-eye.cn
  * car-eye开源网址:  https://github.com/Car-eye-team
  * Copyright
@@ -85,8 +85,8 @@ public class Constants {
 	public static int CAREYE_VCODE_H264_1078 = 98;
 	public static int CAREYE_VCODE_H265_1078 = 99;
 	public static int CAREYE_ACODE_AAC_1078 = 0x13;
-	public static int CAREYE_ACODE_G711U_1078 = 6;
-	public static int CAREYE_ACODE_G711A_1078 = 7;
+	public static int CAREYE_ACODE_G711U_1078 = 7;
+	public static int CAREYE_ACODE_G711A_1078 = 6;
 	public static int CAREYE_ACODE_G726_1078 = 9;
 
 	/* audio paranter  */
@@ -140,7 +140,7 @@ public class Constants {
 	//RTMP pusher key
 	public static final String Key = "937RKqJQjR(Q$q(s3sJsh6Is3sKrkqKsL)KsKsHqKq%qIriQKqgriqKqJqIq(QjqJ50";
 	//RTP pusher key
-	public static final String rtpKey = "t25lomPMOlQM}mQ4-4P4MNn4-4-55n?4p-?45}4momNmn=4Momm=4momPmnmQMOmP2A";
+	public static final String rtpKey = "i01Cz>,cZCycx>ya<a,aXB_a<a<d.e0aYf0a9a,>z>W>_~vcz>^~v>z>,>_>ycZ>,22";
 
 	/**
 	 * 设置参数	 */
