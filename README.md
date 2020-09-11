@@ -3,7 +3,7 @@
 car-eye-device 是车辆管理系统的设备端程序，负责视频采集，gps采集等，实现了传统的DVR功能。还支持远程控制，支持远程观看实时视频和检索录像。
 
 ## Car-eye-device 工作原理
-设备端通过808协议跟Car-eye-server或者Car-eye-CMS进行通信，上传位置信息和视频控制信息，整个框架如下图    
+设备端通过808协议跟平台进行通信，上传位置信息和视频控制信息，整个框架如下图    
 
 
 ![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/car-eye-device-machine.png)
