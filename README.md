@@ -6,7 +6,7 @@ car-eye-device 是车辆管理系统的设备端程序，负责视频采集，gp
 设备端通过808协议跟Car-eye-server或者Car-eye-CMS进行通信，上传位置信息和视频控制信息，整个框架如下图    
 
 
-![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/car-eye-device-machine.png)
+![](https://gitee.com/careye_open_source_platform_group/Car-eye-device/raw/master/picture/car-eye-device-machine.png)
 
 
 
