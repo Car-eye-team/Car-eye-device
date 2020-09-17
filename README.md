@@ -6,7 +6,7 @@ car-eye-device 是车辆管理系统的设备端程序，负责视频采集，gp
 设备端通过808协议跟Car-eye-server或者Car-eye-CMS进行通信，上传位置信息和视频控制信息，整个框架如下图    
 
 
-![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/car-eye-device-machine.png)
+![](https://gitee.com/careye_open_source_platform_group/Car-eye-device/raw/master/picture/car-eye-device-machine.png)
 
 
 
@@ -124,21 +124,17 @@ Car-eye-device 商业用户需要鉴权，具体请联系团队管理人员
 
 
 # 扫描二维码下载       
-![](https://github.com/Car-eye-team/Car-eye-device/blob/master/picture/android%20DVR%20%E4%BA%8C%E7%BB%B4%E7%A0%81.png)
+![](https://gitee.com/careye_open_source_platform_group/Car-eye-device/raw/master/picture/android%20DVR%20%E4%BA%8C%E7%BB%B4%E7%A0%81.png)
 
 
-# 联系我们   
+# 联系我们
 
-car-eye 开源官方网址：www.car-eye.cn     
-
-car-eye 流媒体平台网址：www.liveoss.com     
-
-car-eye 技术官方邮箱: support@car-eye.cn   
-
-car-eye技术交流QQ群: 590411159      
-
-![](https://github.com/Car-eye-team/Car-eye-server/blob/master/car-server/doc/QQ.jpg)    
-
-CopyRight©  car-eye 开源团队 2018 
-
+car-eye 开源官方网址：www.car-eye.cn    
+car-eye 车辆管理平台网址：www.liveoss.com  
+car-eye GB28181管理平台网址 ：www.streaming-vip.com:10088     
+car-eye 技术官方邮箱: support@car-eye.cn  
+car-eye 车辆管理平台技术交流QQ群:590411159   
+car-eye 视频服务和管理平台QQ群：713522732     
+![](https://gitee.com/careye_open_source_platform_group/car-eye-jtt1078-media-server/raw/master/QQ/QQ.jpg)   
+CopyRight©  car-eye 开源团队 2018-2020
 
