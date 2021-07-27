@@ -1,14 +1,7 @@
-﻿/*  car eye 车辆管理平台 
- * car-eye管理平台   www.car-eye.cn
- * car-eye开源网址:  https://github.com/Car-eye-team
- * Copyright
- */
-
 package com.sh.camera.util;
 
 import android.content.Context;
 import android.content.Intent;
-
 
 /**    
  *     
@@ -138,9 +131,9 @@ public class Constants {
 	public static final String ACTION_UPDATE_LOCATION =  "UPDATE_LOCATION";
 
 	//RTMP pusher key
-	public static final String Key = "937RKqJQjR(Q$q(s3sJsh6Is3sKrkqKsL)KsKsHqKq%qIriQKqgriqKqJqIq(QjqJ50";
+	public static final String Key = "q3AuiU18%ug8kUgTIT1T2)3TITi7$UiTH6hTiTLUiUjU37K8iU(7KUiU1U3Ug8%U145";
 	//RTP pusher key
-	public static final String rtpKey = "i01Cz>,cZCycx>ya<a,aXB_a<a<d.e0aYf0a9a,>z>W>_~vcz>^~v>z>,>_>ycZ>,22";
+	public static final String rtpKey = "<2F-}OMnm-NnoON?l?M?PPp?l?l==M4?nlN?5?MO}OQOp5?n}OO5?O}OMOpONnmOM69";
 
 	/**
 	 * 设置参数	 */
